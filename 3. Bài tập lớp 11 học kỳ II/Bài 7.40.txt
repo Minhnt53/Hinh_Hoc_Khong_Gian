@@ -1,0 +1,35 @@
+Bài 7.40 (SGK Hình Học 11)
+Đề bài:
+Người ta cắt bỏ 4 hình vuông cùng kích thước ở 4 góc của một tấm tôn hình vuông cạnh 1m để gò lại thành một chiếc thùng hình hộp chữ nhật không nắp.
+Hỏi cạnh của các hình vuông cần bỏ đi có độ dài bằng bao nhiêu để thùng hình hộp nhận được có thể tích lớn nhất?
+=====
+1. Thiết lập hàm thể tích:
+- Gọi x (m) là độ dài cạnh hình vuông nhỏ cắt đi tại mỗi góc.
+  Điều kiện: 0 < 2x < 1 => 0 < x < 0.5.
+- Sau khi cắt và gấp lên, ta được hình hộp chữ nhật có:
+  + Chiều cao h = x.
+  + Chiều dài đáy = 1 - 2x.
+  + Chiều rộng đáy = 1 - 2x.
+- Thể tích khối hộp là:
+  V = h * S_đáy = x * (1 - 2x)².
+
+2. Tìm giá trị lớn nhất (Sử dụng BĐT Cô-si):
+- Ta biến đổi biểu thức để tổng các thừa số là hằng số (triệt tiêu x).
+  V = 1/4 * (4x) * (1 - 2x) * (1 - 2x).
+- Xét 3 số dương: 4x, 1-2x, 1-2x.
+  Tổng của chúng là: 4x + 1 - 2x + 1 - 2x = 2 (hằng số).
+- Áp dụng BĐT Cô-si cho 3 số dương:
+  a * b * c <= ((a + b + c) / 3)³.
+  4x * (1-2x) * (1-2x) <= (2/3)³ = 8/27.
+- Suy ra:
+  V <= 1/4 * 8/27 = 2/27.
+- Dấu "=" xảy ra khi 3 số bằng nhau:
+  4x = 1 - 2x
+  <=> 6x = 1
+  <=> x = 1/6 (thỏa mãn điều kiện 0 < x < 0.5).
+
+(Cách 2: Có thể dùng đạo hàm V' = (x - 4x² + 4x³)' = 1 - 8x + 12x², giải V'=0 cũng ra x=1/6).
+
+Kết luận:
+Để thể tích chiếc thùng là lớn nhất, cạnh của các hình vuông cần bỏ đi phải bằng 1/6 mét.
+Thể tích lớn nhất khi đó là 2/27 m³.

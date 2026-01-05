@@ -1,0 +1,6 @@
+Cho tứ diện $ABCD$ có tất cả các cạnh bằng nhau và bằng $a$. Tính côsin của góc giữa đường thẳng $AB$ và mặt phẳng $(BCD)$.
+=====
+Kẻ $AH \perp (BCD)$ tại $H$, ta có $BH$ là hình chiếu vuông góc của $AB$ trên mặt phẳng $(BCD)$ nên góc giữa đường thẳng $AB$ và mặt phẳng $(BCD)$ bằng góc giữa hai đường thẳng $AB$ và $BH$, mà $(AB, BH) = \widehat{ABH}$.
+Vì $AB = AC = AD$ nên $HD = HB = HC$, hay $H$ là tâm của tam giác $BCD$, suy ra $BH = \frac{a\sqrt{3}}{3}$.
+Từ đó ta tính được: $\cos \widehat{ABH} = \frac{BH}{AB} = \frac{\sqrt{3}}{3}$.
+Vậy côsin của góc giữa đường thẳng $AB$ và mặt phẳng $(BCD)$ bằng $\frac{\sqrt{3}}{3}$.

@@ -1,0 +1,8 @@
+Cho hình hộp ABCD.A'B'C'D' có tất cả các cạnh bằng nhau và góc A'AD = 120°.
+Tính góc giữa các cặp đường thẳng sau:A'C' và BD; AD và BB'; A'D và BB'
+=====
+Vì $ABCD$ là hình thoi và $A'C' // AC$ nên
+$$(A'C', BD) = (AC, BD) = 90^\circ.$$
+Vì $BB' // AA'$ nên
+$$(AD, BB') = (AD, AA') = 180^\circ - \widehat{A'AD} = 60^\circ \text{ và}$$
+$$(A'D, BB') = (A'D, AA') = \widehat{AA'D} = 30^\circ.$$

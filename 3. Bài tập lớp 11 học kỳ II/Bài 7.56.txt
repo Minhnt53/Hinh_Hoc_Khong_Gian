@@ -1,0 +1,36 @@
+Bài 7.56 (SGK Hình Học 11)
+Đề bài:
+Một bể nước hình hộp chữ nhật ABCD.A'B'C'D' đặt trên mái nhà nghiêng 10 độ.
+AB = 1m, AD = 1.5m, AA' = 1m.
+Các điểm A, B ở thấp hơn C, D.
+Mực nước đo được ở mặt (ABB'A') là AM = 80cm = 0.8m.
+Tính thể tích phần nước trong bể.
+=====
+1. Xác định hình dáng khối nước:
+- Mặt đáy bể (ABCD) nghiêng 10 độ so với mặt nằm ngang.
+- Mặt thoáng nước (MNEF) nằm ngang.
+- Khối nước là một hình lăng trụ đứng có đáy là hình thang vuông AMFD (nằm trên mặt phẳng hông ADD'A') và chiều cao h = AB = 1m.
+(Vì AB nằm ngang nên vuông góc với mặt phẳng hông ADD'A').
+
+2. Tính chiều cao mực nước tại các vị trí:
+- Tại mép dưới A: Chiều cao h1 = AM = 0.8m.
+- Tại mép trên D: Chiều cao h2 = DF.
+- Do đáy nghiêng góc alpha = 10 độ, độ chênh lệch chiều cao do dốc là:
+  Delta_h = AD * tan(10°).
+  Delta_h = 1.5 * tan(10°) ≈ 1.5 * 0.1763 ≈ 0.2645 (m).
+- Chiều cao mực nước tại D sẽ thấp hơn tại A đúng bằng độ chênh lệch này (do nước phẳng):
+  DF = AM - Delta_h
+  DF = 0.8 - 0.2645 = 0.5355 (m).
+
+3. Tính thể tích:
+- Diện tích mặt bên (đáy lăng trụ) AMFD (hình thang vuông):
+  S = (AM + DF) / 2 * AD
+  S = (0.8 + 0.5355) / 2 * 1.5
+  S ≈ 0.66775 * 1.5 ≈ 1.0016 (m²).
+- Thể tích nước:
+  V = S * AB
+  V = 1.0016 * 1 ≈ 1.00 (m³).
+
+(Lưu ý: Nếu tính theo sách giáo khoa với AD=1 thì V ≈ 0.71 m³. Nhưng với AD=1.5 như đề bài thì V ≈ 1.00 m³).
+
+Kết luận: Thể tích phần nước trong bể là khoảng 1.00 m³.

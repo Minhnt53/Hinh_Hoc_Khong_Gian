@@ -1,0 +1,10 @@
+Một chiếc thang có dạng hình thang cân cao 6 m, hai chân thang cách nhau 80 cm, hai ngọn thang cách nhau 60 cm. Thang được dựa vào bờ tường như hình bên. Tính góc tạo giữa đường thẳng chân tường và cạnh cột thang (tính gần đúng theo đơn vị độ, làm tròn kết quả đến chữ số thập phân thứ hai).
+=====
+Gọi $A, B$ là hai điểm tại hai vị trí chân thang và $C, D$ là hai điểm tại hai vị trí ngọn thang, $EF$ là đường chân tường.
+Ta có $EF // AB$ nên $(EF, AC) = (AB, AC) = \widehat{BAC}$.
+Kẻ $CH$ vuông góc với $AB$ tại $H$, khi đó
+$$AH = \frac{AB - CD}{2} = 10 \text{ (cm)} = 0,1 \text{ (m)}.$$
+Tam giác $ACH$ vuông tại $H$ nên
+$$\cos \widehat{CAH} = \frac{AH}{AC} = \frac{0,1}{6} = \frac{1}{60}$$
+suy ra $\widehat{CAH} \approx 89,05^\circ$.
+Vậy góc tạo giữa đường thẳng chân tường và cạnh cột thang bằng khoảng $89,05^\circ$.

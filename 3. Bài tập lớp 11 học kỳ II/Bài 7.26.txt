@@ -1,0 +1,30 @@
+Bài 7.26 (SGK Hình Học 11)
+Đề bài:
+Một viên bi được thả lăn trên một mặt phẳng nằm nghiêng (so với mặt phẳng nằm ngang).
+Coi viên bi chịu tác dụng của hai lực chính:
+- Lực hút của Trái Đất (Trọng lực P): phương thẳng đứng, hướng xuống dưới.
+- Phản lực (N): vuông góc với mặt phẳng nằm nghiêng, hướng lên trên.
+Giải thích vì sao viên bi di chuyển trên một đường thẳng vuông góc với giao tuyến của mặt phẳng nằm nghiêng và mặt phẳng nằm ngang.
+=====
+1. Phân tích phương của các lực:
+- Gọi (P) là mặt phẳng nằm ngang và (Q) là mặt phẳng nằm nghiêng.
+- Gọi a là giao tuyến của (P) và (Q).
+- Trọng lực P có phương thẳng đứng, vuông góc với mặt phẳng nằm ngang (P).
+  => P ⊥ a (vì a nằm trong (P)).
+- Phản lực N có phương vuông góc với mặt phẳng nghiêng (Q).
+  => N ⊥ a (vì a nằm trong (Q)).
+
+2. Phân tích hợp lực:
+- Ta thấy đường thẳng a vuông góc với cả hai vectơ lực P và N.
+- Suy ra, đường thẳng a vuông góc với mặt phẳng chứa hai vectơ lực này (gọi là mặt phẳng (R)).
+- Hợp lực F = P + N là lực tổng hợp tác dụng lên viên bi.
+- Theo quy tắc hình bình hành vectơ, hợp lực F phải nằm trong mặt phẳng (R) (mặt phẳng tạo bởi P và N).
+
+3. Kết luận về phương chuyển động:
+- Vì viên bi chuyển động bắt đầu từ trạng thái nghỉ dưới tác dụng của hợp lực F, nên quỹ đạo của nó sẽ trùng với phương của F.
+- Vì F nằm trong mặt phẳng (R), và ta đã chứng minh (R) ⊥ a.
+- Đồng thời, viên bi bị ràng buộc phải lăn trên mặt phẳng nghiêng (Q).
+- Do đó, quỹ đạo của viên bi là giao tuyến của mặt phẳng (R) và mặt nghiêng (Q).
+- Vì (R) ⊥ a, nên mọi đường thẳng nằm trong (R) đều vuông góc với a (hoặc hình chiếu của nó).
+- Cụ thể hơn: Phương chuyển động nằm trong mặt phẳng vuông góc với giao tuyến a.
+=> Viên bi di chuyển trên một đường thẳng vuông góc với giao tuyến a.

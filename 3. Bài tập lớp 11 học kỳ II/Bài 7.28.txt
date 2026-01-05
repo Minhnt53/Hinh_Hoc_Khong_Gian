@@ -1,0 +1,53 @@
+Bài 7.28 (SGK Hình Học 11)
+Đề bài:
+Cho hình chóp S.ABC có đáy là tam giác ABC đều cạnh bằng a, SA ⊥ (ABC) và SA = 2a. Tính theo a khoảng cách:
+a) Từ điểm B đến mặt phẳng (SAC).
+b) Từ điểm A đến mặt phẳng (SBC).
+c) Giữa hai đường thẳng AB và SC.
+=====
+a) Tính d(B, (SAC)):
+- Gọi H là trung điểm của AC.
+- Vì tam giác ABC đều nên BH ⊥ AC.
+- Vì SA ⊥ (ABC) nên SA ⊥ BH.
+- Ta có:
+  + BH ⊥ AC
+  + BH ⊥ SA
+  => BH ⊥ (SAC).
+- Vậy khoảng cách từ B đến (SAC) là đoạn BH.
+- BH là đường cao tam giác đều cạnh a:
+  BH = a√3 / 2.
+
+b) Tính d(A, (SBC)):
+- Gọi M là trung điểm của BC. Do tam giác ABC đều nên AM ⊥ BC.
+- Ta có:
+  + BC ⊥ AM
+  + BC ⊥ SA (do SA ⊥ đáy)
+  => BC ⊥ (SAM) => BC ⊥ AK (với K thuộc SM).
+- Kẻ AK ⊥ SM tại K.
+- Ta có:
+  + AK ⊥ SM
+  + AK ⊥ BC (chứng minh trên)
+  => AK ⊥ (SBC).
+- Vậy khoảng cách từ A đến (SBC) là đoạn AK.
+- Xét tam giác SAM vuông tại A (do SA ⊥ AM), đường cao AK:
+  + SA = 2a.
+  + AM = a√3 / 2.
+  + Hệ thức lượng: 
+    1/AK² = 1/SA² + 1/AM²
+          = 1/(4a²) + 1/(3a²/4)
+          = 1/(4a²) + 4/(3a²)
+          = (3 + 16) / (12a²) = 19 / (12a²).
+  => AK² = 12a² / 19.
+  => AK = a√(12/19) = 2a√(3/19) = (2a√57) / 19.
+
+c) Tính d(AB, SC):
+- Dựng hình bình hành ABCD. Khi đó AB // CD => AB // (SCD).
+- Do đó: d(AB, SC) = d(AB, (SCD)) = d(A, (SCD)).
+- Xét tứ diện S.ACD:
+  + Đáy ADC là tam giác bằng tam giác ABC (do ABCD là hình thoi ghép bởi 2 tam giác đều).
+  + SA ⊥ đáy.
+  => Hình chóp S.ACD có tính chất tương tự S.ABC.
+- Khoảng cách từ A đến (SCD) được tính hoàn toàn tương tự như khoảng cách từ A đến (SBC) ở câu b.
+- Gọi N là trung điểm CD, kẻ AK' ⊥ SN. Ta sẽ chứng minh được AK' = AK.
+- Vậy:
+  d(AB, SC) = AK = (2a√57) / 19.

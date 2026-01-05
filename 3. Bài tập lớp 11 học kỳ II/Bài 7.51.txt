@@ -1,0 +1,41 @@
+Bài 7.51 (SGK Hình Học 11)
+Đề bài:
+Cho hình chóp S.ABCD có đáy ABCD là hình vuông cạnh a, tam giác SAB đều và SC = a√2. Gọi H là trung điểm của cạnh AB.
+a) Chứng minh rằng SH ⊥ (ABCD).
+b) Tính theo a thể tích khối chóp S.ABCD.
+c) Tính theo a khoảng cách từ điểm A đến mặt phẳng (SBD).
+=====
+a) Chứng minh SH ⊥ (ABCD):
+- Tam giác SAB đều cạnh a, H là trung điểm AB => SH ⊥ AB và SH = a√3 / 2.
+- Xét tam giác HBC vuông tại B: HC² = HB² + BC² = (a/2)² + a² = 5a²/4.
+- Xét tam giác SHC:
+  SH² + HC² = 3a²/4 + 5a²/4 = 8a²/4 = 2a².
+  Mà SC = a√2 => SC² = 2a².
+  => SH² + HC² = SC² => Tam giác SHC vuông tại H => SH ⊥ HC.
+- Ta có SH ⊥ AB và SH ⊥ HC, AB cắt HC trong (ABCD).
+=> SH ⊥ (ABCD).
+
+b) Tính thể tích S.ABCD:
+- Diện tích đáy S_ABCD = a².
+- Chiều cao h = SH = a√3 / 2.
+- Thể tích V = (1/3) * S_ABCD * h
+  = (1/3) * a² * (a√3 / 2)
+  = (a³√3) / 6.
+
+c) Tính khoảng cách từ A đến (SBD):
+- Vì H là trung điểm AB, AB cắt (SBD) tại B nên:
+  d(A, (SBD)) = 2 * d(H, (SBD)).
+- Dựng khoảng cách từ H:
+  + Kẻ HK ⊥ BD tại K. (Vì ABCD là hình vuông tâm O, HK // AC. H là trung điểm AB => K là trung điểm BO => HK = AO/2 = (a√2/2)/2 = a√2/4).
+  + Kẻ HQ ⊥ SK tại Q.
+  + Chứng minh được BD ⊥ (SHK) => BD ⊥ HQ.
+  + Vậy HQ ⊥ (SBD) => d(H, (SBD)) = HQ.
+- Tính HQ:
+  Trong tam giác vuông SHK:
+  1/HQ² = 1/SH² + 1/HK²
+        = 1/(3a²/4) + 1/(2a²/16)
+        = 4/(3a²) + 8/a²
+        = 28/(3a²).
+  => HQ = a√(3/28) = (a√3) / (2√7) = (a√21) / 14.
+- Kết luận:
+  d(A, (SBD)) = 2 * HQ = (a√21) / 7.

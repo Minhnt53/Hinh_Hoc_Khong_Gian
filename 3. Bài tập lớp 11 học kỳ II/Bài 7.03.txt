@@ -1,0 +1,5 @@
+Cho tứ diện $ABCD$, gọi $M$ và $N$ lần lượt là trung điểm của $AC$ và $BD$. Biết $MN = a\sqrt{3}$; $AB = 2\sqrt{2}a$ và $CD = 2a$. Chứng minh rằng đường thẳng $AB$ vuông góc với đường thẳng $CD$.
+=====
+Lấy $K$ là trung điểm của cạnh $BC$, ta có:
+$NK$ và $MK$ lần lượt là đường trung bình của tam giác $BCD$ và tam giác $ABC$ nên $NK = a$, $MK = a\sqrt{2}$.
+Do đó, $MN^2 = 3a^2 = NK^2 + MK^2$ suy ra tam giác $MNK$ vuông tại $K$, hay $MK \perp NK$, mà $MK // AB$ và $NK // CD$ nên $(AB, CD) = (MK, NK) = 90^\circ$, hay $AB \perp CD$.

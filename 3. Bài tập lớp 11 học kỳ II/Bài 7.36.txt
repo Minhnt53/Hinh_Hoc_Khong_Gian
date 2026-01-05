@@ -1,0 +1,48 @@
+Bài 7.36 (SGK Hình Học 11)
+Đề bài:
+Cho tứ diện OABC có OA = OB = OC = a và góc AOB = 90°, góc BOC = 60°, góc COA = 120°.
+Tính theo a thể tích khối tứ diện OABC.
+
+=====
+1. Tính độ dài các cạnh đáy:
+- Xét tam giác OAB vuông cân tại O (góc 90°):
+  AB = √(OA² + OB²) = √(a² + a²) = a√2.
+- Xét tam giác OBC cân tại O có góc 60° => OBC là tam giác đều:
+  BC = OB = a.
+- Xét tam giác OAC cân tại O có góc 120°:
+  Áp dụng định lý cosin:
+  AC² = OA² + OC² - 2.OA.OC.cos(120°)
+      = a² + a² - 2a²(-1/2) = 3a².
+  => AC = a√3.
+
+2. Xác định chân đường cao:
+- Xét tam giác đáy ABC:
+  AB² + BC² = (a√2)² + a² = 2a² + a² = 3a².
+  AC² = (a√3)² = 3a².
+  => AB² + BC² = AC².
+  => Tam giác ABC vuông tại B (theo định lý Pytago đảo).
+- Gọi H là hình chiếu vuông góc của O trên mặt phẳng (ABC).
+  Vì OA = OB = OC = a nên HA = HB = HC.
+  => H là tâm đường tròn ngoại tiếp tam giác ABC.
+  Vì tam giác ABC vuông tại B nên tâm đường tròn ngoại tiếp H là trung điểm của cạnh huyền AC.
+
+3. Tính chiều cao OH:
+- H là trung điểm AC => AH = AC / 2 = a√3 / 2.
+- Xét tam giác OAH vuông tại H (do OH ⊥ đáy):
+  OH² = OA² - AH²
+      = a² - (a√3 / 2)²
+      = a² - 3a² / 4
+      = a² / 4.
+  => OH = a / 2.
+
+4. Tính thể tích:
+- Diện tích đáy ABC (vuông tại B):
+  S_ABC = (1/2) * AB * BC
+        = (1/2) * (a√2) * a
+        = (a²√2) / 2.
+- Thể tích khối tứ diện OABC:
+  V = (1/3) * S_ABC * OH
+    = (1/3) * (a²√2 / 2) * (a / 2)
+    = (a³√2) / 12.
+
+Kết luận: Thể tích khối tứ diện OABC là (a³√2) / 12.

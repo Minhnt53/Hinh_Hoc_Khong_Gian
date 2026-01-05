@@ -1,0 +1,46 @@
+Bài 7.23 (SGK Hình Học 11)
+Đề bài:
+Cho hình lập phương ABCD.A'B'C'D' có cạnh bằng a.
+a) Tính côsin của góc giữa hai mặt phẳng (A'BD) và (ABCD).
+b) Tính côsin của số đo góc nhị diện [A', BD, C'].
+=====
+a) Tính cos((A'BD), (ABCD)):
+- Giao tuyến của hai mặt phẳng là BD.
+- Gọi O là tâm của hình vuông ABCD. Ta có O là trung điểm BD.
+- Vì ABCD là hình vuông => AO ⊥ BD. (1)
+- Xét tam giác A'BD:
+  + A'B = A'D = a√2 (đường chéo các mặt bên).
+  + Tam giác A'BD cân tại A'.
+  + O là trung điểm BD => A'O ⊥ BD. (2)
+- Từ (1) và (2) => Góc giữa (A'BD) và (ABCD) là góc giữa A'O và AO, tức là góc A'OA.
+- Xét tam giác vuông A'AO (vuông tại A):
+  + AA' = a.
+  + AO = AC/2 = (a√2)/2.
+  + A'O = √(AA'² + AO²) = √(a² + a²/2) = a√(3/2) = a√6 / 2.
+- Tính cos(A'OA):
+  cos(A'OA) = AO / A'O
+            = (a√2 / 2) / (a√6 / 2)
+            = √2 / √6
+            = 1 / √3
+            = √3 / 3.
+
+b) Tính cos góc nhị diện [A', BD, C']:
+- Góc nhị diện cạnh BD được tạo bởi hai nửa mặt phẳng (A'BD) và (C'BD).
+- Ta đã có A'O ⊥ BD.
+- Tương tự, tam giác C'BD cân tại C' (C'B=C'D=a√2) => C'O ⊥ BD.
+=> Góc nhị diện [A', BD, C'] chính là góc A'OC'.
+- Xét tam giác A'OC':
+  + A'O = a√6 / 2 (tính ở trên).
+  + C'O = a√6 / 2 (do tính chất đối xứng).
+  + A'C' = a√2 (đường chéo mặt trên hình lập phương).
+- Áp dụng định lý hàm số cosin trong tam giác A'OC':
+  A'C'² = A'O² + C'O² - 2.A'O.C'O.cos(A'OC')
+  (a√2)² = (a√6/2)² + (a√6/2)² - 2.(a√6/2).(a√6/2).cos(A'OC')
+  2a² = 3a²/2 + 3a²/2 - 2.(3a²/2).cos(A'OC')
+  2a² = 3a² - 3a².cos(A'OC')
+  3a².cos(A'OC') = 3a² - 2a² = a²
+  cos(A'OC') = a² / (3a²) = 1/3.
+
+Kết luận: 
+a) Côsin góc giữa (A'BD) và (ABCD) là √3/3.
+b) Côsin của số đo góc nhị diện [A', BD, C'] là 1/3.
