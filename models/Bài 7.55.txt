@@ -1,0 +1,40 @@
+Bài 7.55 (SGK Hình Học 11)
+Đề bài:
+Cho hình lập phương ABCD.A'B'C'D' cạnh a. M, N là trung điểm AB, AD.
+a) Tính thể tích khối chóp cụt AMN.A'B'D'.
+b) Tính khoảng cách giữa hai đường thẳng MN và A'B.
+=====
+a) Tính thể tích khối chóp cụt AMN.A'B'D':
+- Khối chóp cụt này có hai đáy song song là tam giác vuông AMN (tại A) và tam giác vuông A'B'D' (tại A').
+- Chiều cao khối chóp cụt là cạnh bên AA' = a.
+- Diện tích đáy lớn A'B'D':
+  S1 = (1/2) * A'B' * A'D' = (1/2) * a * a = a²/2.
+- Diện tích đáy nhỏ AMN:
+  AM = AB/2 = a/2; AN = AD/2 = a/2.
+  S2 = (1/2) * AM * AN = (1/2) * (a/2) * (a/2) = a²/8.
+- Công thức thể tích chóp cụt:
+  V = (h/3) * (S1 + S2 + sqrt(S1*S2))
+    = (a/3) * (a²/2 + a²/8 + sqrt(a⁴/16))
+    = (a/3) * (4a²/8 + a²/8 + 2a²/8)
+    = (a/3) * (7a²/8)
+    = (7a³)/24.
+
+b) Tính khoảng cách d(MN, A'B):
+- Ta có MN là đường trung bình tam giác ABD => MN // BD.
+- Mà BD nằm trong mặt phẳng (A'BD).
+- Suy ra MN // (A'BD).
+- Do đó d(MN, A'B) = d(MN, (A'BD)) = d(M, (A'BD)).
+- Vì M là trung điểm AB, A là chân đường vuông góc từ A' xuống đáy, ta so sánh khoảng cách từ M và A đến (A'BD).
+  AB cắt (A'BD) tại B. M là trung điểm AB => d(M, (A'BD)) = 1/2 * d(A, (A'BD)).
+- Tính d(A, (A'BD)):
+  Đây là khoảng cách từ đỉnh A của tứ diện vuông A.A'BD (vuông tại A) đến mặt huyền (A'BD).
+  Gọi h = d(A, (A'BD)). Ta có:
+  1/h² = 1/AA'² + 1/AB² + 1/AD²
+       = 1/a² + 1/a² + 1/a² = 3/a².
+  => h = a / sqrt(3).
+- Vậy khoảng cách cần tìm là:
+  d(MN, A'B) = 1/2 * h = a / (2√3) = (a√3) / 6.
+
+Kết luận: 
+a) V = 7a³/24.
+b) Khoảng cách = (a√3)/6.

@@ -1,0 +1,50 @@
+Bài 7.27 (SGK Hình Học 11)
+Đề bài:
+Cho hình lập phương ABCD.A'B'C'D' có cạnh bằng a. Tính theo a khoảng cách:
+a) Giữa hai đường thẳng AB và C'D'.
+b) Giữa đường thẳng AC và mặt phẳng (A'B'C'D').
+c) Từ điểm A đến đường thẳng B'D'.
+d) Giữa hai đường thẳng AC và B'D'.
+=====
+a) Khoảng cách giữa AB và C'D':
+- Ta có AB // CD và CD // C'D' nên AB // C'D'.
+- Vì AB // C'D' nên khoảng cách giữa chúng bằng khoảng cách từ một điểm bất kỳ trên AB (ví dụ điểm B) đến đường thẳng C'D'.
+- Xét tứ giác BC'D'A (không phải phẳng). Xét mặt phẳng (ABC'D'):
+  Ta thấy AB ⊥ BC' (do tam giác ABC' vuông tại B trong mặt bên? Không).
+  AB ⊥ (BCC'B') => AB ⊥ BC'.
+  Tương tự C'D' ⊥ (BCC'B') => C'D' ⊥ BC'.
+- Vậy BC' là đoạn vuông góc chung của hai đường thẳng song song AB và C'D' (nếu xét trong không gian khoảng cách giữa 2 đường song song là đoạn vuông góc nối 2 đường).
+- Độ dài BC' là đường chéo của hình vuông cạnh a:
+  BC' = √(BB'² + B'C'²) = √(a² + a²) = a√2.
+
+b) Khoảng cách giữa AC và (A'B'C'D'):
+- Ta có AC // A'C' (tính chất hình lập phương).
+- Mà A'C' nằm trong mặt phẳng (A'B'C'D').
+=> AC // (A'B'C'D').
+- Khoảng cách giữa đường thẳng và mặt phẳng song song bằng khoảng cách từ một điểm bất kỳ trên đường thẳng đến mặt phẳng.
+- Chọn điểm A. Hình chiếu của A trên (A'B'C'D') là A'.
+=> Khoảng cách = AA' = a.
+
+c) Khoảng cách từ A đến B'D':
+- Gọi O' là tâm của hình vuông A'B'C'D' (giao điểm A'C' và B'D').
+- Ta có A'O' ⊥ B'D' (tính chất hai đường chéo hình vuông).
+- Ta có AA' ⊥ (A'B'C'D') => AA' ⊥ B'D'.
+- Ta có:
+  B'D' ⊥ A'O'
+  B'D' ⊥ AA'
+  => B'D' ⊥ (AA'O') => B'D' ⊥ AO'.
+- Vậy AO' là đoạn vuông góc kẻ từ A đến B'D'. Độ dài AO' chính là khoảng cách cần tìm.
+- Xét tam giác vuông AA'O' (vuông tại A'):
+  AA' = a.
+  A'O' = (A'C')/2 = (a√2)/2.
+  AO' = √(AA'² + A'O'²) = √(a² + a²/2) = √(3a²/2) = a√(3/2) = a√6 / 2.
+
+d) Khoảng cách giữa AC và B'D':
+- AC nằm trong (ABCD). B'D' nằm trong (A'B'C'D').
+- Hai mặt phẳng này song song với nhau.
+- Khoảng cách giữa hai đường thẳng chéo nhau nằm trên hai mặt phẳng song song bằng khoảng cách giữa hai mặt phẳng đó (nếu đường vuông góc chung cắt cả hai).
+- Gọi O là tâm ABCD, O' là tâm A'B'C'D'.
+- Ta có OO' ⊥ (ABCD) => OO' ⊥ AC.
+- Ta có OO' ⊥ (A'B'C'D') => OO' ⊥ B'D'.
+- Vậy OO' là đoạn vuông góc chung của AC và B'D'.
+=> Khoảng cách = OO' = AA' = a.

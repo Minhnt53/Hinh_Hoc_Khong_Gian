@@ -1,0 +1,6 @@
+Cho hình chóp $S.ABC$ có $SA \perp (ABC)$, tam giác $ABC$ nhọn. Gọi $H, K$ lần lượt là trực tâm của tam giác $ABC$ và $SBC$. Chứng minh rằng:
+a) $BC \perp (SAH)$ và các đường thẳng $AH, BC, SK$ đồng quy;
+b) $SB \perp (CHK)$ và $HK \perp (SBC)$.
+=====
+a) Vì $BC \perp SA, BC \perp AH$ nên $BC \perp (SAH)$. Gọi $M$ là giao điểm của $AH$ và $BC$, ta có: $BC \perp (SAM)$, suy ra $BC \perp SM$, mà $K$ là trực tâm của tam giác $SBC$ nên $SM$ đi qua $K$. Do đó, $SK, AH, BC$ đồng quy tại $M$.
+b) Vì $SA \perp (ABC)$ nên $SA \perp CH$, mà $CH \perp AB$, suy ra $CH \perp (SAB)$. Do đó $CH \perp SB$, lại có $SB \perp CK$ nên $SB \perp (CHK)$. Từ đó ta có $SB \perp HK$, tương tự, ta chứng minh được $SC \perp (BHK)$, suy ra $SC \perp HK$. Do đó $HK \perp (SBC)$.

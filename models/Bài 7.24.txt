@@ -1,0 +1,59 @@
+Bài 7.24 (SGK Hình Học 11)
+Đề bài:
+Cho hình chóp S.ABCD có đáy ABCD là hình vuông cạnh a. (SAB) ⊥ (ABCD), (SAD) ⊥ (ABCD) và SA = a.
+Tính côsin của:
+a) Góc nhị diện [S, BD, C].
+b) Góc nhị diện [B, SC, D].
+=====
+1. Xác định đường cao:
+- Vì (SAB) ⊥ (ABCD) và (SAD) ⊥ (ABCD) nên giao tuyến SA ⊥ (ABCD).
+=> SA là đường cao của hình chóp.
+
+a) Tính cos[S, BD, C]:
+- Giao tuyến là BD.
+- Ta có BD ⊥ AC (tính chất hình vuông).
+- BD ⊥ SA (do SA ⊥ đáy).
+=> BD ⊥ (SAC) => BD ⊥ SO và BD ⊥ CO.
+- Vậy góc nhị diện [S, BD, C] là góc giữa hai đường thẳng SO và CO. Đó là góc SOC (hoặc bù của nó).
+- Xét tam giác SOC:
+  + OC = a√2 / 2.
+  + SA = a. AO = a√2 / 2.
+  + SO = √(SA² + AO²) = √(a² + a²/2) = a√6 / 2.
+  + SC = √(SA² + AC²) = √(a² + 2a²) = a√3.
+- Áp dụng định lý hàm số cosin trong tam giác SOC:
+  SC² = SO² + OC² - 2.SO.OC.cos(SOC)
+  3a² = 3a²/2 + a²/2 - 2.(a√6/2).(a√2/2).cos(SOC)
+  3a² = 2a² - a²√3.cos(SOC)
+  a² = - a²√3.cos(SOC)
+  cos(SOC) = -1 / √3 = -√3 / 3.
+*Lưu ý: Góc hình học giữa hai mặt phẳng thường lấy giá trị dương (góc nhọn), nhưng góc nhị diện có thể tù. 
+Kết quả côsin là -√3/3.
+
+b) Tính cos[B, SC, D]:
+- Giao tuyến là SC.
+- Kẻ BM ⊥ SC tại M.
+- Xét hai tam giác SBC và SDC:
+  + SC chung.
+  + BC = DC = a.
+  + SB = SD = a√2.
+  => ΔSBC = ΔSDC (c.c.c).
+  => Đường cao tương ứng DM = BM. Và DM ⊥ SC.
+- Vậy góc nhị diện [B, SC, D] là góc giữa BM và DM, tức là góc BMD.
+- Tính độ dài các cạnh tam giác BMD:
+  + BD = a√2.
+  + Xét tam giác SBC vuông tại B (do BC ⊥ AB, BC ⊥ SA => BC ⊥ SB):
+    BM là đường cao ứng với cạnh huyền SC.
+    1/BM² = 1/SB² + 1/BC² = 1/(2a²) + 1/a² = 3/(2a²).
+    => BM² = 2a²/3 => BM = a√6 / 3.
+    => DM = a√6 / 3.
+- Áp dụng định lý hàm số cosin trong tam giác BMD:
+  cos(BMD) = (BM² + DM² - BD²) / (2.BM.DM)
+           = (2a²/3 + 2a²/3 - 2a²) / (2 * 2a²/3)
+           = (4a²/3 - 6a²/3) / (4a²/3)
+           = (-2a²/3) / (4a²/3)
+           = -1/2.
+- Vì cos(BMD) = -1/2 => Góc BMD = 120°.
+
+Kết luận: 
+a) Côsin góc nhị diện [S, BD, C] là -√3/3.
+b) Côsin góc nhị diện [B, SC, D] là -1/2.

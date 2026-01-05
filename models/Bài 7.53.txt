@@ -1,0 +1,47 @@
+Bài 7.53 (SGK Hình Học 11)
+Đề bài:
+Cho hình chóp tứ giác đều S.ABCD có đáy ABCD là hình vuông cạnh bằng a, cạnh bên SA = (a√5)/2.
+Gọi SM, SN lần lượt là đường cao của tam giác SAD và tam giác SBC.
+a) Chứng minh rằng (SMN) ⊥ (ABCD).
+b) Tính số đo của góc nhị diện [S, AD, B].
+c) Tính theo a thể tích khối chóp S.ABCD.
+=====
+1. Tính toán sơ bộ:
+- Gọi O là giao điểm của AC và BD. Do S.ABCD là chóp đều nên SO ⊥ (ABCD).
+- Ta có OA = (1/2)AC = (a√2)/2.
+- Trong tam giác vuông SOA:
+  SO = √(SA² - OA²)
+     = √((5a²/4) - (2a²/4))
+     = √(3a²/4)
+     = (a√3)/2.
+
+a) Chứng minh (SMN) ⊥ (ABCD):
+- Vì S.ABCD là chóp đều nên các mặt bên là các tam giác cân tại S.
+  => M là trung điểm AD, N là trung điểm BC.
+  => MN là đường trung bình của hình vuông ABCD, MN đi qua O.
+- Ta có SO ⊥ (ABCD).
+- Mà O thuộc MN nên SO nằm trong mặt phẳng (SMN).
+- Một mặt phẳng chứa đường thẳng vuông góc với mặt phẳng kia thì hai mặt phẳng đó vuông góc với nhau.
+  => (SMN) ⊥ (ABCD).
+
+b) Tính góc nhị diện [S, AD, B]:
+- Góc nhị diện [S, AD, B] là góc giữa mặt phẳng (SAD) và mặt phẳng (ABCD).
+- Giao tuyến là AD.
+- Ta có SM ⊥ AD (giả thiết đường cao).
+- Ta có OM ⊥ AD (vì M là trung điểm AD, O là tâm hình vuông).
+- Vậy góc phẳng nhị diện là góc SMO.
+- Xét tam giác vuông SOM (vuông tại O):
+  SO = (a√3)/2.
+  OM = a/2.
+  tan(SMO) = SO / OM = ((a√3)/2) / (a/2) = √3.
+  => Góc SMO = 60°.
+- Vậy số đo góc nhị diện [S, AD, B] là 60°.
+
+c) Tính thể tích khối chóp S.ABCD:
+- Diện tích đáy S_ABCD = a².
+- Chiều cao h = SO = (a√3)/2.
+- Thể tích V = (1/3) * S_ABCD * h
+  = (1/3) * a² * ((a√3)/2)
+  = (a³√3) / 6.
+
+Kết luận: Thể tích khối chóp S.ABCD là (a³√3) / 6.

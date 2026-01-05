@@ -1,0 +1,3 @@
+Một cây cột được dựng trên một sàn phẳng. Người ta thả dây dọi và ngắm thấy cột song song với dây dọi. Hỏi có thể khẳng định rằng cây cột vuông góc với sàn hay không? Vì sao?
+=====
+Vì dây dọi song song với cây cột và dây dọi vuông góc với mặt phẳng sàn nên cây cột vuông góc với mặt phẳng sàn.

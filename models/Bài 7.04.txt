@@ -1,0 +1,9 @@
+Cho hình chóp $S.ABCD$ có đáy là hình vuông tâm $O$ và tất cả các cạnh của hình chóp đều bằng $a$. Gọi $M, N$ lần lượt là trung điểm các cạnh $SA, AB$.
+a) Tính góc giữa các cặp đường thẳng sau: $MN$ và $SD$; $MO$ và $SB$.
+b) Tính tang của góc giữa hai đường thẳng $SN$ và $BC$.
+=====
+a) Ta có: $BD^2 = SB^2 + SD^2 = 2a^2$ nên $\Delta SBD$ vuông tại $S$, mà $MN // SB$, suy ra $(MN, SD) = (SB, SD) = 90^\circ$.
+Với $O$ là giao điểm của $AC$ và $BD$ thì $MO // SC$.
+Khi đó $(MO, SB) = (SC, SB) = \widehat{BSC} = 60^\circ$.
+b) Vì $ON // BC$ nên $(SN, BC) = (SN, ON) = \widehat{SNO}$.
+Ta có $SO = \frac{a\sqrt{2}}{2}$; $ON = \frac{a}{2}$ và tam giác $SNO$ vuông tại $O$ nên $\tan \widehat{SNO} = \frac{SO}{ON} = \sqrt{2}$. Vậy $\tan(SN, BC) = \sqrt{2}$.

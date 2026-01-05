@@ -1,0 +1,4 @@
+Cho tứ diện $ABCD$ có $AC = BC, AD = BD$. Gọi $M$ là trung điểm của $AB$. Chứng minh rằng $(CDM) \perp (ABC)$ và $(CDM) \perp (ABD)$.
+=====
+Vì $M$ là trung điểm của $AB$ nên $AB \perp CM$, $AB \perp DM$, suy ra $AB \perp (CDM)$.
+Vì hai mặt phẳng $(ABC)$ và $(ABD)$ đều chứa đường thẳng $AB$ nên $(ABC) \perp (CDM), (ABD) \perp (CDM)$.

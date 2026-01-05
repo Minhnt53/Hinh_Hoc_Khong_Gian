@@ -1,0 +1,8 @@
+Cho tứ diện đều $ABCD$ có độ dài các cạnh bằng $a$. Gọi $M$ là trung điểm của $CD$, kẻ $AH$ vuông góc với $BM$ tại $H$.
+a) Chứng minh rằng $AH \perp (BCD)$.
+b) Tính côsin của góc giữa mặt phẳng $(BCD)$ và mặt phẳng $(ACD)$.
+=====
+a) Vì $M$ là trung điểm của $CD$ nên $CD \perp BM$, $CD \perp AM$, do đó $CD \perp (ABM)$, suy ra $CD \perp AH$, ta lại có $AH \perp BM$ nên $AH \perp (BCD)$.
+b) Vì $AM \perp CD, BM \perp CD$ nên góc giữa hai mặt phẳng $(ACD)$ và $(BCD)$ bằng góc giữa hai đường thẳng $AM$ và $BM$, mà $(AM, BM) = \widehat{AMB}$ nên góc giữa hai mặt phẳng $(ACD)$ và $(BCD)$ bằng $\widehat{AMB}$.
+Ta có: $HM = \frac{1}{3}BM = \frac{a\sqrt{3}}{6}$ và $AM = \frac{a\sqrt{3}}{2}$, tam giác $AHM$ vuông tại $H$ nên
+$$\cos \widehat{AMB} = \frac{HM}{AM} = \frac{1}{3}.$$

@@ -1,0 +1,41 @@
+Bài 7.38 (SGK Hình Học 11)
+Đề bài:
+Cho hình chóp S.ABC có SA ⊥ (ABC), SA = a. Đáy ABC là tam giác vuông tại A, AB = a, AC = a√3.
+Kẻ AM vuông góc với SB tại M, AN vuông góc với SC tại N.
+Tính theo a thể tích khối chóp S.AMN.
+=====
+1. Tính thể tích khối chóp S.ABC:
+- Diện tích đáy ABC (vuông tại A):
+  S_ABC = (1/2) * AB * AC 
+        = (1/2) * a * (a√3) 
+        = (a²√3) / 2.
+- Thể tích V_S.ABC:
+  V = (1/3) * S_ABC * SA
+    = (1/3) * (a²√3 / 2) * a
+    = (a³√3) / 6.
+
+2. Tính các tỷ số cạnh:
+- Xét tam giác SAB vuông tại A:
+  AB = a, SA = a.
+  => Tam giác SAB vuông cân tại A.
+  => M là trung điểm SB (vì AM là đường cao cũng là đường trung tuyến).
+  => SM / SB = 1/2.
+  
+- Xét tam giác SAC vuông tại A:
+  SA = a, AC = a√3.
+  => SC = √(SA² + AC²) = √(a² + 3a²) = 2a.
+  Hệ thức lượng: SA² = SN * SC
+  => SN = SA² / SC = a² / (2a) = a/2.
+  => Tỷ số SN / SC = (a/2) / (2a) = 1/4.
+
+3. Tính thể tích khối chóp S.AMN:
+- Áp dụng công thức tỉ số thể tích (Công thức Simson):
+  V_S.AMN / V_S.ABC = (SA/SA) * (SM/SB) * (SN/SC)
+                    = 1 * (1/2) * (1/4)
+                    = 1/8.
+- Suy ra:
+  V_S.AMN = (1/8) * V_S.ABC
+          = (1/8) * (a³√3 / 6)
+          = (a³√3) / 48.
+
+Kết luận: Thể tích khối chóp S.AMN là (a³√3) / 48.
