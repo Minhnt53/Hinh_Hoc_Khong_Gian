@@ -1,5 +1,0 @@
-Cho tứ diện $ABCD$ có $AB = AC$ và $DB = DC$. Chứng minh rằng $AD \perp BC$.
-=====
-Gọi $M$ là trung điểm của $BC$, ta có:
-$BC \perp AM, BC \perp MD$. Do đó $BC \perp (AMD)$,
-suy ra $BC \perp AD$.

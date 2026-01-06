@@ -1,8 +1,0 @@
-Cho hình chóp $S.ABC$ có $SA \perp (ABC)$, đáy là tam giác $ABC$ vuông cân tại $B$, biết $AB = a, SA = a\sqrt{6}$.
-a) Tính tang của góc giữa đường thẳng $SB$ và mặt phẳng $(SAC)$.
-b) Tính sin của góc giữa đường thẳng $AC$ và mặt phẳng $(SBC)$.
-=====
-a) Kẻ $BH \perp AC$ tại $H$, mà $SA \perp (ABC)$ nên $SA \perp BH$, suy ra $BH \perp (SAC)$. Do đó, $SH$ là hình chiếu vuông góc của $SB$ trên mặt phẳng $(SAC)$ nên góc giữa đường thẳng $SB$ và mặt phẳng $(SAC)$ bằng góc giữa hai đường thẳng $SB$ và $SH$, mà $(SB, SH) = \widehat{BSH}$.
-Ta tính được: $BH = \frac{a\sqrt{2}}{2}, SH = \frac{a\sqrt{26}}{2}$, suy ra $\tan \widehat{BSH} = \frac{BH}{SH} = \frac{\sqrt{13}}{13}$.
-b) Kẻ $AK \perp SB$ tại $K$, mà $BC \perp (SAB)$ nên $BC \perp AK$, suy ra $AK \perp (SBC)$. Do đó $CK$ là hình chiếu vuông góc của $AC$ trên $(SBC)$, suy ra góc giữa đường thẳng $AC$ và $(SBC)$ bằng góc giữa hai đường thẳng $AC$ và $CK$, mà $(AC, CK) = \widehat{ACK}$.
-Ta có: $AK = \frac{SA \cdot AB}{SB} = a\sqrt{\frac{6}{7}}$, suy ra $\sin \widehat{ACK} = \frac{AK}{AC} = \sqrt{\frac{3}{7}}$.

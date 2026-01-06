@@ -1,8 +1,0 @@
-Cho hình chóp $S.ABCD$ có đáy $ABCD$ là hình thoi tâm $O$ và $SA = SC$, $SB = SD$. Chứng minh rằng:
-a) $SO \perp (ABCD)$;
-b) $AC \perp (SBD)$ và $BD \perp (SAC)$.
-=====
-a) Vì $O$ là giao điểm của $AC$ và $BD$ nên $O$ là trung điểm của $AC$ và $BD$, suy ra $SO \perp AC, SO \perp BD$.
-Do đó $SO \perp (ABCD)$.
-b) Vì $AC \perp BD, AC \perp SO$ nên $AC \perp (SBD)$.
-Tương tự, ta được $BD \perp (SAC)$.
