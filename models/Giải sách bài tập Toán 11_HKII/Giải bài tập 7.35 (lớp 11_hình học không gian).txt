@@ -1,0 +1,6 @@
+Cho hình lăng trụ $ABC.A'B'C'$ có $A'B'C'$ và $AA'C'$ là hai tam giác đều cạnh $a$. Biết $(ACC'A') \perp (A'B'C')$. Tính theo $a$ thể tích khối lăng trụ $ABC.A'B'C'$.
+=====
+Kẻ $AH \perp A'C'$ tại $H$ thì $AH \perp (A'B'C')$.
+Ta có: $S_{A'B'C'} = \frac{a^2\sqrt{3}}{4}; AH = \frac{a\sqrt{3}}{2}$,
+suy ra $V_{ABC.A'B'C'} = S_{A'B'C'} \cdot AH$
+$$= \frac{a^2\sqrt{3}}{4} \cdot \frac{a\sqrt{3}}{2} = \frac{3a^3}{8}.$$

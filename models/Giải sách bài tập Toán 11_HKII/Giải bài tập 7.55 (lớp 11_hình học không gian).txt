@@ -1,0 +1,14 @@
+Cho hình lập phương $ABCD.A'B'C'D'$ có cạnh bằng $a$. Gọi $M, N$ lần lượt là trung điểm của các cạnh $AB, AD$.
+a) Tính theo $a$ thể tích khối chóp cụt $AMN.A'B'D'$.
+b) Tính theo $a$ khoảng cách giữa hai đường thẳng $MN$ và $A'B$.
+=====
+a) Ta có:
+$$S_{A'B'D'} = \frac{a^2}{2}; S_{AMN} = \frac{a^2}{8}; S_{ABCD} = a^2; AA' = a,$$
+suy ra thể tích khối chóp cụt $AMN.A'B'D'$ là:
+$$V = \frac{1}{3} \cdot AA' \cdot \left( S_{AMN} + S_{A'B'D'} + \sqrt{S_{AMN} \cdot S_{A'B'D'}} \right)$$
+$$= \frac{1}{3} \cdot a \cdot \left( \frac{a^2}{8} + \frac{a^2}{2} + \sqrt{\frac{a^2}{8} \cdot \frac{a^2}{2}} \right) = \frac{7a^3}{24}.$$
+b) Vì $MN // BD$ nên $MN // (A'BD)$, do đó:
+$$d(MN, A'B) = d(MN, (A'BD)) = d(M, (A'BD)).$$
+Vì $M$ là trung điểm của $AB$ nên $d(M, (A'BD)) = \frac{1}{2}d(A, (A'BD))$.
+Đặt $h = d(A, (A'BD))$ thì $\frac{1}{h^2} = \frac{1}{AB^2} + \frac{1}{AD^2} + \frac{1}{AA'^2} = \frac{3}{a^2}$, suy ra $h = \frac{a\sqrt{3}}{3}$.
+Vậy $d(MN, A'B) = d(M, (A'BD)) = \frac{a\sqrt{3}}{6}$.

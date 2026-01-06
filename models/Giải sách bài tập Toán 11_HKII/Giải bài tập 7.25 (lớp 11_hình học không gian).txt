@@ -1,0 +1,7 @@
+Cho hình chóp $S.ABCD$ có đáy $ABCD$ là hình vuông cạnh $a$, tam giác $SAD$ đều và nằm trong mặt phẳng vuông góc với mặt đáy $(ABCD)$. Gọi $H, M$ lần lượt là trung điểm của các cạnh $AD$ và $AB$.
+a) Tính côsin của góc giữa đường thẳng $SC$ và mặt đáy $(ABCD)$.
+b) Chứng minh rằng $(SMD) \perp (SHC)$.
+=====
+a) Ta có $(SAD) \perp (ABCD)$ và $SH \perp AD$ nên $SH \perp (ABCD)$, suy ra góc giữa đường thẳng $SC$ và mặt phẳng $(ABCD)$ bằng góc giữa hai đường thẳng $SC$ và $CH$, mà $(SC, CH) = \widehat{SCH}$, ta tính được $SH = \frac{a\sqrt{3}}{2}$, $HC = \frac{a\sqrt{5}}{2}$ và $SC = a\sqrt{2}$.
+Do đó $\cos \widehat{SCH} = \frac{HC}{SC} = \frac{\sqrt{10}}{4}$.
+b) Ta có $DM \perp CH, DM \perp SH$ nên $DM \perp (SCH)$. Hơn nữa, mặt phẳng $(SDM)$ chứa đường thẳng $DM$ nên $(SDM) \perp (SCH)$.

@@ -1,0 +1,8 @@
+Cho hình chóp $S.ABCD$ có đáy $ABCD$ là hình thoi tâm $O$, biết $SO \perp (ABCD)$, $AC = 2a\sqrt{3}$, $BD = 2a$ và khoảng cách từ điểm $A$ đến mặt phẳng $(SBC)$ bằng $\frac{a\sqrt{3}}{2}$. Tính theo $a$ thể tích khối chóp $S.ABCD$.
+=====
+Kẻ $OM$ vuông góc với $BC$ tại $M$, $OH$ vuông góc với $SM$ tại $H$, ta chứng minh được $OH \perp (SBC)$. Vì $O$ là trung điểm của $AC$ nên
+$$d(A, (SBC)) = 2 \cdot d(O, (SBC)) = 2 \cdot OH = \frac{a\sqrt{3}}{2},$$
+suy ra $OH = \frac{a\sqrt{3}}{4}$.
+Tam giác $OBC$ vuông tại $O$, có $OB = a$, $OC = a\sqrt{3}$ và đường cao $OM$ nên $OM = \frac{OB \cdot OC}{BC} = \frac{a\sqrt{3}}{2}$.
+Tam giác $SOM$ vuông tại $O$, đường cao $OH$ nên $\frac{1}{OH^2} = \frac{1}{OM^2} + \frac{1}{OS^2}$, suy ra
+$SO = \frac{a}{2}$. Vậy $V_{S.ABCD} = \frac{1}{3} \cdot S_{ABCD} \cdot SO = \frac{1}{3} \cdot \frac{1}{2} \cdot 2a\sqrt{3} \cdot 2a \cdot \frac{a}{2} = \frac{a^3\sqrt{3}}{3}$.

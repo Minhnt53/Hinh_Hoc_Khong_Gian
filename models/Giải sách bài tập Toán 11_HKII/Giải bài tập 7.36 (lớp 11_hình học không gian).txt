@@ -1,0 +1,5 @@
+Cho tứ diện $OABC$ có $OA = OB = OC = a$ và $\widehat{AOB} = 90^\circ; \widehat{BOC} = 60^\circ; \widehat{COA} = 120^\circ$. Tính theo $a$ thể tích khối tứ diện $OABC$.
+=====
+Ta có: $AB = a\sqrt{2}, BC = a, CA = a\sqrt{3}$,
+tam giác $ABC$ vuông tại $B$. Kẻ $OH$ vuông góc với mặt phẳng $(ABC)$ tại $H$. Vì $OA = OB = OC$ nên $HA = HB = HC$, hay $H$ là trung điểm của $AC$. Xét tam giác $OAH$ vuông tại $H$, theo định lí Pythagore ta tính được: $OH = \frac{a}{2}$.
+Do đó $V_{OABC} = \frac{1}{3} \cdot S_{ABC} \cdot OH = \frac{1}{3} \cdot \frac{1}{2} \cdot a\sqrt{2} \cdot a \cdot \frac{a}{2} = \frac{a^3\sqrt{2}}{12}$.

@@ -1,0 +1,5 @@
+Cho hình chóp $S.ABC$ có $SA \perp (ABC)$, $SA = a$ và đáy $ABC$ là tam giác vuông tại $A$, $AB = a, AC = a\sqrt{3}$. Kẻ $AM$ vuông góc với $SB$ tại $M$, $AN$ vuông góc với $SC$ tại $N$. Tính theo $a$ thể tích khối chóp $S.AMN$.
+=====
+Ta có: $V_{S.ABC} = \frac{a^3\sqrt{3}}{6}$, tam giác $SAB$ vuông cân tại $A$ nên $\frac{SM}{SB} = \frac{1}{2}$; tam giác $SAC$ vuông tại $A$, đường cao $AN$ nên $\frac{SN}{SC} = \frac{SN \cdot SC}{SC^2} = \frac{SA^2}{SC^2} = \frac{1}{4}$.
+Do đó $\frac{V_{S.AMN}}{V_{S.ABC}} = \frac{SM}{SB} \cdot \frac{SN}{SC} = \frac{1}{8}$, suy ra
+$$V_{S.AMN} = \frac{1}{8} \cdot V_{S.ABC} = \frac{1}{8} \cdot \frac{a^3\sqrt{3}}{6} = \frac{a^3\sqrt{3}}{48}.$$

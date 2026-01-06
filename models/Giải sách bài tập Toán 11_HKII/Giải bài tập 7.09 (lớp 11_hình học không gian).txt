@@ -1,0 +1,8 @@
+Cho hình lăng trụ tam giác $ABC.A'B'C'$ có $AA'$ vuông góc với mặt phẳng $(ABC)$ và đáy là tam giác $ABC$ vuông tại $B$. Chứng minh rằng:
+a) $BB' \perp (A'B'C')$;
+b) $B'C' \perp (ABB'A')$.
+=====
+a) Vì $AA' \perp (ABC)$, $AA' // BB'$ và
+$(ABC) // (A'B'C')$ nên $BB' \perp (A'B'C')$.
+b) Vì $BC \perp AB, BC \perp BB'$ nên $BC \perp (ABB'A')$,
+mà $BC // B'C'$, suy ra $B'C' \perp (ABB'A')$.

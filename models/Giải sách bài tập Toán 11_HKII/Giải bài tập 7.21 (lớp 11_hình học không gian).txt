@@ -1,0 +1,12 @@
+Cho hình chóp $S.ABCD$ có đáy $ABCD$ là hình thoi tâm $O$, cạnh bằng $a$, góc $BAD$ bằng $60^\circ$. Kẻ $OH$ vuông góc với $SC$ tại $H$. Biết $SA \perp (ABCD)$ và $SA = \frac{a\sqrt{6}}{2}$.
+Chứng minh rằng:
+a) $(SBD) \perp (SAC)$; \quad b) $(SBC) \perp (BDH)$; \quad c) $(SBC) \perp (SCD)$.
+=====
+a) Ta có $SA \perp (ABCD)$ nên $SA \perp BD$ mà $BD \perp AC$, do đó $BD \perp (SAC)$.
+Vì mặt phẳng $(SBD)$ chứa $BD$ nên $(SBD) \perp (SAC)$.
+b) Ta có $BD \perp (SAC)$ nên $BD \perp SC$ mà $SC \perp OH$, do đó $SC \perp (BDH)$.
+Vì mặt phẳng $(SBC)$ chứa $SC$ nên $(SBC) \perp (BDH)$.
+c) Ta có: $SC = \sqrt{SA^2 + AC^2} = \frac{3a\sqrt{2}}{2}$.
+Vì $\Delta CHO \backsim \Delta CAS$ nên $\frac{HO}{AS} = \frac{CO}{CS}$, suy ra $HO = \frac{CO \cdot AS}{CS} = \frac{a}{2} = \frac{BD}{2}$.
+Do đó, tam giác $BDH$ vuông tại $H$, suy ra $\widehat{BHD} = 90^\circ$.
+Ta lại có $BH \perp SC, DH \perp SC$ nên $(SBC) \perp (SCD)$.

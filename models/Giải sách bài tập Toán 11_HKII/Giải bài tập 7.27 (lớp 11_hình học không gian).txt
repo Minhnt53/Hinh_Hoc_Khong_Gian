@@ -1,0 +1,11 @@
+Cho hình lập phương $ABCD.A'B'C'D'$ có cạnh bằng $a$. Tính theo $a$ khoảng cách:
+a) Giữa hai đường thẳng $AB$ và $C'D'$.
+b) Giữa đường thẳng $AC$ và mặt phẳng $(A'B'C'D')$.
+c) Từ điểm $A$ đến đường thẳng $B'D'$.
+d) Giữa hai đường thẳng $AC$ và $B'D'$.
+=====
+a) Vì $BC'$ vuông góc với cả hai đường thẳng $AB$ và $C'D'$ nên $d(AB, C'D') = BC' = a\sqrt{2}$.
+b) Vì $AC // (A'B'C'D')$ nên
+$d(AC, (A'B'C'D')) = d(A, (A'B'C'D')) = AA' = a$.
+c) Gọi $O'$ là giao điểm của $A'C'$ và $B'D'$, ta có $AO' \perp B'D'$, theo định lí Pythagore, áp dụng cho tam giác $AA'O'$ vuông tại $A'$ thì $AO' = \frac{a\sqrt{6}}{2}$. Do đó $d(A, B'D') = AO' = \frac{a\sqrt{6}}{2}$.
+d) Ta có: $d(AC, B'D') = d(AC, (A'B'C'D')) = d(A, (A'B'C'D')) = AA' = a$.

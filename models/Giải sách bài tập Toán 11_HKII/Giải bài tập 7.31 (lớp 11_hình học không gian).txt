@@ -1,0 +1,13 @@
+Cho hình lăng trụ đứng $ABC.A'B'C'$ có đáy $ABC$ là tam giác vuông tại $A$ và $AB = AC = AA' = a$. Tính theo $a$ khoảng cách:
+a) Từ điểm $A$ đến đường thẳng $B'C'$.
+b) Giữa hai đường thẳng $BC$ và $AB'$.
+=====
+a) Kẻ $AH$ vuông góc với $B'C'$ tại $H$ thì $d(A, B'C') = AH$.
+Ta có: $AB' = AC' = B'C' = a\sqrt{2}$ nên $AH = \frac{a\sqrt{6}}{2}$.
+Vậy $d(A, B'C') = \frac{a\sqrt{6}}{2}$.
+b) Vì $BC // (AB'C')$ nên
+$$d(BC, AB') = d(BC, (AB'C')) = d(C, (AB'C')).$$
+Mà $CA'$ cắt $AC'$ tại trung điểm của $CA'$ nên
+$$d(C, (AB'C')) = d(A', (AB'C')).$$
+Đặt $d(A', (AB'C')) = h$ thì $\frac{1}{h^2} = \frac{1}{A'A^2} + \frac{1}{A'B'^2} + \frac{1}{A'C'^2} = \frac{3}{a^2}$, suy ra $h = \frac{a\sqrt{3}}{3}$.
+Vậy $d(BC, AB') = \frac{a\sqrt{3}}{3}$.

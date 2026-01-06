@@ -1,0 +1,17 @@
+\textbf{7.29.} Cho hình chóp $S.ABC$ có đáy $ABC$ là tam giác vuông tại $A$, góc $ABC$ bằng $60^\circ$, biết tam giác $SBC$ đều cạnh $a$ và nằm trong mặt phẳng vuông góc với mặt phẳng $(ABC)$. Tính theo $a$ khoảng cách:
+a) Từ điểm $S$ đến mặt phẳng $(ABC)$.
+b) Từ điểm $B$ đến mặt phẳng $(SAC)$.
+c) Giữa hai đường thẳng $AB$ và $SC$.
+=====
+7.29. (H.7.48)
+a) Kẻ $SH$ vuông góc với $BC$ tại $H$ thì $SH \perp (ABC)$,
+suy ra $d(S, (ABC)) = SH = \frac{a\sqrt{3}}{2}$.
+b) Kẻ $HK$ vuông góc với $AC$ tại $K$, $HQ$ vuông góc với $SK$ tại $Q$ thì $d(H, (SAC)) = HQ$.
+Ta có: $AB = \frac{a}{2}, HK = \frac{a}{4}$ và tam giác $SHK$ vuông tại $H$, đường cao $HQ$ nên $HQ = \frac{SH \cdot HK}{SK} = \frac{a\sqrt{39}}{26}$.
+Lại có $H$ là trung điểm của $BC$ nên $d(B, (SAC)) = 2d(H, (SAC)) = \frac{a\sqrt{39}}{13}$.
+c) Dựng hình bình hành $ABMC$, chứng minh được $ABMC$ là hình chữ nhật.
+Khi đó $AB // (SCM)$ và mặt phẳng $(SMC)$ chứa $SC$ nên
+$d(AB, SC) = d(AB, (SCM)) = d(B, (SCM)) = 2d(H, (SCM))$.
+Kẻ $HN$ vuông góc với $CM$ tại $N$, $HE$ vuông góc với $SN$ tại $E$ thì $HE \perp (SCM)$,
+suy ra $d(H, (SCM)) = HE$. Ta có: $HN = \frac{BM}{2} = \frac{a\sqrt{3}}{4}$, tam giác $SHN$ vuông tại $H$,
+đường cao $HE$ nên $HE = \frac{SH \cdot HN}{SN} = \frac{a\sqrt{15}}{10}$. Vậy $d(AB, SC) = \frac{a\sqrt{15}}{5}$.

@@ -1,0 +1,11 @@
+Cho hình chóp $S.ABCD$ có đáy $ABCD$ là hình vuông tâm $O$ và các cạnh đều bằng $a$.
+a) Chứng minh rằng $SO \perp (ABCD)$.
+b) Tính góc giữa đường thẳng $SA$ và mặt phẳng $(SBD)$.
+c) Gọi $M$ là trung điểm của cạnh $SC$ và $\alpha$ là góc giữa đường thẳng $OM$ và mặt phẳng $(SBC)$. Tính $\sin \alpha$.
+=====
+a) Ta có: $SO \perp AC; SO \perp BD$ nên $SO \perp (ABCD)$.
+b) Vì $AO \perp (SBD)$ nên $SO$ là hình chiếu vuông góc của $SA$ trên mặt phẳng $(SBD)$, do đó góc giữa đường thẳng $SA$ và mặt phẳng $(SBD)$ bằng góc giữa hai đường thẳng $SA$ và $SO$. Mà $(SA, SO) = \widehat{ASO}$ nên góc giữa đường thẳng $SA$ và mặt phẳng $(SBD)$ bằng góc $\widehat{ASO}$. Xét tam giác $SAC$ có $SA^2 + SC^2 = AC^2$ và $SA = SC$ nên tam giác $SAC$ vuông cân tại $S$, suy ra $\widehat{ASO} = 45^\circ$. Vậy góc giữa đường thẳng $SA$ và mặt phẳng $(SBD)$ bằng $45^\circ$.
+c) Kẻ $OK \perp BC$ tại $K$, $OH \perp SK$ tại $H$ thì ta chứng minh được $OH \perp (SBC)$, suy ra $HM$ là hình chiếu vuông góc của $OM$ trên mặt phẳng $(SBC)$, do đó góc giữa đường thẳng $OM$ và mặt phẳng $(SBC)$ bằng góc giữa hai đường thẳng $OM$ và $MH$, mà $(OM, MH) = \widehat{OMH}$ nên góc giữa đường thẳng $OM$ và mặt phẳng $(SBC)$ bằng góc $\widehat{OMH}$ hay $\widehat{OMH} = \alpha$.
+Ta có: $OM = \frac{a}{2}, OK = \frac{a}{2}, SO = \frac{a\sqrt{2}}{2}$.
+Tam giác $SOK$ vuông tại $O$, đường cao $OH$ nên $OH = \frac{SO \cdot OK}{SK} = \frac{a\sqrt{6}}{6}$.
+Vì tam giác $OMH$ vuông tại $H$ nên $\sin \alpha = \sin \widehat{OMH} = \frac{OH}{OM} = \frac{\sqrt{6}}{3}$.

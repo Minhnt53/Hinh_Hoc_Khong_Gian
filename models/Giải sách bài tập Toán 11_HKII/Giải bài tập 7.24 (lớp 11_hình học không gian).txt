@@ -1,0 +1,7 @@
+Cho hình chóp $S.ABCD$ có đáy $ABCD$ là hình vuông cạnh $a$, biết $(SAB) \perp (ABCD)$, $(SAD) \perp (ABCD)$ và $SA = a$. Tính côsin của số đo góc nhị diện $[S, BD, C]$ và góc nhị diện $[B, SC, D]$.
+=====
+Ta có $SO \perp BD, CO \perp BD$ nên góc nhị diện $[S, BD, C]$ bằng $\widehat{SOC}$. Vì tam giác $SAO$ vuông tại $A$ nên $SO = \sqrt{SA^2 + AO^2} = \frac{a\sqrt{6}}{2}$ và
+$$\cos \widehat{SOC} = -\cos \widehat{SOA} = -\frac{OA}{SO} = -\frac{\sqrt{3}}{3}.$$
+Kẻ $BM \perp SC$ tại $M$ thì $DM \perp SC$ nên $[B, SC, D] = \widehat{BMD}$.
+Ta có $BC \perp (SAB)$ nên tam giác $SBC$ vuông tại $B$, tính được $SB = a\sqrt{2}$, $SC = a\sqrt{3}$ và $DM = BM = \frac{SB \cdot BC}{SC} = \frac{a\sqrt{6}}{3}$. Áp dụng định lí côsin trong tam giác $BDM$, ta có:
+$$\cos \widehat{BMD} = \frac{BM^2 + DM^2 - BD^2}{2 \cdot BM \cdot DM} = -\frac{3}{4}.$$

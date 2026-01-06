@@ -1,0 +1,4 @@
+Cho hình hộp $ABCD.A'B'C'D'$ có đáy $ABCD$ là hình vuông cạnh $a$ và $AA' = a\sqrt{2}$, hình chiếu vuông góc của $A$ trên mặt phẳng $(A'B'C'D')$ trùng với trung điểm của $B'D'$. Tính góc giữa đường thẳng $AA'$ và mặt phẳng $(A'B'C'D')$.
+=====
+Gọi $O$ là giao điểm của $A'C'$ và $B'D'$. Ta có: $A'O$ là hình chiếu vuông góc của $AA'$ trên mặt phẳng $(A'B'C'D')$, góc giữa đường thẳng $AA'$ và mặt phẳng $(A'B'C'D')$ bằng góc giữa $AA'$ và $A'O$. Mà $(AA', A'O) = \widehat{AA'O}$, ta lại có $A'O = \frac{a\sqrt{2}}{2}$.
+Do đó $\cos \widehat{AA'O} = \frac{OA'}{AA'} = \frac{1}{2}$, suy ra $\widehat{AA'O} = 60^\circ$. Vậy góc giữa đường thẳng $AA'$ và mặt phẳng $(A'B'C'D')$ bằng $60^\circ$.

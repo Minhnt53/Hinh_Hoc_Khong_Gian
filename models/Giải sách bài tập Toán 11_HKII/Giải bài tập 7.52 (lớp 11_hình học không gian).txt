@@ -1,0 +1,12 @@
+Cho hình chóp $S.ABCD$ có $SA \perp (ABCD)$, biết $ABCD$ là hình vuông cạnh bằng $a$ và $SA = a\sqrt{2}$.
+a) Chứng minh rằng $(SAC) \perp (SBD)$ và $(SAD) \perp (SCD)$.
+b) Gọi $BE, DF$ là hai đường cao của tam giác $SBD$. Chứng minh rằng $(ACF) \perp (SBC)$ và $(AEF) \perp (SAC)$.
+c) Tính theo $a$ khoảng cách giữa hai đường thẳng $BD$ và $SC$.
+=====
+a) Ta có: $BD \perp AC, SA \perp (ABCD)$ nên $SA \perp BD$, suy ra $BD \perp (SAC)$, mà mặt phẳng $(SBD)$ chứa đường thẳng $BD$, do đó $(SBD) \perp (SAC)$.
+Ta có: $CD \perp AD, CD \perp SA$, suy ra $CD \perp (SAD)$, mà mặt phẳng $(SCD)$ chứa đường thẳng $CD$, do đó $(SCD) \perp (SAD)$.
+b) Ta có: $AD \perp (SAB)$ nên $AD \perp SB$, mà $SB \perp DF$ suy ra $SB \perp (ADF)$, do đó $SB \perp AF$. Ta lại có $BC \perp (SAB)$ nên $BC \perp AF$, suy ra $AF \perp (SBC)$, mà mặt phẳng $(ACF)$ chứa đường thẳng $AF$ nên $(ACF) \perp (SBC)$.
+Vì $AF \perp (SBC)$ nên $AF \perp SC$. Tương tự, ta có $AE \perp (SCD)$ nên $AE \perp SC$, suy ra $SC \perp (AEF)$, mà mặt phẳng $(SAC)$ chứa đường thẳng $SC$ nên $(AEF) \perp (SAC)$.
+c) Gọi $O$ là giao điểm của $AC$ và $BD$, kẻ $OH \perp SC$ tại $H$, mà $BD \perp (SAC)$ nên $OH \perp BD$, suy ra $OH$ là đoạn vuông góc chung của $BD$ và $SC$, hay $d(BD, SC) = OH$.
+Ta có: $\Delta CHO \backsim \Delta CAS$ nên $\frac{OC}{CS} = \frac{OH}{AS}$, suy ra $OH = \frac{AS \cdot OC}{CS} = \frac{a}{2}$.
+Vậy $d(BD, SC) = \frac{a}{2}$.

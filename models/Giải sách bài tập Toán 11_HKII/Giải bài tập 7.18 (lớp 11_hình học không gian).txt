@@ -1,0 +1,5 @@
+Một con diều được thả với dây căng, tạo với mặt đất một góc $60^\circ$. Đoạn dây diều (từ đầu ở mặt đất đến đầu ở con diều) dài 10 m. Hỏi hình chiếu vuông góc trên mặt đất của con diều cách đầu dây diều trên mặt đất bao nhiêu centimét (lấy giá trị nguyên gần đúng)?
+=====
+Gọi $A$ là vị trí con diều, $B$ là vị trí đầu dây diều trên mặt đất, $H$ là hình chiếu vuông góc của $A$ trên mặt đất.
+Tam giác $ABH$ vuông tại $H$, góc $ABH$ bằng $60^\circ$ và $AB = 10 \text{ m} = 1000 \text{ cm}$.
+Ta có: $AH = AB \cdot \sin 60^\circ \approx 866 \text{ (cm)}$.

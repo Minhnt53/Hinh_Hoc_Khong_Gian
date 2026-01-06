@@ -1,0 +1,12 @@
+Cho hình hộp chữ nhật $ABCD.A'B'C'D'$ có $AB = a, AD = a\sqrt{2}, AA' = a\sqrt{3}$. Tính theo $a$ khoảng cách:
+a) Từ điểm $A$ đến mặt phẳng $(BDD'B')$.
+b) Giữa hai đường thẳng $BD$ và $CD'$.
+=====
+a) Kẻ $AH$ vuông góc với $BD$ tại $H$.
+Khi đó $AH \perp (BB'D'D)$, suy ra
+$$d(A, (BB'D'D)) = AH = \frac{AB \cdot AD}{BD} = \frac{a\sqrt{6}}{3}.$$
+b) Ta có: $CD' // (A'BD)$ nên
+$$d(CD', BD) = d(CD', (A'BD)) = d(C, (A'BD)).$$
+Vì $AC$ cắt $BD$ tại trung điểm của $AC$ nên $d(C, (A'BD)) = d(A, (A'BD))$.
+Kẻ $AK$ vuông góc với $A'H$ tại $K$. Khi đó $AK \perp (A'BD)$, suy ra
+$$d(A, (A'BD)) = AK = \frac{AH \cdot AA'}{A'H} = \frac{a\sqrt{66}}{11}. \text{ Vậy } d(CD', BD) = \frac{a\sqrt{66}}{11}.$$

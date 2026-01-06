@@ -1,0 +1,10 @@
+Cho hình chóp $S.ABC$ có đáy là tam giác $ABC$ đều cạnh bằng $a$, $SA \perp (ABC)$ và $SA = 2a$. Tính theo $a$ khoảng cách:
+a) Từ điểm $B$ đến mặt phẳng $(SAC)$.
+b) Từ điểm $A$ đến mặt phẳng $(SBC)$.
+c) Giữa hai đường thẳng $AB$ và $SC$.
+=====
+a) Kẻ $BH \perp AC$ tại $H$, mà $SA \perp (ABC)$ nên $SA \perp BH$, suy ra $BH \perp (SAC)$. Do đó $d(B, (SAC)) = BH = \frac{a\sqrt{3}}{2}$.
+b) Kẻ $AM \perp BC$ tại $M$ và $AK \perp SM$ tại $K$ thì $AK \perp (SBC)$, suy ra $d(A, (SBC)) = AK$.
+Ta có: $\frac{1}{AK^2} = \frac{1}{SA^2} + \frac{1}{AM^2} = \frac{19}{12a^2}$,
+suy ra $AK = 2a\sqrt{\frac{3}{19}}$. Vậy $d(A, (SBC)) = 2a\sqrt{\frac{3}{19}}$.
+c) Dựng hình bình hành $ABCD$ thì $AB // (SCD)$ và mặt phẳng $(SCD)$ chứa $SC$ nên $d(AB, SC) = d(AB, (SCD))$. Mà $d(AB, (SCD)) = d(A, (SCD))$, tính tương tự như câu b ta được: $d(A, (SCD)) = 2a\sqrt{\frac{3}{19}}$. Vậy $d(AB, SC) = 2a\sqrt{\frac{3}{19}}$.

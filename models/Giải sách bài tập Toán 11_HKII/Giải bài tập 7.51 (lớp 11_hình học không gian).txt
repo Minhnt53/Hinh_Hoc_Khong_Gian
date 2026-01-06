@@ -1,0 +1,14 @@
+Cho hình chóp $S.ABCD$ có đáy $ABCD$ là hình vuông cạnh $a$, tam giác $SAB$ đều và $SC = a\sqrt{2}$. Gọi $H$ là trung điểm của cạnh $AB$.
+a) Chứng minh rằng $SH \perp (ABCD)$.
+b) Tính theo $a$ thể tích khối chóp $S.ABCD$.
+c) Tính theo $a$ khoảng cách từ điểm $A$ đến mặt phẳng $(SBD)$.
+=====
+a) Ta có: $SH = \frac{a\sqrt{3}}{2}, HC = \frac{a\sqrt{5}}{2}$,
+suy ra $SH^2 + HC^2 = SC^2$,
+do đó $\Delta SHC$ vuông tại $H$, hay $SH \perp HC$. Lại có $SH \perp AB$ nên $SH \perp (ABCD)$.
+b) Ta có: $SH = \frac{a\sqrt{3}}{2}, S_{ABCD} = a^2$.
+Suy ra $V_{S.ABCD} = \frac{1}{3} \cdot S_{ABCD} \cdot SH = \frac{1}{3} \cdot a^2 \cdot \frac{a\sqrt{3}}{2} = \frac{a^3\sqrt{3}}{6}$.
+c) Vì $H$ là trung điểm của $AB$ nên $d(A, (SBD)) = 2 \cdot d(H, (SBD))$. Kẻ $HK$ vuông góc với $BD$ tại $K$, $HQ$ vuông góc với $SK$ tại $Q$. Khi đó $HQ \perp (SBD)$, suy ra $d(H, (SBD)) = HQ$.
+Ta tính được $HK = \frac{AC}{4} = \frac{a\sqrt{2}}{4}, SH = \frac{a\sqrt{3}}{2}$, mà tam giác $SHK$ vuông tại $H$,
+đường cao $HQ$ nên $\frac{1}{HQ^2} = \frac{1}{HK^2} + \frac{1}{HS^2}$.
+Suy ra $HQ = \frac{a\sqrt{21}}{14}$, do đó $d(A, (SBD)) = 2HQ = \frac{a\sqrt{21}}{7}$.

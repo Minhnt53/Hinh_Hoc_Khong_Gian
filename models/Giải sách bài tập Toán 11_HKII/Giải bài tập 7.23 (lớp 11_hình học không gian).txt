@@ -1,0 +1,9 @@
+Cho hình lập phương $ABCD.A'B'C'D'$ có cạnh bằng $a$.
+a) Tính côsin của góc giữa hai mặt phẳng $(A'BD)$ và $(ABCD)$.
+b) Tính côsin của số đo góc nhị diện $[A', BD, C']$.
+=====
+a) Gọi $O$ là giao điểm của $AC$ và $BD$, ta có: $AO \perp BD, A'O \perp BD$ nên góc giữa hai mặt phẳng $(A'BD)$ và $(ABCD)$ bằng góc giữa hai đường thẳng $AO, A'O$ mà $(AO, A'O) = \widehat{AOA'}$ nên góc giữa hai mặt phẳng $(A'BD)$ và $(ABCD)$ bằng $\widehat{AOA'}$. Ta có:
+$OA = \frac{a\sqrt{2}}{2}, OA' = \sqrt{OA^2 + AA'^2} = \frac{a\sqrt{6}}{2}$.
+Suy ra $\cos \widehat{AOA'} = \frac{AO}{A'O} = \frac{\sqrt{3}}{3}$.
+b) Vì $A'O \perp BD, C'O \perp BD$ nên góc nhị diện $[A', BD, C']$ bằng $\widehat{A'OC'}$.
+Ta có $OA' = OC' = \frac{a\sqrt{6}}{2}, A'C' = a\sqrt{2}$ nên $\cos \widehat{A'OC'} = \frac{OA'^2 + OC'^2 - A'C'^2}{2 \cdot OA' \cdot OC'} = \frac{1}{3}$.

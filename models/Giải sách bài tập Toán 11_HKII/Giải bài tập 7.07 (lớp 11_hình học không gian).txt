@@ -1,0 +1,14 @@
+Cho tứ diện $OABC$ có ba cạnh $OA, OB, OC$ đôi một vuông góc với nhau. Gọi $H$ là chân đường vuông góc hạ từ $O$ đến mặt phẳng $(ABC)$. Chứng minh rằng:
+a) $BC \perp (OAH)$;
+b) $H$ là trực tâm của tam giác $ABC$;
+c) $\frac{1}{OH^2} = \frac{1}{OA^2} + \frac{1}{OB^2} + \frac{1}{OC^2}$.
+=====
+a) Vì $OA \perp OB, OA \perp OC$ nên $OA \perp (OBC)$,
+suy ra $OA \perp BC$.
+Vì $OH \perp (ABC)$ nên $OH \perp BC$,
+suy ra $BC \perp (OAH)$.
+b) Vì $BC \perp (OAH)$ nên $BC \perp AH$. Tương tự, $CA \perp BH$, do đó $H$ là trực tâm của tam giác $ABC$.
+c) Gọi $K$ là giao điểm của $AH$ và $BC$, ta có: $OK \perp BC$ và $OA \perp OK$ nên $OK$ là đường cao của tam giác vuông $OBC$ và $OH$ là đường cao của tam giác vuông $OAK$.
+Áp dụng hệ thức lượng trong các tam giác vuông $OBC$ và $OAK$, ta có:
+$$\frac{1}{OH^2} = \frac{1}{OA^2} + \frac{1}{OK^2} \text{ và } \frac{1}{OK^2} = \frac{1}{OB^2} + \frac{1}{OC^2}.$$
+Từ đó suy ra: $$\frac{1}{OH^2} = \frac{1}{OA^2} + \frac{1}{OB^2} + \frac{1}{OC^2}.$$
