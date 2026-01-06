@@ -1,5 +1,0 @@
-Cho hình chóp $S.ABCD$ có đáy $ABCD$ là hình bình hành, tam giác $SAD$ là tam giác đều và $M$ là trung điểm của cạnh $AD$. Tính góc giữa hai đường thẳng $BC$ và $SA$; $BC$ và $SM$.
-=====
-Vì $BC // AD$ nên
-$$(BC, SA) = (AD, SA) = \widehat{SAD} = 60^\circ \text{ và}$$
-$$(BC, SM) = (AD, SM) = 90^\circ.$$

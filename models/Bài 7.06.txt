@@ -1,8 +1,0 @@
-Cho hình chóp $S.ABC$ có $SA$ vuông góc với mặt phẳng $(ABC)$ và đáy là tam giác $ABC$ vuông tại $B$. Kẻ $AM$ vuông góc với $SB$ tại $M$ và $AN$ vuông góc với $SC$ tại $N$. Chứng minh rằng:
-a) $BC \perp (SAB)$;
-b) $AM \perp (SBC)$;
-c) $SC \perp (AMN)$.
-=====
-a) Ta có: $BC \perp AB$ và $SA \perp (ABC)$ nên $SA \perp BC$, suy ra $BC \perp (SAB)$.
-b) Vì $BC \perp (SAB)$ nên $BC \perp AM$, mà $AM \perp SB$, suy ra $AM \perp (SBC)$.
-c) Vì $AM \perp (SBC)$ nên $AM \perp SC$, mà $AN \perp SC$, suy ra $SC \perp (AMN)$.
