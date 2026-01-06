@@ -1,0 +1,5 @@
+Cho hình chóp S.ABCD có đáy ABCD là hình bình hành. Gọi M,N lần lượt là trung điểm của các cạnh BC,CD. a) Xác định giao tuyến của hai mặt phẳng (SAM) và (SCD). b) Xác định giao tuyến của hai mặt phẳng (SBN) và (SAD). c) Xác định giao tuyến của hai mặt phẳng (SAM) và (SBN).
+=====
+a) Trong mặt phẳng (ABCD), gọi P là giao điểm của AM và CD thì SP là giao tuyến cần tìm. 
+b) Trong mặt phẳng (ABCD), gọi Q là giao điểm của BN và AD thì SQ là giao tuyến cần tìm. 
+c) Trong mặt phẳng (ABCD), gọi R là giao điểm của AM và BN thì SR là giao tuyến cần tìm.

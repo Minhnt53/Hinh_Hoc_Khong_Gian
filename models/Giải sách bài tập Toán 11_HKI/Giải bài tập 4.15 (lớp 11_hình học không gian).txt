@@ -1,0 +1,7 @@
+Cho hình chóp $S.ABCD$ có đáy $ABCD$ là hình thang $(AB // CD)$. Gọi $M, N$ lần lượt là các điểm thuộc các cạnh $SA, SD$.
+a) Xác định giao tuyến $d$ của hai mặt phẳng $(MCD)$ và $(NAB)$.
+b) Chứng minh rằng $d // AB$.
+=====
+a) Trong mặt phẳng $(SAD)$, gọi $P$ là giao điểm của $AN$ và $DM$.
+Trong mặt phẳng $(NAB)$, vẽ đường thẳng $d$ đi qua $P$ và song song với $AB$ thì $d$ là giao tuyến cần tìm.
+b) Theo cách dựng thì $d$ song song với $AB$.

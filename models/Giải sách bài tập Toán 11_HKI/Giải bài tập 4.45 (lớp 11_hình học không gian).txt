@@ -1,0 +1,3 @@
+Vẽ hình biểu diễn của hình chóp $S.ABCD$ có đáy $ABCD$ là hình vuông.
+=====
+Học sinh tự thực hiện. Đáy của hình chóp cần có hình biểu diễn là hình bình hành.

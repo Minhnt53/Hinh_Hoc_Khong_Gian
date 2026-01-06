@@ -1,0 +1,3 @@
+Cho hình lăng trụ tứ giác $ABCD.A'B'C'D'$ có đáy $ABCD$ là hình thang. Chứng minh rằng đáy $A'B'C'D'$ là hình thang.
+=====
+Giả sử $AB // CD$. Các mặt $ABB'A'$ và $CDD'C'$ của hình lăng trụ là hình bình hành nên $AB // A'B'$ và $CD // C'D'$. Vì vậy ta có $A'B' // C'D'$, tức là tứ giác $A'B'C'D'$ là hình thang.

@@ -1,0 +1,3 @@
+Đánh dấu một điểm trên mép của tờ giấy A4 và dùng kéo cắt một đường bất kì đi qua điểm đó (trong khi cắt không xoay kéo). Hãy giải thích vì sao đường cắt nhận được trên tờ giấy luôn là đường thẳng.
+=====
+Đường cắt là giao tuyến của hai mặt phẳng: mặt phẳng chứa tờ giấy và mặt phẳng tạo bởi hai lưỡi kéo. Do đó đường cắt luôn là đường thẳng.

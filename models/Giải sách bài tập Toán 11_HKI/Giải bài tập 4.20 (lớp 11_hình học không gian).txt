@@ -1,0 +1,3 @@
+Một chiếc thang được đặt sao cho hai đầu của chân thang dựa vào tường, hai đầu còn lại nằm trên sàn nhà. Biết rằng chiếc thang có dạng hình chữ nhật, hãy giải thích vì sao hai đầu của chân thang nằm trên sàn nhà lại cách đều đường chân tường.
+=====
+Áp dụng định lí về ba đường giao tuyến cho ba mặt phẳng: mặt sàn nhà, mặt chân tường và mặt phẳng tạo bởi bốn đầu của chân thang. Từ đó suy ra đường thẳng đi qua hai đầu của chân thang trên sàn nhà song song với đường chân tường.

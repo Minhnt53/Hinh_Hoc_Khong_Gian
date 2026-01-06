@@ -1,0 +1,6 @@
+Cho hình chóp S.ABCD. Gọi O là một điểm nằm trong tam giác SCD. 
+a) Xác định giao tuyến của hai mặt phẳng (SBO) và (SAC). 
+b) Xác định giao điểm của đường thẳng BO và mặt phẳng (SAC).
+=====
+a) Trong mặt phẳng (SCD), gọi M là giao điểm của SO và CD. Trong mặt phẳng (ABCD), gọi N là giao điểm của BM và AC. Khi đó SN là giao tuyến của hai mặt phẳng đó. 
+b) Trong mặt phẳng (SBO) (hay (SBM)), gọi P là giao điểm của SN và BO thì P là giao điểm của BO và (SAC).

@@ -1,0 +1,3 @@
+Một tấm bảng hình chữ nhật được đặt dựa vào tường như trong Hình 4.18. Hãy giải thích vì sao mép trên của tấm bảng song song với mặt đất, mép dưới của tấm bảng song song với mặt tường.
+=====
+Gọi $(P)$ là mặt tường và $(Q)$ là mặt bảng. Gọi $a$ là mép dưới của bảng và $b$ là mép trên thì $b$ nằm trong $(P)$. Vì bảng có dạng hình chữ nhật nên $a // b$, do đó $a // (P)$, tức là mép dưới của bảng song song với mặt tường. Giải thích tương tự suy ra mép trên của bảng song song với mặt đất.

@@ -1,0 +1,11 @@
+Cho tứ diện $ABCD$. Gọi $M, N, P, Q$ lần lượt là trung điểm của các cạnh $AB, BC, CD, DA$.
+a) Xác định giao tuyến của hai mặt phẳng $(ANP)$ và $(CMQ)$.
+b) Xác định giao tuyến của hai mặt phẳng $(ANP)$ và $(ABD)$.
+c) Xác định giao tuyến của hai mặt phẳng $(CMQ)$ và $(BCD)$.
+d) Chứng minh rằng các giao tuyến tìm được ở trên đôi một song song với nhau.
+=====
+a) Trong mặt phẳng $(ABC)$, gọi $E$ là giao điểm của $AN$ và $CM$. Trong mặt phẳng $(ACD)$, gọi $F$ là giao điểm của $AP$ và $CQ$. Đường thẳng $EF$ là giao tuyến của hai mặt phẳng $(ANP)$ và $(CMQ)$.
+Vì $MQ$ và $NP$ lần lượt là đường trung bình của các tam giác $ABD$ và $CBD$ nên $MQ // BD // NP$, suy ra $EF // MQ // NP // BD$.
+b) Giao tuyến là đường thẳng qua $A$ và song song với $BD$.
+c) Giao tuyến là đường thẳng qua $C$ và song song với $BD$.
+d) Các giao tuyến đều song song với $BD$ nên chúng đôi một song song với nhau.

@@ -1,0 +1,3 @@
+Cho tứ diện ABCD. Gọi M,N lần lượt là trung điểm của các cạnh AB,AC. Gọi P là điểm thuộc cạnh AD sao cho AP=2DP. Xác định giao tuyến của hai mặt phẳng (MNP) và (BCD).
+=====
+Trong mặt phẳng (ABD) gọi E là giao điểm của MP và BD, trong mặt phẳng (ACD) gọi F là giao điểm của NP và CD. Khi đó đường thẳng EF là giao tuyến cần tìm.

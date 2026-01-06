@@ -1,0 +1,3 @@
+Bạn Hà lấy một tờ giấy hình chữ nhật và gấp tờ giấy sao cho hai mép của tờ giấy song song với nhau. Hà thấy rằng dù gấp thế nào thì đường nếp gấp vẫn luôn song song với hai mép của tờ giấy. Hãy giải thích vì sao.
+=====
+Hai nửa của tờ giấy có thể coi như hai mặt phẳng chứa hai đường thẳng song song là hai mép giấy. Đường nếp gấp chính là giao tuyến của hai mặt phẳng này nên nó song song với hai mép giấy.

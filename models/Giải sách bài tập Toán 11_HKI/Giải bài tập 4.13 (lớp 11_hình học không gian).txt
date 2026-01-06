@@ -1,0 +1,6 @@
+Cho tứ diện $ABCD$. Gọi $M, N, P$ lần lượt là các điểm thuộc các cạnh $AB, BC, CD$. Xác định giao điểm của đường thẳng $AD$ và mặt phẳng $(MNP)$ trong các trường hợp sau:
+a) Đường thẳng $NP$ song song với đường thẳng $BD$;
+b) Đường thẳng $NP$ cắt đường thẳng $BD$.
+=====
+a) Trong mặt phẳng $(ABD)$ vẽ đường thẳng $MQ // BD$ ($Q \in AD$) thì $Q$ là giao điểm của đường thẳng $AD$ và mặt phẳng $(MNP)$ (H.4.43a).
+b) Trong mặt phẳng $(BCD)$, gọi $R$ là giao điểm của $NP$ và $BD$. Trong mặt phẳng $(ABD)$, gọi $S$ là giao điểm của $MR$ và $AD$. Khi đó $S$ là giao điểm của đường thẳng $AD$ và mặt phẳng $(MNP)$.

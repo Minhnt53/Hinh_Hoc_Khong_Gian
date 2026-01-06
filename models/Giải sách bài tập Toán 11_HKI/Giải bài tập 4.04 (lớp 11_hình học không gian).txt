@@ -1,0 +1,8 @@
+Cho tứ diện ABCD. Gọi M,N lần lượt là trung điểm của các cạnh AB,CD. Gọi P là một điểm thuộc cạnh BC sao cho PC=2PB. 
+a) Xác định giao điểm của đường thẳng BD và mặt phẳng (MNP). 
+b) Xác định giao điểm của đường thẳng AC và mặt phẳng (MNP). 
+c) Xác định giao điểm của đường thẳng AD và mặt phẳng (MNP).
+=====
+a) Trong mặt phẳng (BCD), gọi E là giao điểm của NP và BD thì E là giao điểm của đường thẳng BD và mặt phẳng (MNP). 
+b) Trong mặt phẳng (ABC), gọi F là giao điểm của MP và AC thì F là giao điểm của đường thẳng AC và mặt phẳng (MNP). 
+c) Trong mặt phẳng (ACD), gọi G là giao điểm của NF và AD thì G là giao điểm của đường thẳng AD và mặt phẳng (MNP).

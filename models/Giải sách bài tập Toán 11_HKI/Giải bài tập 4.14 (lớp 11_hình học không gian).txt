@@ -1,0 +1,6 @@
+Cho hình chóp $S.ABCD$ có đáy $ABCD$ là hình bình hành. Gọi $M$ là một điểm bất kì thuộc cạnh $SC$.
+a) Xác định các giao tuyến của mặt phẳng $(MAB)$ với các mặt của hình chóp.
+b) Xác định các giao tuyến của mặt phẳng $(MAD)$ với các mặt của hình chóp.
+=====
+a) Trong mặt phẳng $(SCD)$, vẽ $MN // CD$ ($N \in SD$). Giao tuyến của mặt phẳng $(MAB)$ và các mặt của hình chóp là các đường thẳng $AB, BM, MN, NA$.
+b) Tương tự câu a.

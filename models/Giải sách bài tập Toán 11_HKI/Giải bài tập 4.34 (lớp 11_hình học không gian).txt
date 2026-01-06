@@ -1,0 +1,3 @@
+Cho hình hộp $ABCD.A'B'C'D'$. Một mặt phẳng $(P)$ cắt các cạnh $AD, BC, B'C', A'D'$ lần lượt tại $E, F, G, H$. Chứng minh rằng tứ giác $EFGH$ là hình bình hành.
+=====
+Vì hai mặt $(ABCD)$ và $(A'B'C'D')$ của hình hộp song song với nhau nên giao tuyến của mặt phẳng $(EFGH)$ và hai mặt phẳng đó song song với nhau, tức là $EF // HG$. Tương tự có $EH // FG$ nên tứ giác $EFGH$ là hình bình hành.

@@ -1,0 +1,3 @@
+Khi cắt một chiếc bánh ga-tô hình hộp, Thuý nhận thấy vết cắt ở mặt trên và mặt dưới của bánh gợi nên hình ảnh về hai đường thẳng song song với nhau. Hỏi nhận xét của Thuý có đúng không? Vì sao?
+=====
+Khi Thuý cắt bánh thì lưỡi dao di chuyển tạo thành một mặt phẳng cắt hai mặt trên và dưới của chiếc bánh. Vì mặt trên và mặt dưới của chiếc bánh song song với nhau nên các vết cắt (chính là giao tuyến của mặt phẳng cắt và hai mặt bánh) song song với nhau.

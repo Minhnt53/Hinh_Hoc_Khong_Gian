@@ -1,0 +1,3 @@
+Cho ba mặt phẳng $(P), (Q), (R)$ đôi một song song. Hai đường thẳng $d, d'$ cắt ba mặt phẳng lần lượt tại $A, B, C$ và $A', B', C'$. Biết rằng $AB = 2$ cm, $BC = 6$ cm và $A'B' = 3$ cm, tính $B'C'$.
+=====
+Áp dụng định lí Thalès tính được $B'C' = 9$.

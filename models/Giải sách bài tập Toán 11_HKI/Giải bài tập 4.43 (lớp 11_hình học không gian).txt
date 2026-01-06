@@ -1,0 +1,6 @@
+Cho hình chóp $S.ABCD$ có đáy $ABCD$ không là hình thang.
+a) Xác định giao tuyến của hai mặt phẳng $(SAB)$ và $(SCD)$.
+b) Xác định hình chiếu của điểm $A$ qua phép chiếu song song lên mặt phẳng $(SCD)$ theo phương $SB$.
+=====
+a) Trong mặt phẳng $(ABCD)$, gọi $E$ là giao điểm của $AB$ và $CD$. Khi đó $SE$ là giao tuyến của hai mặt phẳng $(SAB)$ và $(SCD)$.
+b) Trong mặt phẳng $(SAB)$, vẽ đường thẳng qua $A$ và song song với $SB$ cắt $SE$ tại $A'$. Khi đó $A'$ là hình chiếu của điểm $A$ qua phép chiếu đã cho.

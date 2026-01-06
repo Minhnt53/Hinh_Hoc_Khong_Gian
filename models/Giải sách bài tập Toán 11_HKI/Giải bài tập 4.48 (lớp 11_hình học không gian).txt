@@ -1,0 +1,7 @@
+Trong không gian cho hai đường thẳng cắt nhau $a$ và $b$. Nếu $c$ là một đường thẳng song song với $a$ thì
+A. $c$ và $b$ song song với nhau.
+B. $c$ và $b$ cắt nhau.
+C. $c$ và $b$ chéo nhau.
+D. $c$ và $b$ không song song với nhau.
+=====
+D

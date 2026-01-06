@@ -1,0 +1,3 @@
+Ba chiếc gậy thẳng được đặt dựa vào tường và đôi một song song với nhau. Giải thích vì sao nếu ba đầu gậy trên tường thẳng hàng thì ba đầu gậy trên mặt sàn cũng thẳng hàng.
+=====
+Gọi $d$ là đường thẳng song song với ba chiếc gậy và $(P)$ là mặt sàn. Khi đó ba đầu gậy trên sàn chính là hình chiếu của ba đầu gậy trên tường qua phép chiếu lên mặt phẳng $(P)$ theo phương $d$. Vì phép chiếu song song bảo toàn tính thẳng hàng của các điểm nên nếu ba đầu gậy trên tường thẳng hàng thì ba đầu gậy trên sàn cũng thẳng hàng.

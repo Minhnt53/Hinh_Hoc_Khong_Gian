@@ -1,0 +1,9 @@
+Cho hai hình bình hành $ABCD$ và $ABEF$ không cùng nằm trong một mặt phẳng. Chứng minh rằng:
+a) $CD // (ABEF)$;
+b) $EF // (ABCD)$;
+c) $CE // (ADF)$.
+(Gợi ý: Theo SGK Bài 11, Luyện tập 3, ta đã biết $CEFD$ là hình bình hành).
+=====
+a) Vì $ABCD$ là hình bình hành nên $CD // AB$, suy ra $CD // (ABEF)$.
+b) Vì $ABEF$ là hình bình hành nên $EF // AB$, suy ra $EF // (ABCD)$.
+c) Vì $CEFD$ là hình bình hành nên $CE // DF$, suy ra $CE // (ADF)$.

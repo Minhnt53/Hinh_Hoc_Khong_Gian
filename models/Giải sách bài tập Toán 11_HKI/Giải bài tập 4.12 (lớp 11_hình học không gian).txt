@@ -1,0 +1,3 @@
+Một số chiếc bàn có thiết kế khung sắt là hai hình chữ nhật có thể xoay quanh một trục, mặt bàn là một tấm gỗ phẳng được đặt lên phần khung như trong Hình. Tính chất hình học nào giải thích việc mặt bàn có thể được giữ cố định bởi khung sắt? (Giả sử khung sắt chắc chắn và được đặt cân đối).
+=====
+Mặt bàn có thể được đỡ cố định bằng khung sắt dựa theo tính chất: một mặt phẳng được hoàn toàn xác định khi biết nó chứa hai đường thẳng cắt nhau.

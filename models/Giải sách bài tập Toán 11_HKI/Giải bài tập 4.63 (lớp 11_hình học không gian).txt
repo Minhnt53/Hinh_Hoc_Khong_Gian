@@ -1,0 +1,5 @@
+Một người thợ đang cố gắng đặt tấm kính $ABCD$ (mép $AB$ không // với $CD$) dựa vào tường sao cho mép kính $CD //$ với đường chân tường, còn mép kính $AB$ nằm hoàn toàn trên tường. Sau một hồi loay hoay, người thợ vẫn không thể đặt được tấm kính như mong muốn. Hãy giải thích tại sao.
+Có cách nào đặt tấm kính để một mép kính // với đường chân tường, một mép kính khác nằm hoàn toàn trên tường không?
+=====
+Áp dụng định lí ba đường giao tuyến cho ba mặt phẳng gồm: mặt đất, mặt tường và mặt kính. Khi đó ba giao tuyến là mép chân tường và hai mép kính $AB, CD$. Vì $AB$ không // với $CD$ nên ba giao tuyến đồng quy, vì vậy không thể đặt tấm kính sao cho mép $CD //$ với đường chân tường.
+Có thể đặt tấm kính sao cho mép kính $BC$ nằm trên tường và mép kính $AD$ nằm trên mặt đất. Khi đó cả hai mép kính đều // với đường chân tường.

@@ -1,0 +1,8 @@
+Cho hình bình hành $ABCD$. Qua $A, B, C, D$ lần lượt vẽ bốn đường thẳng $a, b, c, d$ đôi một song song và không nằm trong mặt phẳng $(ABCD)$.
+a) Chứng minh rằng hai mặt phẳng $mp(a, b)$ và $mp(c, d)$ song song với nhau.
+b) Chứng minh rằng hai mặt phẳng $mp(a, d)$ và $mp(b, c)$ song song với nhau.
+c) Một mặt phẳng cắt bốn đường thẳng $a, b, c, d$ lần lượt tại $A', B', C', D'$. Chứng minh rằng tứ giác $A'B'C'D'$ là hình bình hành.
+=====
+a) Vì $a // d$ nên $a // mp(c, d)$. Vì $ABCD$ là hình bình hành nên $AB // CD$, suy ra $AB // mp(c, d)$. Mặt phẳng $mp(a, b)$ chứa hai đường thẳng cắt nhau là $a$ và $AB$ cùng song song với $mp(c, d)$ nên mặt phẳng $mp(a, b)$ song song với mặt phẳng $mp(c, d)$.
+b) Chứng minh tương tự câu a.
+c) Vì mặt phẳng $mp(a, b)$ song song với mặt phẳng $mp(c, d)$ nên giao tuyến của mặt phẳng $(A'B'C'D')$ với hai mặt phẳng đó song song với nhau, tức là $A'B' // C'D'$. Lập luận tương tự có $A'D' // B'C'$, suy ra tứ giác $A'B'C'D'$ là hình bình hành.

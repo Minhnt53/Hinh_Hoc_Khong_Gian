@@ -1,0 +1,7 @@
+Cho hình chóp tứ giác $S.ABCD$ và $E$ là một điểm bất kì thuộc cạnh $SA$. Gọi $(P)$ là mặt phẳng qua $E$ và song song với hai đường thẳng $SB, SD$. Gọi $M, N$ lần lượt là giao điểm của $(P)$ và các cạnh $AB, AD$.
+a) Chứng minh rằng $EM // SB$ và $EN // SD$.
+b) Giả sử đường thẳng $MN$ cắt các đường thẳng $BC, CD$. Xác định giao tuyến của mặt phẳng $(P)$ và các mặt phẳng $(SBC), (SCD)$.
+=====
+a) Mặt phẳng $(SAB)$ chứa đường thẳng $SB$ song song với $(P)$ nên giao tuyến của hai mặt phẳng đó song song với $SB$, suy ra $EM // SB$. Tương tự có $EN // SD$.
+b) Gọi $F, G$ lần lượt là giao điểm của đường thẳng $MN$ và hai đường thẳng $BC, CD$. Trong mặt phẳng $(SBC)$, vẽ đường thẳng qua $F$ và song song với $SB$ thì đường thẳng đó là giao tuyến của mặt phẳng $(P)$ và mặt phẳng $(SBC)$.
+Trong mặt phẳng $(SCD)$, vẽ đường thẳng qua $G$ và song song với $SD$ thì đường thẳng đó là giao tuyến của mặt phẳng $(P)$ và mặt phẳng $(SCD)$.

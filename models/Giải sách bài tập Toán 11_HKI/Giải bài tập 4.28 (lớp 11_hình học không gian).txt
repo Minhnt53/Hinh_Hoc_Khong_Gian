@@ -1,0 +1,3 @@
+Để dựng dây phơi quần áo, bác Việt lắp hai thanh sắt thẳng đứng có chiều dài bằng nhau trên mặt đất và căng dây nối hai đầu còn lại của hai thanh sắt. Khi đó, dây phơi có song song với mặt đất không? Giải thích vì sao.
+=====
+Gọi hai đầu của hai thanh sắt trên mặt đất là $A, B$ và hai đầu tương ứng còn lại là $M, N$ thì $AM // BN$ và $AM = BN$, suy ra $ABNM$ là hình bình hành. Vì vậy $MN // AB$ và do đó dây phơi (nối hai điểm $M, N$) song song với mặt đất (chứa đường thẳng $AB$).

@@ -1,0 +1,6 @@
+Cho hình hộp $ABCD.A'B'C'D'$. Chứng minh rằng:
+a) $AB' // C'D$;
+b) Hai mặt phẳng $(AB'D')$ và $(C'BD)$ song song với nhau.
+=====
+a) Theo bài tập 4.35c thì tứ giác $ADC'B'$ là hình bình hành, do đó $AB' // C'D$.
+b) Từ câu a suy ra $AB' // (C'BD)$. Chứng minh tương tự có $AD' // BC'$ nên $AD' // (C'BD)$. Mặt phẳng $(AB'D')$ có hai đường thẳng cắt nhau $AB'$ và $AD'$ cùng song song với mặt phẳng $(C'BD)$ nên hai mặt phẳng $(AB'D')$ và $(C'BD)$ song song với nhau.

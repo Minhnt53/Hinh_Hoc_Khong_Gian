@@ -1,0 +1,6 @@
+Cho tứ diện $ABCD$. Một mặt phẳng cắt bốn cạnh $AB, BC, CD, DA$ lần lượt tại các điểm $M, N, P, Q$.
+a) Chứng minh rằng các đường thẳng $MN, PQ, AC$ đôi một song song hoặc đồng quy.
+b) Chứng minh rằng các đường thẳng $MQ, NP, BD$ đôi một song song hoặc đồng quy.
+=====
+Áp dụng định lí về ba đường giao tuyến cho ba mặt phẳng $(ABC)$, $(ACD)$ và $(MNPQ)$.
+b) Tương tự câu a.

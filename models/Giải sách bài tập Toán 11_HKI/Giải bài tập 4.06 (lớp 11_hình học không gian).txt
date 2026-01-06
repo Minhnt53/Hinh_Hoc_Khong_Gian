@@ -1,0 +1,7 @@
+Cho tứ diện $ABCD$. Gọi $E, F$ là các điểm lần lượt thuộc các cạnh $AB, AC$ sao cho $AE = \frac{1}{2}BE$ và $AF = 2CF$. Gọi $O$ là một điểm nằm trong tam giác $BCD$.
+a) Xác định giao tuyến của hai mặt phẳng $(OEF)$ và $(ABD)$.
+b) Xác định giao điểm (nếu có) của đường thẳng $AD$ và mặt phẳng $(OEF)$.
+=====
+a) Trong mặt phẳng $(ABC)$, gọi $G$ là giao điểm của $EF$ và $BC$.
+Trong mặt phẳng $(BCD)$, gọi $H$ là giao điểm của $OG$ và $BD$. Khi đó $H$ là một điểm chung của hai mặt phẳng $(OEF)$ và $(ABD)$, suy ra $EH$ là giao tuyến của hai mặt phẳng đó.
+b) Trong mặt phẳng $(ABD)$, gọi $I$ là giao điểm (nếu có) của $EH$ và $AD$. Khi đó $I$ là giao điểm của $AD$ và $(OEF)$.

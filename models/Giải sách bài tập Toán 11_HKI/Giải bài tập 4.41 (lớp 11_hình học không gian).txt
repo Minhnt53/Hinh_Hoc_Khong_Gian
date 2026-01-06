@@ -1,0 +1,6 @@
+Cho hình lăng trụ tam giác $ABC.A'B'C'$. Gọi $M$ là điểm thuộc cạnh $BC$ sao cho $MB = 2MC$.
+a) Xác định hình chiếu $M'$ của $M$ qua phép chiếu song song lên mặt phẳng $(A'B'C')$ theo phương $AA'$.
+b) Chứng minh rằng $M'B' = 2M'C'$.
+=====
+a) Trong mặt phẳng $(BCC'B')$ vẽ $MM' // BB'$ ($M' \in B'C'$) thì $M'$ là hình chiếu của $M$ qua phép chiếu đã cho.
+b) Vì $AA' // BB' // CC'$ nên $B', C'$ lần lượt là hình chiếu của $B, C$ lên mặt phẳng $(A'B'C')$ theo phương chiếu $AA'$. Theo tính chất của phép chiếu song song suy ra $\frac{M'B'}{M'C'} = \frac{MB}{MC} = 2$.

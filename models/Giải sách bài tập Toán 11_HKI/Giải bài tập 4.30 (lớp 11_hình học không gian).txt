@@ -1,0 +1,6 @@
+Cho tứ diện $ABCD$ và một điểm $O$ nằm trong tam giác $BCD$. Gọi $(P)$ là mặt phẳng qua $O$ và song song với mặt phẳng $(ABD)$.
+a) Xác định giao tuyến của mặt phẳng $(P)$ và mặt phẳng $(BCD)$.
+b) Xác định giao tuyến của mặt phẳng $(P)$ và các mặt còn lại của tứ diện.
+=====
+a) Trong mặt phẳng $(BCD)$, vẽ đường thẳng qua $O$ và song song với $BD$ cắt các cạnh $BC, CD$ lần lượt tại $E, F$. Khi đó $EF$ là giao tuyến của mặt phẳng $(P)$ và mặt phẳng $(BCD)$.
+b) Trong mặt phẳng $(ABC)$, vẽ $EG // AB$ ($G \in AC$) thì $EG$ là giao tuyến của mặt phẳng $(P)$ và mặt phẳng $(ABC)$. Khi đó $FG$ là giao tuyến của mặt phẳng $(P)$ và mặt phẳng $(ACD)$.

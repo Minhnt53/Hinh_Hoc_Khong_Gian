@@ -1,0 +1,6 @@
+Cho tứ diện $ABCD$. Gọi $M, N$ lần lượt là trung điểm của các cạnh $AB, CD$ và $(P)$ là mặt phẳng cố định không song song với $MN$. Gọi $A', B', C', D', M', N'$ lần lượt là hình chiếu của $A, B, C, D, M, N$ qua phép chiếu lên mặt phẳng $(P)$ theo phương $MN$.
+a) Chứng minh rằng hai điểm $M'$ và $N'$ trùng nhau.
+b) Chứng minh rằng bốn điểm $A', B', C', D'$ là bốn đỉnh của một hình bình hành.
+=====
+a) Vì đường thẳng $MN$ là phương chiếu nên hình chiếu $M'$ của $M$ trùng với hình chiếu $N'$ của $N$.
+b) Vì $M$ là trung điểm của $AB$ nên theo tính chất của phép chiếu song song suy ra $M'$ là trung điểm của $A'B'$. Tương tự có $N'$ là trung điểm của $C'D'$. Vì $M'$ trùng $N'$ nên tứ giác tạo bởi bốn điểm $A', B', C', D'$ có các đường chéo đi qua trung điểm của mỗi đường, suy ra tứ giác đó là hình bình hành.

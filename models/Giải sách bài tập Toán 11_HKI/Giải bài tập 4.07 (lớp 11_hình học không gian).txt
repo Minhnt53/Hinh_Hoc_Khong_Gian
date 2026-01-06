@@ -1,0 +1,8 @@
+Cho tứ diện $ABCD$ và các điểm $M, N, P$ lần lượt thuộc các cạnh $AB, AC, AD$. Gọi $O$ là một điểm nằm trong tam giác $BCD$.
+a) Xác định giao tuyến của hai mặt phẳng $(ABO)$ và $(ACD)$.
+b) Xác định giao tuyến của hai mặt phẳng $(ABO)$ và $(MNP)$.
+c) Xác định giao điểm của đường thẳng $AO$ và mặt phẳng $(MNP)$.
+=====
+a) Trong mặt phẳng $(BCD)$, gọi $E$ là giao điểm của $BO$ và $CD$ thì $AE$ là giao tuyến của hai mặt phẳng $(ABO)$ và $(ACD)$.
+b) Trong mặt phẳng $(ACD)$, gọi $F$ là giao điểm của $AE$ và $NP$ thì $F$ là một điểm chung của hai mặt phẳng $(ABO)$ và $(MNP)$, suy ra $MF$ là giao tuyến của hai mặt phẳng đó.
+c) Trong mặt phẳng $(ABE)$, gọi $G$ là giao điểm của $AO$ và $MF$ thì $G$ là giao điểm của $AO$ và $(MNP)$.

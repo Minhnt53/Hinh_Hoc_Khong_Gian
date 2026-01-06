@@ -1,0 +1,7 @@
+Cho tứ diện $ABCD$. Một mặt phẳng cắt các cạnh $AB, BC, CD, DA$ của tứ diện lần lượt tại các điểm $M, N, P, Q$. Khi đó
+A. $MN, AC, PQ$ đồng quy.
+B. $MN, AC, PQ$ đôi một song song.
+C. $MN, AC, PQ$ đôi một chéo nhau.
+D. $MN, AC, PQ$ đôi một song song hoặc đồng quy.
+=====
+D

@@ -1,0 +1,3 @@
+Bạn Huy đổ nước màu vào một chiếc bể cá có các mặt đều làm bằng kính phẳng. Sau một vài hôm nước bay hơi một phần và để lại trên thành bể các vệt màu như trong Hình. Huy quan sát thấy rằng, dù bể cá có hình dạng như thế nào, miễn là các mặt đều phẳng, thì vệt màu trên mỗi thành bể đều là các đường thẳng. Hãy giải thích vì sao.
+=====
+Vệt màu trên mỗi thành bể là giao tuyến của hai mặt phẳng: mặt phẳng tạo bởi thành bể và mặt nước. Do đó vệt màu luôn là đường thẳng.

@@ -1,0 +1,6 @@
+Cho hình hộp $ABCD.A'B'C'D'$. Gọi $O$ là giao điểm của các đường chéo của hình hộp. Mặt phẳng qua $O$ và song song với mặt phẳng $(ABCD)$ cắt các cạnh $AA', BB', CC', DD'$ lần lượt tại $M, N, P, Q$.
+a) Chứng minh rằng $M, N, P, Q$ lần lượt là trung điểm của các cạnh $AA', BB', CC', DD'$.
+b) Chứng minh rằng $ABCD.MNPQ$ là hình hộp.
+=====
+a) Áp dụng định lí Thalès cho ba mặt phẳng $(ABCD), (MNPQ), (A'B'C'D')$ và hai cát tuyến $AA'$ và $DB'$ suy ra $\frac{AM}{MA'} = \frac{DO}{OB'}$. Vì $O$ là trung điểm của $DB'$ nên $M$ là trung điểm của $AA'$. Chứng minh tương tự với các điểm $N, P, Q$.
+b) Vì $M, N$ lần lượt là trung điểm của các cạnh $AA', BB'$ nên $MN // AB$ và $MN = AB$. Tương tự $PQ // CD$ và $PQ = CD$. Vì $AB // CD$ và $AB = CD$ nên $MN // PQ$ và $MN = PQ$, suy ra $MNPQ$ là hình bình hành. Vì các đường thẳng $AM, BN, CP, DQ$ đôi một song song nên suy ra $ABCD.MNPQ$ là hình hộp.

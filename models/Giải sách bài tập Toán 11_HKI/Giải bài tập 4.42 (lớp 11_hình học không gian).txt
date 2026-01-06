@@ -1,0 +1,3 @@
+Cho hình lăng trụ tứ giác $ABCD.A'B'C'D'$. Gọi $O$ là giao điểm của $AC$ và $BD$. Gọi $O'$ là hình chiếu của $O$ qua phép chiếu song song lên mặt phẳng $(A'B'C'D')$ theo phương $AA'$. Chứng minh rằng $O'$ là giao điểm của $A'C'$ và $B'D'$.
+=====
+Qua phép chiếu lên mặt phẳng $(A'B'C'D')$ theo phương $AA'$, các điểm $A, B, C, D, O$ lần lượt có hình chiếu là $A', B', C', D', O'$. Vì phép chiếu song song bảo toàn tính thẳng hàng của các điểm và $O$ nằm giữa $A$ và $C$ nên $O'$ nằm giữa $A'$ và $C'$. Tương tự suy ra $O'$ nằm giữa $B'$ và $D'$. Vậy $O'$ là giao điểm của $A'C'$ và $B'D'$.

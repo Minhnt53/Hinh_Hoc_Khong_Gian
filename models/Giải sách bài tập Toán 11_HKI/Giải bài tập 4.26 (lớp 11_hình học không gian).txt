@@ -1,0 +1,10 @@
+Cho hình chóp $S.ABCD$ có đáy $ABCD$ là hình thang $(AB // CD)$. Gọi $E$ là một điểm bất kì thuộc cạnh $SA$. Gọi $(P)$ là mặt phẳng qua $E$ và song song với hai đường thẳng $AB$ và $SC$.
+a) Xác định giao tuyến của mặt phẳng $(P)$ và mặt phẳng $(SAC)$, từ đó tìm một điểm chung của mặt phẳng $(P)$ và mặt phẳng $(ABCD)$.
+b) Xác định giao tuyến của mặt phẳng $(P)$ và mặt phẳng $(ABCD)$.
+c) Xác định giao tuyến của mặt phẳng $(P)$ và các mặt còn lại của hình chóp.
+=====
+a) Mặt phẳng $(SAC)$ chứa đường thẳng $SC$ song song với mặt phẳng $(P)$ nên giao tuyến của hai mặt phẳng $(SAC)$ và $(P)$ song song với $SC$. Do đó, trong mặt phẳng $(SAC)$, vẽ đường thẳng $EF // SC$ ($F \in AC$) thì $EF$ là giao tuyến của hai mặt phẳng $(P)$ và $(SAC)$.
+Điểm $F$ là điểm chung của mặt phẳng $(P)$ và mặt phẳng $(ABCD)$.
+b) Trong mặt phẳng $(ABCD)$, vẽ đường thẳng $MN$ qua $F$ và song song với $AB$ ($M \in AD, N \in BC$) thì $MN$ là giao tuyến của $(P)$ và mặt phẳng $(ABCD)$.
+c) Trong mặt phẳng $(SAB)$, vẽ đường thẳng $EG // AB$ ($G \in SB$) thì $EG$ là giao tuyến của hai mặt phẳng $(P)$ và $(SAB)$.
+Các giao tuyến của $(P)$ và các mặt của hình chóp là $EG, MN, EM, GN$.

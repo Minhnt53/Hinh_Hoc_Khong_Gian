@@ -1,0 +1,3 @@
+Cho hai hình bình hành $ABCD$ và $ABEF$ không cùng nằm trong một mặt phẳng. Chứng minh rằng sáu điểm $A, B, C, D, E, F$ là sáu đỉnh của một hình lăng trụ tam giác.
+=====
+Các đường thẳng $AB, CD, EF$ đôi một song song với nhau. Hai mặt phẳng $(ADF)$ và $(BCE)$ song song với nhau (xem SGK, Bài 14, Ví dụ 1). Do đó $ADF.BCE$ là hình lăng trụ tam giác.

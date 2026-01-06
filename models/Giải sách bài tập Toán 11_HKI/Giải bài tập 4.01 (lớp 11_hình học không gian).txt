@@ -1,0 +1,4 @@
+Cho hình chóp S.ABCD. Gọi O là giao điểm của AC và BD và gọi M là một điểm bất kì thuộc cạnh SC. a) Xác định giao tuyến của hai mặt phẳng (AMO) và (SCD). b) Xác định giao tuyến của hai mặt phẳng (BMO) và (SCD).
+=====
+a) Giao tuyến là đường thẳng SC. 
+b) Giao tuyến là đường thẳng DM.

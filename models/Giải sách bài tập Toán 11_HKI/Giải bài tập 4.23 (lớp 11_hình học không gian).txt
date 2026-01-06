@@ -1,0 +1,6 @@
+Cho hai hình bình hành $ABCD$ và $ABEF$ không cùng nằm trong một mặt phẳng. Gọi $K$ và $L$ lần lượt là giao điểm của hai đường chéo của hai hình bình hành đó. Chứng minh rằng:
+a) $KL // (ADF)$; 
+b) $KL // (BCE)$.
+=====
+a) Vì $KL$ là đường trung bình của tam giác $BDF$ nên $KL // DF$, suy ra $KL // (ADF)$.
+b) Tương tự câu a.

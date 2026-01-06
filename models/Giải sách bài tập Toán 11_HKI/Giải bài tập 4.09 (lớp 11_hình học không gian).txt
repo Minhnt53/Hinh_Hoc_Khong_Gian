@@ -1,0 +1,3 @@
+Cho hai mặt phẳng $(P)$ và $(Q)$ cắt nhau theo giao tuyến $d$ và một điểm $O$ nằm ngoài cả hai mặt phẳng đó. Gọi $A, B$ là hai điểm phân biệt thuộc mặt phẳng $(P)$ sao cho $AB$ cắt $d$ tại $C$. Gọi $D, E$ lần lượt là giao điểm của hai đường thẳng $OA, OB$ và mặt phẳng $(Q)$. Chứng minh rằng ba điểm $C, D, E$ thẳng hàng.
+=====
+Ba điểm $C, D, E$ đều thuộc giao tuyến của hai mặt phẳng $(OAB)$ và $(Q)$ nên ba điểm đó thẳng hàng.

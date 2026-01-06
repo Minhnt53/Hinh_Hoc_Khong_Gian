@@ -1,0 +1,8 @@
+Cho hình chóp $S.ABCD$ có đáy $ABCD$ là hình thang $(AB // CD)$. Gọi $E, F$ lần lượt là trọng tâm của các tam giác $SAD, SBC$.
+=====
+a) Vì $E, F$ lần lượt là trọng tâm của các tam giác $SAD, SBC$ nên $\frac{SE}{SM} = \frac{SF}{SN} = \frac{2}{3}$.
+Theo định lí Thalès suy ra trong tam giác $SMN$ có $EF // MN$. Vì $MN$ là đường trung bình của hình thang $ABCD$ nên $MN // AB$.
+Từ đó suy ra $EF // AB$.
+b) Trong mặt phẳng $(SAD)$, gọi $P$ là giao điểm của $AE$ và $SD$. Trong mặt phẳng $(SBC)$, gọi $Q$ là giao điểm của $BF$ và $SC$.
+Các giao tuyến của mặt phẳng $(AEF)$ và các mặt của hình chóp là các đường thẳng $AP, PQ, QB, AB$.
+c) Hai mặt phẳng $(AEF)$ và $(SCD)$ chứa hai đường thẳng song song là $EF$ và $CD$ (cùng song song với $AB$) nên giao tuyến của hai mặt phẳng đó song song với $EF$, tức là $PQ$ song song với $EF$. Vậy có hai giao tuyến song song với đường thẳng $EF$ là $AB$ và $PQ$.

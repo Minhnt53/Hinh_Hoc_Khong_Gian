@@ -1,0 +1,3 @@
+Một chiếc bình nước hình trụ được đặt trên bàn, lượng nước trong bình bằng đúng một nửa dung tích của bình. Hoàng đặt một chiếc ống hút vào trong bình sao cho một đầu của ống hút chạm vào đáy bình còn một đầu chạm vào miệng bình. Hoàng nói rằng độ dài của phần ống hút bị ướt bằng $\frac{1}{3}$ độ dài của toàn bộ ống hút. Hỏi Hoàng nói đúng hay sai? Vì sao?
+=====
+Hoàng nói sai. Theo định lí Thalès trong không gian thì độ dài của phần ống hút bị ướt bằng $\frac{1}{2}$ độ dài của toàn bộ ống hút. (Xem thêm Bài 13, Vận dụng 2).

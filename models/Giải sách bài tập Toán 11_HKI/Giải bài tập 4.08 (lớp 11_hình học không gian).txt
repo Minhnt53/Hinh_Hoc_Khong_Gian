@@ -1,0 +1,3 @@
+Cho hình tứ diện $SABC$ và các điểm $A', B', C'$ lần lượt thuộc các cạnh $SA, SB, SC$. Giả sử hai đường thẳng $B'C'$ và $BC$ cắt nhau tại $D$, hai đường thẳng $C'A'$ và $CA$ cắt nhau tại $E$ và hai đường thẳng $A'B'$ và $AB$ cắt nhau tại $F$. Chứng minh rằng ba điểm $D, E, F$ thẳng hàng.
+=====
+Ba điểm $D, E, F$ cùng thuộc giao tuyến của hai mặt phẳng $(ABC)$ và $(A'B'C')$ nên ba điểm đó thẳng hàng (H.4.41).
