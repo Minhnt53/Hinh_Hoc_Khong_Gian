@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Học Hình Học 3D (AR Version)</title>
+    <title>Học Hình Học 3D (AR Final)</title>
     
     <link rel="icon" href="data:,">
 
@@ -46,6 +46,7 @@
         .menu-item.active { background: #3498db; color: white; border-left: 4px solid #fff; }
         .sidebar-footer { padding: 15px; text-align: center; color: #aaa; font-size: 12px; margin-top: auto; }
         #main-content { flex: 1; display: flex; position: relative; overflow: hidden; }
+        /* QUAN TRỌNG: background màu xám ở đây để Desktop vẫn thấy màu xám, còn AR thì trong suốt */
         #viewer-container { flex: 7; position: relative; background: #e0e0e0; overflow: hidden; border-right: 2px solid #ccc; }
         #text-panel { flex: 3; display: flex; flex-direction: column; min-width: 300px; background: white; border-left: 1px solid #ccc; }
         #problem-section { flex: 1; display: flex; flex-direction: column; border-bottom: 4px double #ddd; background-color: #fffdf5; }
@@ -79,7 +80,7 @@
     <div id="sidebar">
         <div class="brand">📐 MENU BÀI TẬP</div>
         <div id="menu-content"></div>
-        <div class="sidebar-footer">V29 - Final AR Version</div>
+        <div class="sidebar-footer">V30 - AR Complete</div>
     </div>
 
     <div id="main-content">
@@ -119,12 +120,14 @@
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
-        import { ARButton } from 'three/addons/webxr/ARButton.js'; // IMPORT AR
+        import { ARButton } from 'three/addons/webxr/ARButton.js';
 
         // --- SETUP ---
         const viewer = document.getElementById('viewer-container');
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xe0e0e0);
+        // QUAN TRỌNG: Để null để chế độ AR nhìn xuyên qua được. 
+        // Màu xám trên PC được xử lý bởi CSS #viewer-container
+        scene.background = null; 
 
         const aspect = viewer.clientWidth / viewer.clientHeight;
         const frustumSize = 10; 
@@ -137,12 +140,12 @@
         
         let activeCamera = orthoCamera; 
 
-        // RENDERER SETUP CHO AR
+        // RENDERER SETUP
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(viewer.clientWidth, viewer.clientHeight);
         renderer.setPixelRatio(window.devicePixelRatio); 
         renderer.sortObjects = true;
-        renderer.xr.enabled = true; // BẬT XR
+        renderer.xr.enabled = true; // BẬT AR
         viewer.appendChild(renderer.domElement);
 
         const labelRenderer = new CSS2DRenderer();
@@ -154,8 +157,8 @@
         controls.enableDamping = true; controls.enableRotate = true;
         const clock = new THREE.Clock();
 
-        // --- AR LOGIC & RETICLE ---
-        // Nút Start AR
+        // --- AR SETUP ---
+        // 1. Nút bấm AR
         const arButton = ARButton.createButton(renderer, { 
             requiredFeatures: ['hit-test'],
             optionalFeatures: ['dom-overlay'],
@@ -163,7 +166,7 @@
         });
         document.body.appendChild(arButton);
 
-        // Vòng tròn định vị (Reticle)
+        // 2. Vòng tròn định vị (Reticle)
         const reticle = new THREE.Mesh(
             new THREE.RingGeometry(0.15, 0.2, 32).rotateX(-Math.PI / 2),
             new THREE.MeshBasicMaterial()
@@ -172,21 +175,24 @@
         reticle.visible = false;
         scene.add(reticle);
 
+        // 3. Xử lý chạm màn hình -> Đặt mô hình
         let hitTestSource = null;
         let hitTestSourceRequested = false;
 
-        // Xử lý chạm màn hình để đặt vật
         function onSelect() {
             if (reticle.visible && currentModel) {
-                // Di chuyển model đến vị trí vòng tròn
+                // Di chuyển mô hình tới vị trí vòng tròn
                 currentModel.position.setFromMatrixPosition(reticle.matrix);
+                
+                // (Tuỳ chọn) Xoay mô hình hướng về phía người xem nếu muốn
+                // currentModel.lookAt(renderer.xr.getCamera().position); 
             }
         }
         const controller = renderer.xr.getController(0);
         controller.addEventListener('select', onSelect);
         scene.add(controller);
 
-        // --- MANAGER NHÃN (FIX LỖI CHỒNG CHỮ) ---
+        // --- HELPER FUNCTIONS ---
         let allLabels = []; 
         function clearLabels() {
             allLabels.forEach(label => {
@@ -196,7 +202,6 @@
             allLabels = [];
         }
 
-        // --- CAMERA TOGGLE ---
         window.toggleCamera = function() {
             const btn = document.getElementById('cam-toggle');
             const oldPos = activeCamera.position.clone();
@@ -211,7 +216,6 @@
             controls.object = activeCamera; controls.target.copy(oldTarget); controls.update();
         }
 
-        // --- SHADER & MATERIAL ---
         function getColorFromName(name) {
             const n = name.toLowerCase();
             if (n.includes('red')) return 0xff4444; if (n.includes('green')) return 0x22aa22;
@@ -250,7 +254,7 @@
             geometry.setAttribute('lineDistance', new THREE.BufferAttribute(lineDistances, 1));
         }
 
-        // --- UI & ANIMATION ---
+        // --- ANIMATION UI ---
         window.toggleSolution = function() {
             const textDiv = document.getElementById('solution-text');
             const btn = document.getElementById('reveal-btn');
@@ -280,7 +284,7 @@
         btnNext.addEventListener('click', () => { if (currentStepIndex < animationActions.length - 1) { currentStepIndex++; const action = animationActions[currentStepIndex]; action.reset(); action.setLoop(THREE.LoopOnce); action.clampWhenFinished = true; action.play(); updateStepVisibility(currentStepIndex); updateUI(); } });
         btnPrev.addEventListener('click', () => { if (currentStepIndex >= 0) { const action = animationActions[currentStepIndex]; action.stop(); currentStepIndex--; updateStepVisibility(currentStepIndex); updateUI(); } });
 
-        // --- LOAD MODEL & TEXT ---
+        // --- LOAD MODEL ---
         const loader = new GLTFLoader();
 
         window.loadModel3D = function(filePath, title, fullTextFromMenu) {
@@ -300,10 +304,14 @@
             if (mixer) { mixer.stopAllAction(); mixer = null; }
             animationActions = []; currentStepIndex = -1; controlsPanel.classList.remove('visible');
 
+            // --- FIX URL ---
             const timestamp = new Date().getTime();
-            const textPath = filePath.replace('.glb', '.txt').replace('.gltf', '.txt');
+            const encodedPath = encodeURI(filePath); // Mã hóa đường dẫn (Fix lỗi dấu cách/tiếng Việt)
+            const textPathRaw = filePath.replace('.glb', '.txt').replace('.gltf', '.txt');
+            const encodedTextPath = encodeURI(textPathRaw);
 
-            fetch(textPath + '?t=' + timestamp)
+            // 1. Tải Text
+            fetch(encodedTextPath + '?t=' + timestamp)
                 .then(response => {
                     if (!response.ok) throw new Error("File text không tồn tại");
                     return response.text();
@@ -315,7 +323,7 @@
                     if (window.MathJax) MathJax.typesetPromise([problemDiv, solutionDiv]).then(()=>{});
                 })
                 .catch(err => {
-                    console.warn("Lỗi tải text dynamic:", err);
+                    // Fallback nếu lỗi
                     if (fullTextFromMenu) {
                         const parts = fullTextFromMenu.split('=====');
                         problemDiv.innerHTML = parts[0].trim();
@@ -326,7 +334,8 @@
                     }
                 });
 
-            loader.load(filePath + '?t=' + timestamp, (gltf) => {
+            // 2. Tải 3D
+            loader.load(encodedPath + '?t=' + timestamp, (gltf) => {
                 const root = gltf.scene;
                 let maxGeoSize = 0;
                 
@@ -369,6 +378,7 @@
 
                 currentModel = root; updateStepVisibility(-1);
                 
+                // AUTO FIT
                 const box = new THREE.Box3().setFromObject(root); const center = box.getCenter(new THREE.Vector3()); root.position.sub(center); 
                 if (maxGeoSize > 0) {
                     const padding = 1.5; const newFrustumSize = maxGeoSize * padding;
@@ -384,15 +394,19 @@
                     perspCamera.lookAt(0,0,0);
                 }
                 scene.add(root); controls.object = activeCamera; controls.target.set(0,0,0); controls.update(); loading.style.display = 'none';
-            }, undefined, (err) => { console.error(err); loading.style.display = 'none'; alert("Lỗi tải file 3D"); });
+            }, undefined, (err) => { 
+                console.error(err); 
+                loading.style.display = 'none'; 
+                alert("Lỗi tải file 3D (Hãy kiểm tra lại tên file trên GitHub)"); 
+            });
         }
 
-        // --- RENDER LOOP CHO AR & NORMAL ---
+        // --- MAIN LOOP ---
         function render(timestamp, frame) {
             const delta = clock.getDelta();
             if (mixer) mixer.update(delta);
             
-            // --- XỬ LÝ HIT-TEST (AR) ---
+            // --- XỬ LÝ AR HIT-TEST ---
             if (frame) {
                 const referenceSpace = renderer.xr.getReferenceSpace();
                 const session = renderer.xr.getSession();
@@ -422,7 +436,6 @@
                     }
                 }
             }
-            // -------------------------
 
             controls.update();
             renderer.render(scene, activeCamera);
