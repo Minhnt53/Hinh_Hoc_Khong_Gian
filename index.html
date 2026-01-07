@@ -3,18 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Học Hình Học 3D (AR Final)</title>
+    <title>Học Hình Học 3D (AR Final Complete)</title>
     
     <link rel="icon" href="data:,">
 
     <script>
         window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']]
-            },
-            svg: {
-                fontCache: 'global'
-            }
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
         };
     </script>
 
@@ -46,8 +42,10 @@
         .menu-item.active { background: #3498db; color: white; border-left: 4px solid #fff; }
         .sidebar-footer { padding: 15px; text-align: center; color: #aaa; font-size: 12px; margin-top: auto; }
         #main-content { flex: 1; display: flex; position: relative; overflow: hidden; }
-        /* QUAN TRỌNG: background màu xám ở đây để Desktop vẫn thấy màu xám, còn AR thì trong suốt */
-        #viewer-container { flex: 7; position: relative; background: #e0e0e0; overflow: hidden; border-right: 2px solid #ccc; }
+        
+        /* Mặc định là màu xám. Khi vào AR, JS sẽ đổi thành transparent */
+        #viewer-container { flex: 7; position: relative; background: #e0e0e0; overflow: hidden; border-right: 2px solid #ccc; transition: background 0.3s; }
+        
         #text-panel { flex: 3; display: flex; flex-direction: column; min-width: 300px; background: white; border-left: 1px solid #ccc; }
         #problem-section { flex: 1; display: flex; flex-direction: column; border-bottom: 4px double #ddd; background-color: #fffdf5; }
         .section-header { padding: 8px 15px; font-weight: bold; font-size: 14px; color: white; display: flex; justify-content: space-between; align-items: center; }
@@ -122,25 +120,21 @@
         import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
         import { ARButton } from 'three/addons/webxr/ARButton.js';
 
-        // --- SETUP ---
+        // --- SETUP CƠ BẢN ---
         const viewer = document.getElementById('viewer-container');
         const scene = new THREE.Scene();
-        // QUAN TRỌNG: Để null để chế độ AR nhìn xuyên qua được. 
-        // Màu xám trên PC được xử lý bởi CSS #viewer-container
+        // QUAN TRỌNG: Để null để chế độ AR nhìn xuyên qua được
         scene.background = null; 
 
         const aspect = viewer.clientWidth / viewer.clientHeight;
         const frustumSize = 10; 
         
-        // Camera 1: Ortho
+        // Camera Setup
         const orthoCamera = new THREE.OrthographicCamera(frustumSize * aspect / -2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / -2, 0.1, 10000);
-        
-        // Camera 2: Perspective
         const perspCamera = new THREE.PerspectiveCamera(45, aspect, 0.1, 10000);
-        
         let activeCamera = orthoCamera; 
 
-        // RENDERER SETUP
+        // Renderer Setup
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(viewer.clientWidth, viewer.clientHeight);
         renderer.setPixelRatio(window.devicePixelRatio); 
@@ -157,8 +151,7 @@
         controls.enableDamping = true; controls.enableRotate = true;
         const clock = new THREE.Clock();
 
-        // --- AR SETUP ---
-        // 1. Nút bấm AR
+        // --- AR SETUP & FIX LỖI MÀN HÌNH XÁM ---
         const arButton = ARButton.createButton(renderer, { 
             requiredFeatures: ['hit-test'],
             optionalFeatures: ['dom-overlay'],
@@ -166,7 +159,35 @@
         });
         document.body.appendChild(arButton);
 
-        // 2. Vòng tròn định vị (Reticle)
+        // KHI VÀO AR: Xóa màu nền để hiện Camera
+        renderer.xr.addEventListener('sessionstart', () => {
+            document.getElementById('viewer-container').style.background = 'transparent';
+            document.body.style.background = 'transparent';
+            
+            // Ẩn model đi cho đến khi người dùng đặt nó
+            if(currentModel) currentModel.visible = false; 
+            
+            // Hiện cảnh báo nhỏ để người dùng biết phải làm gì
+            alert("⚠️ HƯỚNG DẪN AR:\n1. Rà điện thoại xuống sàn nhà/mặt bàn.\n2. Đợi VÒNG TRÒN TRẮNG hiện ra.\n3. CHẠM MÀN HÌNH để đặt hình!");
+        });
+
+        // KHI THOÁT AR: Trả lại màu nền xám
+        renderer.xr.addEventListener('sessionend', () => {
+            document.getElementById('viewer-container').style.background = '#e0e0e0';
+            document.body.style.background = '#f5f6fa';
+            
+            if(currentModel) {
+                currentModel.visible = true; 
+                currentModel.scale.set(1,1,1); // Trả lại kích thước gốc
+                
+                // Reset vị trí về giữa
+                const box = new THREE.Box3().setFromObject(currentModel);
+                const center = box.getCenter(new THREE.Vector3());
+                currentModel.position.sub(center);
+            }
+        });
+
+        // Vòng tròn định vị (Reticle)
         const reticle = new THREE.Mesh(
             new THREE.RingGeometry(0.15, 0.2, 32).rotateX(-Math.PI / 2),
             new THREE.MeshBasicMaterial()
@@ -175,24 +196,25 @@
         reticle.visible = false;
         scene.add(reticle);
 
-        // 3. Xử lý chạm màn hình -> Đặt mô hình
         let hitTestSource = null;
         let hitTestSourceRequested = false;
 
+        // Xử lý chạm màn hình -> Đặt mô hình
         function onSelect() {
             if (reticle.visible && currentModel) {
-                // Di chuyển mô hình tới vị trí vòng tròn
+                // Đặt model vào vị trí vòng tròn
                 currentModel.position.setFromMatrixPosition(reticle.matrix);
+                currentModel.visible = true; // Hiện hình lên
                 
-                // (Tuỳ chọn) Xoay mô hình hướng về phía người xem nếu muốn
-                // currentModel.lookAt(renderer.xr.getCamera().position); 
+                // QUAN TRỌNG: Thu nhỏ hình xuống còn 15% (để vừa mặt bàn)
+                currentModel.scale.set(0.15, 0.15, 0.15); 
             }
         }
         const controller = renderer.xr.getController(0);
         controller.addEventListener('select', onSelect);
         scene.add(controller);
 
-        // --- HELPER FUNCTIONS ---
+        // --- CÁC HÀM HỖ TRỢ CŨ (GIỮ NGUYÊN) ---
         let allLabels = []; 
         function clearLabels() {
             allLabels.forEach(label => {
@@ -254,7 +276,6 @@
             geometry.setAttribute('lineDistance', new THREE.BufferAttribute(lineDistances, 1));
         }
 
-        // --- ANIMATION UI ---
         window.toggleSolution = function() {
             const textDiv = document.getElementById('solution-text');
             const btn = document.getElementById('reveal-btn');
@@ -304,18 +325,15 @@
             if (mixer) { mixer.stopAllAction(); mixer = null; }
             animationActions = []; currentStepIndex = -1; controlsPanel.classList.remove('visible');
 
-            // --- FIX URL ---
+            // Fix URL encode
             const timestamp = new Date().getTime();
-            const encodedPath = encodeURI(filePath); // Mã hóa đường dẫn (Fix lỗi dấu cách/tiếng Việt)
+            const encodedPath = encodeURI(filePath); 
             const textPathRaw = filePath.replace('.glb', '.txt').replace('.gltf', '.txt');
             const encodedTextPath = encodeURI(textPathRaw);
 
-            // 1. Tải Text
+            // Tải Text
             fetch(encodedTextPath + '?t=' + timestamp)
-                .then(response => {
-                    if (!response.ok) throw new Error("File text không tồn tại");
-                    return response.text();
-                })
+                .then(response => { if (!response.ok) throw new Error("File text không tồn tại"); return response.text(); })
                 .then(text => {
                     const parts = text.split('====='); 
                     problemDiv.innerHTML = parts[0].trim(); 
@@ -323,18 +341,15 @@
                     if (window.MathJax) MathJax.typesetPromise([problemDiv, solutionDiv]).then(()=>{});
                 })
                 .catch(err => {
-                    // Fallback nếu lỗi
                     if (fullTextFromMenu) {
                         const parts = fullTextFromMenu.split('=====');
                         problemDiv.innerHTML = parts[0].trim();
                         solutionDiv.innerHTML = parts.length > 1 ? parts.slice(1).join('=====').trim() : "<i>(Chưa có lời giải chi tiết)</i>";
                         if (window.MathJax) MathJax.typesetPromise([problemDiv, solutionDiv]).then(()=>{});
-                    } else {
-                        problemDiv.innerHTML = "<i>(Không tìm thấy dữ liệu đề bài)</i>";
-                    }
+                    } else { problemDiv.innerHTML = "<i>(Không tìm thấy dữ liệu đề bài)</i>"; }
                 });
 
-            // 2. Tải 3D
+            // Tải 3D
             loader.load(encodedPath + '?t=' + timestamp, (gltf) => {
                 const root = gltf.scene;
                 let maxGeoSize = 0;
@@ -346,7 +361,6 @@
 
                 root.traverse((child) => {
                     if (child.userData.isGenerated) return;
-                    
                     if (child.name.includes("Label_")) { 
                         const match = child.name.match(/\((.*?)\)/); 
                         let displayText = match ? match[1] : child.name.replace("Label_", "").split(".")[0]; 
@@ -355,50 +369,27 @@
                         child.add(label); allLabels.push(label); 
                         if(child.material) child.material.visible = false; 
                     }
-                    else if (child.name.includes("Symbol")) { 
-                        if(child.isLine || child.isLineSegments) { child.material = symbolMaterial; child.renderOrder = 999; child.userData.isGenerated = true; } 
-                    }
-                    else if (child.name.includes("DASH")) {
-                        if(child.isLine || child.isLineSegments) {
-                            const color = getColorFromName(child.name);
-                            const myMats = createMaterials(color, maxGeoSize);
-                            manualComputeLineDistances(child.geometry);
-                            child.material = myMats.fixedDashed; 
-                            child.renderOrder = 1;
-                            child.userData.isGenerated = true; 
-                        }
-                    }
-                    else if (child.isMesh) { 
-                        const color = getColorFromName(child.name); const myMats = createMaterials(color, maxGeoSize); child.material = myMats.face; child.renderOrder = 0; const edgesGeom = new THREE.EdgesGeometry(child.geometry, 15); const lHidden = new THREE.LineSegments(edgesGeom, myMats.hidden); lHidden.computeLineDistances(); lHidden.renderOrder = 1; lHidden.userData.isGenerated = true; const lVisible = new THREE.LineSegments(edgesGeom, myMats.visible); lVisible.renderOrder = 1; lVisible.userData.isGenerated = true; child.add(lHidden); child.add(lVisible); 
-                    } 
-                    else if (child.isLine || child.isLineSegments) { 
-                        const color = getColorFromName(child.name); const myMats = createMaterials(color, maxGeoSize); manualComputeLineDistances(child.geometry); child.material = myMats.visible; child.renderOrder = 1; const hiddenClone = child.clone(); hiddenClone.position.set(0,0,0); hiddenClone.rotation.set(0,0,0); hiddenClone.scale.set(1,1,1); hiddenClone.quaternion.set(0,0,0,1); hiddenClone.material = myMats.hidden; hiddenClone.renderOrder = 1; hiddenClone.userData.isGenerated = true; child.add(hiddenClone); 
-                    }
+                    else if (child.name.includes("Symbol")) { if(child.isLine || child.isLineSegments) { child.material = symbolMaterial; child.renderOrder = 999; child.userData.isGenerated = true; } }
+                    else if (child.name.includes("DASH")) { if(child.isLine || child.isLineSegments) { const color = getColorFromName(child.name); const myMats = createMaterials(color, maxGeoSize); manualComputeLineDistances(child.geometry); child.material = myMats.fixedDashed; child.renderOrder = 1; child.userData.isGenerated = true; } }
+                    else if (child.isMesh) { const color = getColorFromName(child.name); const myMats = createMaterials(color, maxGeoSize); child.material = myMats.face; child.renderOrder = 0; const edgesGeom = new THREE.EdgesGeometry(child.geometry, 15); const lHidden = new THREE.LineSegments(edgesGeom, myMats.hidden); lHidden.computeLineDistances(); lHidden.renderOrder = 1; lHidden.userData.isGenerated = true; const lVisible = new THREE.LineSegments(edgesGeom, myMats.visible); lVisible.renderOrder = 1; lVisible.userData.isGenerated = true; child.add(lHidden); child.add(lVisible); } 
+                    else if (child.isLine || child.isLineSegments) { const color = getColorFromName(child.name); const myMats = createMaterials(color, maxGeoSize); manualComputeLineDistances(child.geometry); child.material = myMats.visible; child.renderOrder = 1; const hiddenClone = child.clone(); hiddenClone.position.set(0,0,0); hiddenClone.rotation.set(0,0,0); hiddenClone.scale.set(1,1,1); hiddenClone.quaternion.set(0,0,0,1); hiddenClone.material = myMats.hidden; hiddenClone.renderOrder = 1; hiddenClone.userData.isGenerated = true; child.add(hiddenClone); }
                 });
 
                 currentModel = root; updateStepVisibility(-1);
                 
-                // AUTO FIT
+                // AUTO FIT cho Desktop (Không ảnh hưởng AR vì AR sẽ set lại scale trong onSelect)
                 const box = new THREE.Box3().setFromObject(root); const center = box.getCenter(new THREE.Vector3()); root.position.sub(center); 
                 if (maxGeoSize > 0) {
                     const padding = 1.5; const newFrustumSize = maxGeoSize * padding;
-                    
                     orthoCamera.left = -newFrustumSize * aspect / 2; orthoCamera.right = newFrustumSize * aspect / 2;
                     orthoCamera.top = newFrustumSize / 2; orthoCamera.bottom = -newFrustumSize / 2;
                     orthoCamera.updateProjectionMatrix();
-                    orthoCamera.position.set(maxGeoSize * 0.0, maxGeoSize * 0.8, maxGeoSize * 4.0); 
-                    orthoCamera.lookAt(0,0,0);
-
+                    orthoCamera.position.set(maxGeoSize * 0.0, maxGeoSize * 0.8, maxGeoSize * 4.0); orthoCamera.lookAt(0,0,0);
                     const fov = perspCamera.fov * (Math.PI / 180); let cameraZ = Math.abs(maxGeoSize / 2 / Math.tan(fov / 2)) * 1.5;
-                    perspCamera.position.set(cameraZ * 0.5, cameraZ * 0.3, cameraZ);
-                    perspCamera.lookAt(0,0,0);
+                    perspCamera.position.set(cameraZ * 0.5, cameraZ * 0.3, cameraZ); perspCamera.lookAt(0,0,0);
                 }
                 scene.add(root); controls.object = activeCamera; controls.target.set(0,0,0); controls.update(); loading.style.display = 'none';
-            }, undefined, (err) => { 
-                console.error(err); 
-                loading.style.display = 'none'; 
-                alert("Lỗi tải file 3D (Hãy kiểm tra lại tên file trên GitHub)"); 
-            });
+            }, undefined, (err) => { console.error(err); loading.style.display = 'none'; alert("Lỗi tải file 3D"); });
         }
 
         // --- MAIN LOOP ---
@@ -406,7 +397,7 @@
             const delta = clock.getDelta();
             if (mixer) mixer.update(delta);
             
-            // --- XỬ LÝ AR HIT-TEST ---
+            // XỬ LÝ AR HIT-TEST
             if (frame) {
                 const referenceSpace = renderer.xr.getReferenceSpace();
                 const session = renderer.xr.getSession();
@@ -418,9 +409,7 @@
                         });
                     });
                     session.addEventListener('end', function () {
-                        hitTestSourceRequested = false;
-                        hitTestSource = null;
-                        reticle.visible = false;
+                        hitTestSourceRequested = false; hitTestSource = null; reticle.visible = false;
                     });
                     hitTestSourceRequested = true;
                 }
@@ -431,9 +420,7 @@
                         const hit = hitTestResults[0];
                         reticle.visible = true;
                         reticle.matrix.fromArray(hit.getPose(referenceSpace).transform.matrix);
-                    } else {
-                        reticle.visible = false;
-                    }
+                    } else { reticle.visible = false; }
                 }
             }
 
