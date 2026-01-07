@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Học Hình Học 3D (Final Standard AR)</title>
+    <title>Học Hình Học 3D (Final Stable)</title>
     
     <link rel="icon" href="data:,">
 
@@ -25,19 +25,20 @@
     </script>
 
     <style>
-        /* --- CSS GIAO DIỆN GỐC --- */
+        /* --- CSS GIAO DIỆN --- */
         body { margin: 0; font-family: 'Segoe UI', sans-serif; overflow: hidden; display: flex; height: 100vh; background-color: #f5f6fa; }
         
-        /* QUAN TRỌNG: Class này dùng để ẩn giao diện khi vào AR */
+        /* CLASS ẨN GIAO DIỆN KHI VÀO AR */
         body.in-ar #sidebar, 
         body.in-ar #text-panel, 
         body.in-ar #cam-toggle, 
         body.in-ar #mobile-toggle, 
-        body.in-ar #animation-controls { display: none !important; }
+        body.in-ar #animation-controls,
+        body.in-ar #loading { display: none !important; }
         
+        /* Làm trong suốt khi AR */
         body.in-ar #main-content { background: transparent !important; }
         body.in-ar #viewer-container { background: transparent !important; border: none !important; }
-        /* ------------------------------------------------------- */
 
         #sidebar { width: 280px; background-color: #2c3e50; color: white; display: flex; flex-direction: column; border-right: 1px solid #ddd; flex-shrink: 0; z-index: 200; overflow-y: auto; }
         .brand { padding: 20px; font-size: 18px; font-weight: bold; background: #1a252f; text-align: center; border-bottom: 1px solid #34495e; }
@@ -54,10 +55,7 @@
         .sidebar-footer { padding: 15px; text-align: center; color: #aaa; font-size: 12px; margin-top: auto; }
         
         #main-content { flex: 1; display: flex; position: relative; overflow: hidden; }
-        
-        /* Mặc định màu xám (PC) */
         #viewer-container { flex: 7; position: relative; background: #e0e0e0; overflow: hidden; border-right: 2px solid #ccc; transition: background 0.3s; }
-        
         #text-panel { flex: 3; display: flex; flex-direction: column; min-width: 300px; background: white; border-left: 1px solid #ccc; }
         #problem-section { flex: 1; display: flex; flex-direction: column; border-bottom: 4px double #ddd; background-color: #fffdf5; }
         .section-header { padding: 8px 15px; font-weight: bold; font-size: 14px; color: white; display: flex; justify-content: space-between; align-items: center; }
@@ -94,14 +92,14 @@
     <div id="sidebar">
         <div class="brand">📐 MENU BÀI TẬP</div>
         <div id="menu-content"></div>
-        <div class="sidebar-footer">V33 - STANDARD SHADER + AR</div>
+        <div class="sidebar-footer">V34 - FINAL STABLE</div>
     </div>
 
     <div id="main-content">
         <div id="viewer-container">
             <button id="mobile-toggle">☰ Menu</button>
             <div id="loading">⏳ Đang tải...</div>
-            <button id="cam-toggle" title="Chuyển View (Trục đo/Phối cảnh)" onclick="toggleCamera()">🧊</button>
+            <button id="cam-toggle" title="Chuyển View" onclick="toggleCamera()">🧊</button>
             <div id="animation-controls">
                 <button class="control-btn" id="btn-prev" title="Lùi">❮</button>
                 <div id="step-indicator">Bắt đầu</div>
@@ -112,7 +110,7 @@
         <div id="text-panel">
             <div id="problem-section">
                 <div class="section-header header-problem">📄 Đề Bài</div>
-                <div class="section-content" id="problem-text"><i>Chọn bài tập từ menu bên trái...</i></div>
+                <div class="section-content" id="problem-text"><i>Chọn bài tập từ menu...</i></div>
             </div>
             <div id="solution-section">
                 <div class="section-header header-solution">
@@ -136,28 +134,25 @@
         import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
         import { ARButton } from 'three/addons/webxr/ARButton.js';
 
-        // --- SETUP SCENE ---
+        // --- SETUP ---
         const viewer = document.getElementById('viewer-container');
         const scene = new THREE.Scene();
-        // Mặc định màu xám cho PC. Khi vào AR sẽ set null sau.
-        scene.background = new THREE.Color(0xe0e0e0); 
+        scene.background = new THREE.Color(0xe0e0e0); // Nền xám trên PC
 
         const aspect = viewer.clientWidth / viewer.clientHeight;
         const frustumSize = 10; 
         
-        // Camera Setup
         const orthoCamera = new THREE.OrthographicCamera(frustumSize * aspect / -2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / -2, 0.1, 10000);
         const perspCamera = new THREE.PerspectiveCamera(45, aspect, 0.1, 10000);
         let activeCamera = orthoCamera; 
 
-        // RENDERER SETUP (QUAN TRỌNG: ALPHA: TRUE)
+        // RENDERER: Quan trọng alpha: true để AR xuyên thấu
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(viewer.clientWidth, viewer.clientHeight);
         renderer.setPixelRatio(window.devicePixelRatio); 
         renderer.sortObjects = true;
-        renderer.xr.enabled = true; // BẬT AR
-        // Đặt clear color trong suốt
-        renderer.setClearColor( 0x000000, 0 );
+        renderer.xr.enabled = true; 
+        renderer.setClearColor(0x000000, 0); // Đảm bảo trong suốt
         viewer.appendChild(renderer.domElement);
 
         const labelRenderer = new CSS2DRenderer();
@@ -169,7 +164,7 @@
         controls.enableDamping = true; controls.enableRotate = true;
         const clock = new THREE.Clock();
 
-        // --- CÁC HÀM XỬ LÝ VẬT LIỆU CŨ (COPY Y NGUYÊN TỪ FILE GỐC CỦA BẠN) ---
+        // --- CÁC HÀM SHADER CŨ (VẬT LIỆU CƠ BẢN) ---
         function getColorFromName(name) {
             const n = name.toLowerCase();
             if (n.includes('red')) return 0xff4444; if (n.includes('green')) return 0x22aa22;
@@ -190,12 +185,7 @@
                 visible: new THREE.LineBasicMaterial({ color: lineC, depthTest: true, depthFunc: THREE.LessEqualDepth, transparent: true, polygonOffset: true, polygonOffsetFactor: -0.75, polygonOffsetUnits: -1 }),
                 fixedDashed: new THREE.LineDashedMaterial({
                     color: (colorHex !== null) ? colorHex : 0x000000, 
-                    dashSize: myDash,
-                    gapSize: myGap,
-                    depthTest: true,
-                    depthFunc: THREE.LessEqualDepth, 
-                    transparent: true,
-                    opacity: 1
+                    dashSize: myDash, gapSize: myGap, depthTest: true, depthFunc: THREE.LessEqualDepth, transparent: true, opacity: 1
                 })
             };
         }
@@ -208,66 +198,53 @@
             geometry.setAttribute('lineDistance', new THREE.BufferAttribute(lineDistances, 1));
         }
 
-        // --- AR SETUP & FIX LỖI UI ---
-        // Không dùng domOverlay, tự xử lý bằng CSS class
+        // --- AR SETUP ---
         const arButton = ARButton.createButton(renderer, { 
             requiredFeatures: ['hit-test'] 
+            // KHÔNG DÙNG dom-overlay ĐỂ TRÁNH LỖI QUIT APP
         });
         document.body.appendChild(arButton);
 
         // KHI VÀO AR
         renderer.xr.addEventListener('sessionstart', () => {
-            // 1. Thêm class in-ar để CSS ẩn hết Sidebar, Text Panel, Nền Xám
+            // Thêm class để ẩn giao diện bằng CSS (An toàn hơn DOM overlay)
             document.body.classList.add('in-ar');
-            // 2. Set nền scene thành null (trong suốt)
-            scene.background = null; 
-            
-            if(currentModel) currentModel.visible = false; // Ẩn hình chờ đặt
-            
-            setTimeout(() => {
-                 alert("BƯỚC 1: Rà điện thoại xuống sàn nhà.\nBƯỚC 2: Khi thấy VÒNG TRÒN TRẮNG -> Chạm màn hình.");
-            }, 500);
+            scene.background = null; // Nền trong suốt
+            if(currentModel) currentModel.visible = false;
+            // TUYỆT ĐỐI KHÔNG DÙNG ALERT Ở ĐÂY
         });
 
         // KHI THOÁT AR
         renderer.xr.addEventListener('sessionend', () => {
-            // 1. Bỏ class in-ar -> Hiện lại giao diện cũ
             document.body.classList.remove('in-ar');
-            // 2. Trả lại nền xám
-            scene.background = new THREE.Color(0xe0e0e0);
-            
+            scene.background = new THREE.Color(0xe0e0e0); // Trả lại nền xám
             if(currentModel) {
                 currentModel.visible = true; 
-                currentModel.scale.set(1,1,1); // Trả lại kích thước thật
-                
-                // Reset vị trí về giữa
+                currentModel.scale.set(1,1,1);
+                // Reset view
                 const box = new THREE.Box3().setFromObject(currentModel);
                 const center = box.getCenter(new THREE.Vector3());
                 currentModel.position.sub(center);
             }
-            // Reset Camera
             activeCamera.position.set(0, 2, 10);
             activeCamera.lookAt(0,0,0);
         });
 
-        // Vòng tròn định vị (Reticle)
         const reticle = new THREE.Mesh(
             new THREE.RingGeometry(0.15, 0.2, 32).rotateX(-Math.PI / 2),
             new THREE.MeshBasicMaterial()
         );
-        reticle.matrixAutoUpdate = false;
-        reticle.visible = false;
+        reticle.matrixAutoUpdate = false; reticle.visible = false;
         scene.add(reticle);
 
         let hitTestSource = null;
         let hitTestSourceRequested = false;
 
-        // Xử lý chạm màn hình -> Đặt mô hình
         function onSelect() {
             if (reticle.visible && currentModel) {
                 currentModel.position.setFromMatrixPosition(reticle.matrix);
                 currentModel.visible = true; 
-                // Thu nhỏ hình xuống còn 15% (để vừa mặt bàn)
+                // Thu nhỏ còn 15% để vừa bàn
                 currentModel.scale.set(0.15, 0.15, 0.15); 
             }
         }
@@ -328,7 +305,7 @@
         btnNext.addEventListener('click', () => { if (currentStepIndex < animationActions.length - 1) { currentStepIndex++; const action = animationActions[currentStepIndex]; action.reset(); action.setLoop(THREE.LoopOnce); action.clampWhenFinished = true; action.play(); updateStepVisibility(currentStepIndex); updateUI(); } });
         btnPrev.addEventListener('click', () => { if (currentStepIndex >= 0) { const action = animationActions[currentStepIndex]; action.stop(); currentStepIndex--; updateStepVisibility(currentStepIndex); updateUI(); } });
 
-        // --- LOAD MODEL (LOGIC CŨ CỦA BẠN ĐƯỢC KHÔI PHỤC) ---
+        // --- LOAD MODEL (SHADER CŨ) ---
         const loader = new GLTFLoader();
 
         window.loadModel3D = function(filePath, title, fullTextFromMenu) {
@@ -354,7 +331,6 @@
             const textPathRaw = filePath.replace('.glb', '.txt').replace('.gltf', '.txt');
             const encodedTextPath = encodeURI(textPathRaw);
 
-            // Tải Text
             fetch(encodedTextPath + '?t=' + timestamp)
                 .then(response => { if (!response.ok) throw new Error("File text không tồn tại"); return response.text(); })
                 .then(text => {
@@ -372,7 +348,7 @@
                     } else { problemDiv.innerHTML = "<i>(Không tìm thấy dữ liệu đề bài)</i>"; }
                 });
 
-            // Tải 3D (COPY LẠI LOGIC XỬ LÝ MATERIAL CŨ)
+            // Tải 3D (LOGIC CŨ)
             loader.load(encodedPath + '?t=' + timestamp, (gltf) => {
                 const root = gltf.scene;
                 let maxGeoSize = 0;
@@ -385,7 +361,6 @@
                 root.traverse((child) => {
                     if (child.userData.isGenerated) return;
                     
-                    // XỬ LÝ LABEL: DÙNG CSS2DObject
                     if (child.name.includes("Label_")) { 
                         const match = child.name.match(/\((.*?)\)/); 
                         let displayText = match ? match[1] : child.name.replace("Label_", "").split(".")[0]; 
@@ -394,11 +369,9 @@
                         child.add(label); allLabels.push(label); 
                         if(child.material) child.material.visible = false; 
                     }
-                    // XỬ LÝ SYMBOL VUÔNG GÓC
                     else if (child.name.includes("Symbol")) { 
                         if(child.isLine || child.isLineSegments) { child.material = symbolMaterial; child.renderOrder = 999; child.userData.isGenerated = true; } 
                     }
-                    // XỬ LÝ NÉT ĐỨT CỐ ĐỊNH (DASH)
                     else if (child.name.includes("DASH")) {
                         if(child.isLine || child.isLineSegments) {
                             const color = getColorFromName(child.name);
@@ -409,11 +382,9 @@
                             child.userData.isGenerated = true; 
                         }
                     }
-                    // XỬ LÝ MESH (MẶT PHẲNG + VIỀN)
                     else if (child.isMesh) { 
                         const color = getColorFromName(child.name); const myMats = createMaterials(color, maxGeoSize); child.material = myMats.face; child.renderOrder = 0; const edgesGeom = new THREE.EdgesGeometry(child.geometry, 15); const lHidden = new THREE.LineSegments(edgesGeom, myMats.hidden); lHidden.computeLineDistances(); lHidden.renderOrder = 1; lHidden.userData.isGenerated = true; const lVisible = new THREE.LineSegments(edgesGeom, myMats.visible); lVisible.renderOrder = 1; lVisible.userData.isGenerated = true; child.add(lHidden); child.add(lVisible); 
                     } 
-                    // XỬ LÝ ĐƯỜNG LINE THƯỜNG
                     else if (child.isLine || child.isLineSegments) { 
                         const color = getColorFromName(child.name); const myMats = createMaterials(color, maxGeoSize); manualComputeLineDistances(child.geometry); child.material = myMats.visible; child.renderOrder = 1; const hiddenClone = child.clone(); hiddenClone.position.set(0,0,0); hiddenClone.rotation.set(0,0,0); hiddenClone.scale.set(1,1,1); hiddenClone.quaternion.set(0,0,0,1); hiddenClone.material = myMats.hidden; hiddenClone.renderOrder = 1; hiddenClone.userData.isGenerated = true; child.add(hiddenClone); 
                     }
@@ -425,16 +396,12 @@
                 const box = new THREE.Box3().setFromObject(root); const center = box.getCenter(new THREE.Vector3()); root.position.sub(center); 
                 if (maxGeoSize > 0) {
                     const padding = 1.5; const newFrustumSize = maxGeoSize * padding;
-                    
                     orthoCamera.left = -newFrustumSize * aspect / 2; orthoCamera.right = newFrustumSize * aspect / 2;
                     orthoCamera.top = newFrustumSize / 2; orthoCamera.bottom = -newFrustumSize / 2;
                     orthoCamera.updateProjectionMatrix();
-                    orthoCamera.position.set(maxGeoSize * 0.0, maxGeoSize * 0.8, maxGeoSize * 4.0); 
-                    orthoCamera.lookAt(0,0,0);
-
+                    orthoCamera.position.set(maxGeoSize * 0.0, maxGeoSize * 0.8, maxGeoSize * 4.0); orthoCamera.lookAt(0,0,0);
                     const fov = perspCamera.fov * (Math.PI / 180); let cameraZ = Math.abs(maxGeoSize / 2 / Math.tan(fov / 2)) * 1.5;
-                    perspCamera.position.set(cameraZ * 0.5, cameraZ * 0.3, cameraZ);
-                    perspCamera.lookAt(0,0,0);
+                    perspCamera.position.set(cameraZ * 0.5, cameraZ * 0.3, cameraZ); perspCamera.lookAt(0,0,0);
                 }
                 scene.add(root); controls.object = activeCamera; controls.target.set(0,0,0); controls.update(); loading.style.display = 'none';
             }, undefined, (err) => { console.error(err); loading.style.display = 'none'; alert("Lỗi tải file 3D"); });
@@ -445,7 +412,6 @@
             const delta = clock.getDelta();
             if (mixer) mixer.update(delta);
             
-            // XỬ LÝ AR HIT-TEST
             if (frame) {
                 const referenceSpace = renderer.xr.getReferenceSpace();
                 const session = renderer.xr.getSession();
