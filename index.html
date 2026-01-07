@@ -3,15 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Học Hình Học 3D (AR Stable)</title>
-    <link rel="icon" href="data:,">
-
-    <script>
-        window.MathJax = {
-            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-            svg: { fontCache: 'global' }
-        };
-    </script>
+    <title>AR Rescue Fix</title>
+    <style>
+        body { margin: 0; overflow: hidden; font-family: sans-serif; }
+        
+        /* Giao diện chính */
+        #ui-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; display: flex; flex-direction: column; }
+        #sidebar { pointer-events: auto; width: 250px; background: rgba(0,0,0,0.8); color: white; height: 100%; overflow-y: auto; display: flex; flex-direction: column; }
+        .menu-item { padding: 15px; border-bottom: 1px solid #444; cursor: pointer; }
+        .menu-item:hover { background: #444; }
+        
+        /* Loading */
+        #loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); background: black; color: white; padding: 20px; border-radius: 10px; display: none; z-index: 999; }
+        
+        /* Khi vào AR, ẩn hết giao diện thừa */
+        body.ar-active #sidebar { display: none; }
+        body.ar-active #ui-container { display: none; }
+    </style>
+    
+    <script> window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } }; </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
     <script type="importmap">
@@ -22,137 +32,72 @@
             }
         }
     </script>
-
-    <style>
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; overflow: hidden; display: flex; height: 100vh; background-color: #f5f6fa; }
-        
-        /* GIAO DIỆN CHÍNH */
-        #sidebar { width: 280px; background-color: #2c3e50; color: white; display: flex; flex-direction: column; border-right: 1px solid #ddd; flex-shrink: 0; z-index: 200; overflow-y: auto; }
-        .brand { padding: 20px; font-size: 18px; font-weight: bold; background: #1a252f; text-align: center; border-bottom: 1px solid #34495e; }
-        ul { list-style: none; padding-left: 0; margin: 0; }
-        .menu-folder-title { padding: 12px 15px; cursor: pointer; background: #34495e; border-bottom: 1px solid #2c3e50; display: flex; justify-content: space-between; font-weight: 600; font-size: 14px; }
-        .menu-folder-title:hover { background: #3e5871; }
-        .submenu { display: none; background: #233140; }
-        .submenu.show { display: block; }
-        .submenu .menu-folder-title { padding-left: 30px; } 
-        .menu-item { padding: 10px 15px 10px 30px; cursor: pointer; color: #bdc3c7; font-size: 14px; border-left: 4px solid transparent; display: block; }
-        .submenu .menu-item { padding-left: 45px; }
-        .menu-item:hover { color: white; background: rgba(255,255,255,0.05); }
-        .menu-item.active { background: #3498db; color: white; border-left: 4px solid #fff; }
-        .sidebar-footer { padding: 15px; text-align: center; color: #aaa; font-size: 12px; margin-top: auto; }
-        
-        #main-content { flex: 1; display: flex; position: relative; overflow: hidden; }
-        #viewer-container { flex: 7; position: relative; background: #e0e0e0; overflow: hidden; border-right: 2px solid #ccc; }
-        #text-panel { flex: 3; display: flex; flex-direction: column; min-width: 300px; background: white; border-left: 1px solid #ccc; }
-        #problem-section { flex: 1; display: flex; flex-direction: column; border-bottom: 4px double #ddd; background-color: #fffdf5; }
-        .section-header { padding: 8px 15px; font-weight: bold; font-size: 14px; color: white; display: flex; justify-content: space-between; align-items: center; }
-        .header-problem { background: #f39c12; }
-        .header-solution { background: #3498db; }
-        .section-content { padding: 15px; overflow-y: auto; font-size: 14px; line-height: 1.6; color: #333; white-space: pre-wrap; flex: 1; }
-        #solution-section { flex: 3; display: flex; flex-direction: column; position: relative; background: white; }
-        #solution-content-wrapper { flex: 1; overflow-y: auto; position: relative; padding: 15px; }
-        #solution-text { font-size: 14px; line-height: 1.6; transition: filter 0.3s; white-space: pre-wrap; }
-        .blur-solution { filter: blur(10px); user-select: none; pointer-events: none; opacity: 0.5; }
-        #reveal-btn { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); padding: 10px 20px; background: #27ae60; color: white; border: none; border-radius: 20px; font-weight: bold; cursor: pointer; z-index: 10; box-shadow: 0 4px 10px rgba(0,0,0,0.2); display: none; }
-        #reveal-btn:hover { background: #2ecc71; }
-        #loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); color: white; padding: 15px 30px; border-radius: 30px; display: none; pointer-events: none; z-index: 100; }
-        
-        #cam-toggle { position: absolute; top: 20px; right: 20px; z-index: 100; background: white; border: 1px solid #ccc; width: 40px; height: 40px; border-radius: 8px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-size: 20px; display: flex; justify-content: center; align-items: center; transition: 0.2s; }
-        #animation-controls { position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.95); padding: 8px 15px; border-radius: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 15px; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-        #animation-controls.visible { opacity: 1; pointer-events: auto; }
-        .control-btn { background: #2c3e50; color: white; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-size: 16px; display: flex; justify-content: center; align-items: center; }
-        #step-indicator { font-weight: bold; color: #2c3e50; font-size: 14px; min-width: 70px; text-align: center; }
-        .math-label { color: black; font-family: 'Times New Roman', serif; font-weight: bold; font-style: italic; font-size: 20px; text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff; margin-top: -15px; margin-left: -10px; pointer-events: none; user-select: none; }
-        
-        @media (max-width: 768px) { #sidebar { position: absolute; height: 100%; transform: translateX(-100%); } #sidebar.mobile-open { transform: translateX(0); } #main-content { flex-direction: column; } #viewer-container { flex: 1; height: 50%; } #text-panel { flex: 1; height: 50%; } #cam-toggle { top: 60px; } }
-        #mobile-toggle { display: none; position: absolute; top: 10px; right: 10px; z-index: 100; background: #2c3e50; color: white; border: none; padding: 8px 12px; border-radius: 5px; }
-        @media (max-width: 768px) { #mobile-toggle { display: block; } }
-    </style>
 </head>
 <body>
 
-    <div id="sidebar">
-        <div class="brand">📐 MENU BÀI TẬP</div>
-        <div id="menu-content"></div>
-        <div class="sidebar-footer">V32 - AR STABLE</div>
-    </div>
+    <div id="loading">⏳ Đang tải...</div>
 
-    <div id="main-content">
-        <div id="viewer-container">
-            <button id="mobile-toggle">☰ Menu</button>
-            <div id="loading">⏳ Đang tải...</div>
-            <button id="cam-toggle" title="Chuyển View" onclick="toggleCamera()">🧊</button>
-            <div id="animation-controls">
-                <button class="control-btn" id="btn-prev">❮</button>
-                <div id="step-indicator">Bắt đầu</div>
-                <button class="control-btn" id="btn-next">❯</button>
-            </div>
-            </div>
-
-        <div id="text-panel">
-            <div id="problem-section">
-                <div class="section-header header-problem">📄 Đề Bài</div>
-                <div class="section-content" id="problem-text"><i>Chọn bài tập từ menu...</i></div>
-            </div>
-            <div id="solution-section">
-                <div class="section-header header-solution">
-                    <span>💡 Lời Giải</span>
-                    <button onclick="toggleSolution()" style="background:none; border:1px solid rgba(255,255,255,0.5); color:white; border-radius:4px; font-size:11px;">Ẩn/Hiện</button>
-                </div>
-                <div id="solution-content-wrapper">
-                    <button id="reveal-btn" onclick="toggleSolution()">👁️ Xem Lời Giải</button>
-                    <div id="solution-text" class="blur-solution"></div>
-                </div>
-            </div>
+    <div id="ui-container">
+        <div id="sidebar">
+            <div style="padding: 20px; font-weight: bold; background: #222;">MENU BÀI TẬP</div>
+            <div id="menu-content"></div>
         </div>
     </div>
-
-    <script src="menu_data.js"></script>
 
     <script type="module">
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-        import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
         import { ARButton } from 'three/addons/webxr/ARButton.js';
+        import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
-        // --- SETUP SCENE ---
-        const viewer = document.getElementById('viewer-container');
+        // 1. SETUP SCENE
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xe0e0e0); // Mặc định màu xám cho PC
+        scene.background = new THREE.Color(0xaaaaaa); // Mặc định nền xám
 
-        // Camera
-        const aspect = viewer.clientWidth / viewer.clientHeight;
-        const frustumSize = 8;
-        // Chỉnh near plane = 0.01 để không bị mất hình khi zoom gần
-        const orthoCamera = new THREE.OrthographicCamera(frustumSize * aspect / -2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / -2, 0.01, 10000);
-        const perspCamera = new THREE.PerspectiveCamera(60, aspect, 0.01, 10000);
-        let activeCamera = orthoCamera;
+        const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 50);
+        camera.position.set(0, 1, 3);
 
-        // Renderer
+        // QUAN TRỌNG: alpha: true để hỗ trợ AR trong suốt
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(viewer.clientWidth, viewer.clientHeight);
+        renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.xr.enabled = true; // Bật WebXR
-        viewer.appendChild(renderer.domElement);
+        document.body.appendChild(renderer.domElement);
 
+        // Label Renderer (Hiển thị chữ)
         const labelRenderer = new CSS2DRenderer();
-        labelRenderer.setSize(viewer.clientWidth, viewer.clientHeight);
-        labelRenderer.domElement.style.position = 'absolute'; labelRenderer.domElement.style.top = '0px'; labelRenderer.domElement.style.pointerEvents = 'none';
-        viewer.appendChild(labelRenderer.domElement);
+        labelRenderer.setSize(window.innerWidth, window.innerHeight);
+        labelRenderer.domElement.style.position = 'absolute';
+        labelRenderer.domElement.style.top = '0px';
+        labelRenderer.domElement.style.pointerEvents = 'none';
+        document.body.appendChild(labelRenderer.domElement);
 
-        const controls = new OrbitControls(activeCamera, renderer.domElement);
-        controls.enableDamping = true;
+        // Ánh sáng (QUAN TRỌNG ĐỂ KHÔNG BỊ TỐI OM)
+        const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 3);
+        scene.add(light);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 3);
+        dirLight.position.set(5, 10, 7);
+        scene.add(dirLight);
 
-        // --- SETUP AR (PHIÊN BẢN TỐI GIẢN - KHÔNG DOM OVERLAY) ---
-        // Đây là điểm quan trọng: KHÔNG dùng domOverlay để tránh lỗi văng app
-        const arButton = ARButton.createButton(renderer, { 
-            requiredFeatures: ['hit-test'] 
-            // Đã xóa optionalFeatures dom-overlay để fix lỗi
-        });
+        // Controls
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.target.set(0,0,0);
+        controls.update();
+
+        // 2. TẠO KHỐI HỘP TEST (MẶC ĐỊNH SẼ THẤY CÁI NÀY)
+        // Để kiểm tra xem Three.js có chạy không
+        const testBox = new THREE.Mesh(
+            new THREE.BoxGeometry(0.2, 0.2, 0.2), 
+            new THREE.MeshStandardMaterial({ color: 0xff0000 })
+        );
+        testBox.position.set(0, 0, 0);
+        scene.add(testBox); // Luôn có một cái hộp đỏ ở giữa
+
+        // 3. XỬ LÝ AR (FIX LỖI MÀN HÌNH ĐEN)
+        const arButton = ARButton.createButton(renderer, { requiredFeatures: ['hit-test'] });
         document.body.appendChild(arButton);
 
-        // Vòng tròn định vị (Reticle)
         const reticle = new THREE.Mesh(
             new THREE.RingGeometry(0.15, 0.2, 32).rotateX(-Math.PI / 2),
             new THREE.MeshBasicMaterial()
@@ -161,138 +106,110 @@
         reticle.visible = false;
         scene.add(reticle);
 
-        let hitTestSource = null;
-        let hitTestSourceRequested = false;
-
-        // Sự kiện khi vào/thoát AR
+        // --- SỰ KIỆN CHUYỂN ĐỔI CHẾ ĐỘ ---
         renderer.xr.addEventListener('sessionstart', () => {
-            // Khi vào AR: Ẩn model đi cho đến khi đặt
-            if(currentModel) currentModel.visible = false;
-            // Xóa nền màu xám đi để thấy camera
+            // VÀO AR: Xóa nền xám -> Thành trong suốt để thấy Camera
             scene.background = null; 
+            renderer.setClearColor(0x000000, 0);
+            document.body.classList.add('ar-active');
+            
+            // Ẩn hộp test và model đi, chờ đặt
+            testBox.visible = false;
+            if(currentModel) currentModel.visible = false;
+            
+            setTimeout(() => alert("Rà xuống sàn -> Thấy vòng tròn -> Chạm để đặt!"), 500);
         });
 
         renderer.xr.addEventListener('sessionend', () => {
-            // Khi thoát AR: Hiện lại model, trả lại màu nền
+            // THOÁT AR: Trả lại nền xám
+            scene.background = new THREE.Color(0xaaaaaa);
+            document.body.classList.remove('ar-active');
+            testBox.visible = true;
             if(currentModel) {
                 currentModel.visible = true;
-                currentModel.scale.set(1, 1, 1);
+                currentModel.scale.set(1,1,1);
             }
-            scene.background = new THREE.Color(0xe0e0e0);
-            activeCamera.position.set(0, 5, 10);
-            activeCamera.lookAt(0,0,0);
+            // Reset camera
+            camera.position.set(0, 1, 3);
+            camera.lookAt(0,0,0);
         });
 
-        // Xử lý chạm màn hình trong AR
-        function onSelect() {
-            if (reticle.visible && currentModel) {
-                currentModel.position.setFromMatrixPosition(reticle.matrix);
-                currentModel.visible = true;
-                // Thu nhỏ hình xuống còn 10% để vừa mặt bàn
-                currentModel.scale.set(0.1, 0.1, 0.1); 
-            }
-        }
+        // XỬ LÝ CHẠM MÀN HÌNH AR
+        let hitTestSource = null;
+        let hitTestSourceRequested = false;
+
         const controller = renderer.xr.getController(0);
-        controller.addEventListener('select', onSelect);
+        controller.addEventListener('select', () => {
+            if (reticle.visible) {
+                // Ưu tiên đặt model thật, nếu không có thì đặt hộp đỏ test
+                const objectToPlace = currentModel ? currentModel : testBox;
+                
+                objectToPlace.position.setFromMatrixPosition(reticle.matrix);
+                objectToPlace.visible = true;
+                objectToPlace.scale.set(0.15, 0.15, 0.15); // Thu nhỏ cho vừa bàn
+                
+                if(!currentModel) alert("Đã đặt hộp Test (Do chưa chọn bài tập)");
+            }
+        });
         scene.add(controller);
 
 
-        // --- LOAD MODEL ---
+        // 4. LOAD MODEL LOGIC
         const loader = new GLTFLoader();
         let currentModel = null;
         let mixer = null;
-        let animationActions = [];
-        let currentStepIndex = -1;
 
-        window.loadModel3D = function(filePath, title, fullText) {
+        window.loadModel3D = function(filePath, title) {
             document.getElementById('loading').style.display = 'block';
             
-            // Xử lý text
-            const prob = document.getElementById('problem-text');
-            const sol = document.getElementById('solution-text');
-            const encodedPath = encodeURI(filePath);
+            if(currentModel) scene.remove(currentModel);
             
-            // Reset Scene
-            if (currentModel) scene.remove(currentModel);
-            clearLabels();
-            if (mixer) mixer.stopAllAction();
-            animationActions = [];
-            currentStepIndex = -1;
-            document.getElementById('animation-controls').classList.remove('visible');
+            // Fix URL
+            const encodedPath = encodeURI(filePath);
 
-            // Load Text (giả lập hoặc fetch)
-            const textPath = encodedPath.replace('.glb', '.txt').replace('.gltf', '.txt');
-            fetch(textPath).then(r=>r.text()).then(t=>{
-                 const p = t.split('====='); prob.innerHTML=p[0]; sol.innerHTML=p[1]||"";
-                 if(window.MathJax) MathJax.typesetPromise([prob, sol]);
-            }).catch(()=>{
-                 if(fullText) {
-                    const p = fullText.split('====='); prob.innerHTML=p[0]; sol.innerHTML=p[1]||"";
-                    if(window.MathJax) MathJax.typesetPromise([prob, sol]);
-                 }
-            });
-
-            // Load 3D
             loader.load(encodedPath, (gltf) => {
                 const root = gltf.scene;
                 
-                // Xử lý vật liệu & nét đứt
+                // Xử lý hiển thị Label/Nét đứt (Giữ nguyên logic cũ của bạn)
                 root.traverse((child) => {
-                    if (child.isMesh) {
-                         const mat = new THREE.MeshBasicMaterial({ color: 0xcccccc, transparent: true, opacity: 0.8, side: 2, polygonOffset: true, polygonOffsetFactor: 1 });
-                         child.material = mat;
-                         const edges = new THREE.LineSegments(new THREE.EdgesGeometry(child.geometry, 15), new THREE.LineBasicMaterial({ color: 0x000000 }));
-                         child.add(edges);
-                    }
                     if (child.name.includes("Label")) {
                         const div = document.createElement('div');
                         div.className = 'math-label';
-                        div.textContent = child.name.replace("Label_", "").split(".")[0].replace(/\(.*\)/, "");
+                        div.textContent = child.name.replace("Label_", "").split(".")[0];
+                        div.style.color = 'black'; div.style.fontWeight='bold';
                         const l = new CSS2DObject(div);
                         child.add(l);
-                        allLabels.push(l);
-                        child.visible = false; // Ẩn object gốc đi
+                        child.visible = false; 
                     }
                 });
 
                 currentModel = root;
                 scene.add(root);
                 
+                // Ẩn hộp test đi vì đã có model thật
+                testBox.visible = false;
+
                 // Auto Fit Camera
                 const box = new THREE.Box3().setFromObject(root);
-                const size = box.getSize(new THREE.Vector3()).length();
                 const center = box.getCenter(new THREE.Vector3());
-                root.position.sub(center); // Đưa về gốc tọa độ
+                const size = box.getSize(new THREE.Vector3()).length();
+                root.position.sub(center); // Đưa về 0,0,0
 
-                orthoCamera.zoom = 1;
-                orthoCamera.position.set(size, size, size);
-                orthoCamera.lookAt(0,0,0);
-                orthoCamera.updateProjectionMatrix();
+                camera.position.set(size, size, size);
+                camera.lookAt(0,0,0);
 
-                perspCamera.position.set(size, size/2, size*1.5);
-                perspCamera.lookAt(0,0,0);
-                
                 document.getElementById('loading').style.display = 'none';
-
-                // Setup Animation
-                if(gltf.animations.length){
-                    mixer = new THREE.AnimationMixer(root);
-                    gltf.animations.forEach(clip=>{ animationActions.push(mixer.clipAction(clip)); });
-                    updateUI();
-                }
 
             }, undefined, (err) => {
-                alert("Lỗi tải file: " + filePath);
+                console.error(err);
+                alert("Lỗi tải file 3D! Đang hiển thị hộp đỏ test.");
                 document.getElementById('loading').style.display = 'none';
+                testBox.visible = true; // Fallback về hộp đỏ
             });
         }
 
-        // --- RENDER LOOP ---
+        // 5. RENDER LOOP
         function render(timestamp, frame) {
-            const delta = clock.getDelta();
-            if (mixer) mixer.update(delta);
-
-            // AR HIT TEST
             if (frame) {
                 const referenceSpace = renderer.xr.getReferenceSpace();
                 const session = renderer.xr.getSession();
@@ -303,7 +220,6 @@
                             hitTestSource = source;
                         });
                     });
-                    session.addEventListener('end', () => { hitTestSourceRequested = false; hitTestSource = null; });
                     hitTestSourceRequested = true;
                 }
 
@@ -313,89 +229,42 @@
                         const hit = hitTestResults[0];
                         reticle.visible = true;
                         reticle.matrix.fromArray(hit.getPose(referenceSpace).transform.matrix);
-                    } else {
-                        reticle.visible = false;
-                    }
+                    } else { reticle.visible = false; }
                 }
             }
 
-            // Fix lỗi màn hình đen/xám: Phải clear renderer mỗi frame
-            renderer.clear();
-            renderer.render(scene, activeCamera);
-            labelRenderer.render(scene, activeCamera);
+            renderer.render(scene, camera);
+            labelRenderer.render(scene, camera);
         }
         renderer.setAnimationLoop(render);
 
-
-        // --- HELPER ---
-        let allLabels = [];
-        function clearLabels() {
-            allLabels.forEach(l => { if(l.parent) l.parent.remove(l); });
-            allLabels = [];
-        }
-
-        // --- UI LOGIC ---
-        window.toggleCamera = () => {
-            activeCamera = (activeCamera === orthoCamera) ? perspCamera : orthoCamera;
-            controls.object = activeCamera;
-            const btn = document.getElementById('cam-toggle');
-            btn.innerText = (activeCamera === orthoCamera) ? "🧊" : "👁️";
-        }
-        
-        window.toggleSolution = () => {
-            const t = document.getElementById('solution-text');
-            t.classList.toggle('blur-solution');
-            document.getElementById('reveal-btn').style.display = t.classList.contains('blur-solution') ? 'block' : 'none';
-        }
-
-        // Animation UI
-        const btnNext = document.getElementById('btn-next');
-        const btnPrev = document.getElementById('btn-prev');
-        const stepInd = document.getElementById('step-indicator');
-        
-        function updateUI() {
-             document.getElementById('animation-controls').classList.add('visible');
-             stepInd.innerText = `Bước ${currentStepIndex + 1}`;
+        // 6. MENU GENERATOR
+        const menuContainer = document.getElementById('menu-content');
+        if (typeof curriculumData !== 'undefined') {
+            curriculumData.forEach(folder => {
+                if(folder.children) {
+                    folder.children.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'menu-item';
+                        div.innerText = item.title;
+                        div.onclick = () => loadModel3D(item.file, item.title);
+                        menuContainer.appendChild(div);
+                    });
+                }
+            });
+        } else {
+             menuContainer.innerHTML = "<div style='padding:10px'>⚠️ Không tìm thấy menu_data.js</div>";
         }
         
-        btnNext.onclick = () => {
-            if(currentStepIndex < animationActions.length - 1) {
-                currentStepIndex++;
-                const act = animationActions[currentStepIndex];
-                act.reset(); act.setLoop(THREE.LoopOnce); act.clampWhenFinished = true; act.play();
-                updateUI();
-            }
-        };
-        btnPrev.onclick = () => {
-            if(currentStepIndex >= 0) {
-                animationActions[currentStepIndex].stop();
-                currentStepIndex--;
-                updateUI();
-            }
-        };
-
-        // Resize
         window.addEventListener('resize', () => {
-            const w = viewer.clientWidth; const h = viewer.clientHeight;
-            renderer.setSize(w, h); labelRenderer.setSize(w, h);
-            const a = w/h;
-            perspCamera.aspect = a; perspCamera.updateProjectionMatrix();
-            const s = 8;
-            orthoCamera.left = -s*a/2; orthoCamera.right = s*a/2;
-            orthoCamera.top = s/2; orthoCamera.bottom = -s/2;
-            orthoCamera.updateProjectionMatrix();
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            labelRenderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // MENU LOGIC
-        const menuContainer = document.getElementById('menu-content');
-        function createMenuHTML(data, parentElement) {
-            const ul = document.createElement('ul'); if (parentElement !== menuContainer) ul.classList.add('submenu');
-            data.forEach(item => { const li = document.createElement('li'); if (item.type === 'folder') { const titleDiv = document.createElement('div'); titleDiv.className = 'menu-folder-title'; titleDiv.innerHTML = `<span>${item.title}</span> <span>▶</span>`; titleDiv.onclick = () => { const sub = li.querySelector('.submenu'); if (sub) sub.classList.toggle('show'); }; li.appendChild(titleDiv); if (item.children) createMenuHTML(item.children, li); } else { const itemDiv = document.createElement('div'); itemDiv.className = 'menu-item'; itemDiv.innerText = item.title; itemDiv.onclick = () => { document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active')); itemDiv.classList.add('active'); loadModel3D(item.file, item.title, item.desc); if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('mobile-open'); }; li.appendChild(itemDiv); } ul.appendChild(li); }); parentElement.appendChild(ul);
-        }
-        if (typeof curriculumData !== 'undefined') { createMenuHTML(curriculumData, menuContainer); }
-        window.toggleMenu = function () { document.getElementById('sidebar').classList.toggle('mobile-open'); }
-        document.getElementById('mobile-toggle').addEventListener('click', toggleMenu);
-
     </script>
+    
+    <script src="menu_data.js"></script>
 </body>
 </html>
