@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Học Hình Học 3D (AR Final Complete)</title>
+    <title>Học Hình Học 3D (AR Final Fixed)</title>
     
     <link rel="icon" href="data:,">
 
@@ -28,6 +28,13 @@
     <style>
         /* CSS GIAO DIỆN */
         body { margin: 0; font-family: 'Segoe UI', sans-serif; overflow: hidden; display: flex; height: 100vh; background-color: #f5f6fa; }
+        
+        /* QUAN TRỌNG: Class này sẽ được thêm vào khi bật AR để xóa nền */
+        body.in-ar { background-color: transparent !important; }
+        body.in-ar #sidebar, body.in-ar #text-panel, body.in-ar #cam-toggle, body.in-ar #mobile-toggle { display: none !important; }
+        body.in-ar #main-content { background: transparent !important; }
+        body.in-ar #viewer-container { background: transparent !important; width: 100vw !important; height: 100vh !important; flex: none !important; }
+
         #sidebar { width: 280px; background-color: #2c3e50; color: white; display: flex; flex-direction: column; border-right: 1px solid #ddd; flex-shrink: 0; z-index: 200; overflow-y: auto; }
         .brand { padding: 20px; font-size: 18px; font-weight: bold; background: #1a252f; text-align: center; border-bottom: 1px solid #34495e; }
         ul { list-style: none; padding-left: 0; margin: 0; }
@@ -43,7 +50,6 @@
         .sidebar-footer { padding: 15px; text-align: center; color: #aaa; font-size: 12px; margin-top: auto; }
         #main-content { flex: 1; display: flex; position: relative; overflow: hidden; }
         
-        /* Mặc định là màu xám. Khi vào AR, JS sẽ đổi thành transparent */
         #viewer-container { flex: 7; position: relative; background: #e0e0e0; overflow: hidden; border-right: 2px solid #ccc; transition: background 0.3s; }
         
         #text-panel { flex: 3; display: flex; flex-direction: column; min-width: 300px; background: white; border-left: 1px solid #ccc; }
@@ -140,6 +146,8 @@
         renderer.setPixelRatio(window.devicePixelRatio); 
         renderer.sortObjects = true;
         renderer.xr.enabled = true; // BẬT AR
+        // Fix xóa màu nền
+        renderer.setClearColor( 0x000000, 0 ); 
         viewer.appendChild(renderer.domElement);
 
         const labelRenderer = new CSS2DRenderer();
@@ -151,7 +159,7 @@
         controls.enableDamping = true; controls.enableRotate = true;
         const clock = new THREE.Clock();
 
-        // --- AR SETUP & FIX LỖI MÀN HÌNH XÁM ---
+        // --- AR SETUP & FIX LỖI MÀN HÌNH TRẮNG/XÁM ---
         const arButton = ARButton.createButton(renderer, { 
             requiredFeatures: ['hit-test'],
             optionalFeatures: ['dom-overlay'],
@@ -159,22 +167,22 @@
         });
         document.body.appendChild(arButton);
 
-        // KHI VÀO AR: Xóa màu nền để hiện Camera
+        // KHI VÀO AR: Thêm class .in-ar để CSS ẩn hết nền trắng đi
         renderer.xr.addEventListener('sessionstart', () => {
-            document.getElementById('viewer-container').style.background = 'transparent';
-            document.body.style.background = 'transparent';
+            document.body.classList.add('in-ar');
             
             // Ẩn model đi cho đến khi người dùng đặt nó
             if(currentModel) currentModel.visible = false; 
             
             // Hiện cảnh báo nhỏ để người dùng biết phải làm gì
-            alert("⚠️ HƯỚNG DẪN AR:\n1. Rà điện thoại xuống sàn nhà/mặt bàn.\n2. Đợi VÒNG TRÒN TRẮNG hiện ra.\n3. CHẠM MÀN HÌNH để đặt hình!");
+            setTimeout(() => {
+                 alert("⚠️ HƯỚNG DẪN AR:\n1. Rà điện thoại xuống sàn nhà/mặt bàn.\n2. Đợi VÒNG TRÒN TRẮNG hiện ra.\n3. CHẠM MÀN HÌNH để đặt hình!");
+            }, 500);
         });
 
-        // KHI THOÁT AR: Trả lại màu nền xám
+        // KHI THOÁT AR: Bỏ class .in-ar, trả lại giao diện web
         renderer.xr.addEventListener('sessionend', () => {
-            document.getElementById('viewer-container').style.background = '#e0e0e0';
-            document.body.style.background = '#f5f6fa';
+            document.body.classList.remove('in-ar');
             
             if(currentModel) {
                 currentModel.visible = true; 
