@@ -1,1 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEST CAMERA AR</title>
+    <style>
+        body { margin: 0; background-color: transparent !important; }
+        /* Bắt buộc html và body phải trong suốt */
+        html { background-color: transparent !important; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script type="module">
+        import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+        import { ARButton } from 'https://unpkg.com/three@0.160.0/examples/jsm/webxr/ARButton.js';
 
+        // 1. Setup Scene
+        const scene = new THREE.Scene();
+        
+        // 2. Camera
+        const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 20);
+
+        // 3. Renderer (QUAN TRỌNG NHẤT LÀ DÒNG ALPHA VÀ SET CLEAR COLOR)
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.xr.enabled = true;
+        renderer.setClearColor(0x000000, 0); // Xóa sạch màu nền
+        document.body.appendChild(renderer.domElement);
+
+        // 4. Ánh sáng
+        const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 3);
+        light.position.set(0.5, 1, 0.25);
+        scene.add(light);
+
+        // 5. Tạo một cái hộp đỏ xoay vòng tròn để test 3D
+        const geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2); // Hộp 20cm
+        const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+        const cube = new THREE.Mesh(geometry, material);
+        cube.position.set(0, 0, -0.5); // Đặt cách camera 50cm
+        scene.add(cube);
+
+        // 6. Nút AR (Bỏ domOverlay để tránh lỗi che màn hình)
+        document.body.appendChild(ARButton.createButton(renderer));
+
+        // 7. Loop
+        renderer.setAnimationLoop((timestamp, frame) => {
+            // Xoay hộp cho vui
+            cube.rotation.x += 0.01;
+            cube.rotation.y += 0.01;
+
+            renderer.render(scene, camera);
+        });
+    </script>
+</body>
+</html>
