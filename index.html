@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Học Hình Học 3D (AR Fix)</title>
+    <title>Học Hình Học 3D (Final Fix)</title>
     
     <link rel="icon" href="data:,">
 
@@ -90,7 +90,7 @@
     <div id="sidebar">
         <div class="brand">📐 MENU BÀI TẬP</div>
         <div id="menu-content"></div>
-        <div class="sidebar-footer">V35 - AR SPRITE FIX</div>
+        <div class="sidebar-footer">V36 - PERFECT LABELS</div>
     </div>
 
     <div id="main-content">
@@ -129,13 +129,12 @@
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-        // Đã xóa CSS2DRenderer vì không dùng trong AR tốt
         import { ARButton } from 'three/addons/webxr/ARButton.js';
 
         // --- SETUP ---
         const viewer = document.getElementById('viewer-container');
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xe0e0e0); // Nền xám trên PC
+        scene.background = new THREE.Color(0xe0e0e0);
 
         const aspect = viewer.clientWidth / viewer.clientHeight;
         const frustumSize = 10; 
@@ -144,22 +143,22 @@
         const perspCamera = new THREE.PerspectiveCamera(45, aspect, 0.1, 10000);
         let activeCamera = orthoCamera; 
 
-        // RENDERER: Quan trọng alpha: true để AR xuyên thấu
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(viewer.clientWidth, viewer.clientHeight);
         renderer.setPixelRatio(window.devicePixelRatio); 
         renderer.sortObjects = true;
         renderer.xr.enabled = true; 
-        renderer.setClearColor(0x000000, 0); // Đảm bảo trong suốt
+        renderer.setClearColor(0x000000, 0);
         viewer.appendChild(renderer.domElement);
-
-        // Đã xóa labelRenderer (CSS2D)
 
         const controls = new OrbitControls(activeCamera, renderer.domElement);
         controls.enableDamping = true; controls.enableRotate = true;
         const clock = new THREE.Clock();
 
-        // --- CÁC HÀM SHADER GIẢ LẬP (VẬT LIỆU) ---
+        // --- GLOBAL VARIABLES FOR LABELS ---
+        let textLabels = []; // Danh sách các nhãn để xử lý scale
+
+        // --- CÁC HÀM SHADER GIẢ LẬP ---
         function getColorFromName(name) {
             const n = name.toLowerCase();
             if (n.includes('red')) return 0xff4444; if (n.includes('green')) return 0x22aa22;
@@ -194,27 +193,21 @@
         }
 
         // --- AR SETUP ---
-        const arButton = ARButton.createButton(renderer, { 
-            requiredFeatures: ['hit-test'] 
-            // KHÔNG DÙNG dom-overlay
-        });
+        const arButton = ARButton.createButton(renderer, { requiredFeatures: ['hit-test'] });
         document.body.appendChild(arButton);
 
-        // KHI VÀO AR
         renderer.xr.addEventListener('sessionstart', () => {
             document.body.classList.add('in-ar');
-            scene.background = null; // Nền trong suốt
+            scene.background = null;
             if(currentModel) currentModel.visible = false;
         });
 
-        // KHI THOÁT AR
         renderer.xr.addEventListener('sessionend', () => {
             document.body.classList.remove('in-ar');
-            scene.background = new THREE.Color(0xe0e0e0); // Trả lại nền xám
+            scene.background = new THREE.Color(0xe0e0e0);
             if(currentModel) {
                 currentModel.visible = true; 
                 currentModel.scale.set(1,1,1);
-                // Reset view
                 const box = new THREE.Box3().setFromObject(currentModel);
                 const center = box.getCenter(new THREE.Vector3());
                 currentModel.position.sub(center);
@@ -223,10 +216,7 @@
             activeCamera.lookAt(0,0,0);
         });
 
-        const reticle = new THREE.Mesh(
-            new THREE.RingGeometry(0.15, 0.2, 32).rotateX(-Math.PI / 2),
-            new THREE.MeshBasicMaterial()
-        );
+        const reticle = new THREE.Mesh(new THREE.RingGeometry(0.15, 0.2, 32).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial());
         reticle.matrixAutoUpdate = false; reticle.visible = false;
         scene.add(reticle);
 
@@ -237,7 +227,6 @@
             if (reticle.visible && currentModel) {
                 currentModel.position.setFromMatrixPosition(reticle.matrix);
                 currentModel.visible = true; 
-                // Thu nhỏ còn 15% để vừa bàn
                 currentModel.scale.set(0.15, 0.15, 0.15); 
             }
         }
@@ -246,26 +235,24 @@
         scene.add(controller);
 
         // --- HELPER FUNCTIONS ---
-        let allLabels = []; 
         
-        // HÀM TẠO SPRITE (THAY CHO CSS2D)
+        // CẢI TIẾN: HÀM TẠO SPRITE NÂNG CAO
         function createTextSprite(message) {
             const ctx = document.createElement('canvas').getContext('2d');
-            const size = 64; // Base size
+            const size = 64; 
             ctx.canvas.width = size * 4; 
             ctx.canvas.height = size * 2;
             
-            // Vẽ chữ
             ctx.font = `Bold ${size}px "Times New Roman", serif`;
             ctx.fillStyle = "rgba(0, 0, 0, 1.0)";
             ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
+            ctx.textBaseline = "bottom"; // Căn lề dưới
             
-            // Viền trắng nhẹ
+            // Viền trắng
             ctx.strokeStyle = 'white';
-            ctx.lineWidth = 4;
-            ctx.strokeText(message, ctx.canvas.width / 2, ctx.canvas.height / 2);
-            ctx.fillText(message, ctx.canvas.width / 2, ctx.canvas.height / 2);
+            ctx.lineWidth = 6;
+            ctx.strokeText(message, ctx.canvas.width / 2, ctx.canvas.height - 10);
+            ctx.fillText(message, ctx.canvas.width / 2, ctx.canvas.height - 10);
 
             const texture = new THREE.CanvasTexture(ctx.canvas);
             texture.minFilter = THREE.LinearFilter;
@@ -273,12 +260,18 @@
             const spriteMaterial = new THREE.SpriteMaterial({ 
                 map: texture, 
                 transparent: true,
-                depthTest: false, // QUAN TRỌNG: Luôn hiển thị trên cùng
+                depthTest: false,   // 1. KHÔNG KIỂM TRA ĐỘ SÂU (LUÔN VẼ)
                 depthWrite: false
             });
 
             const sprite = new THREE.Sprite(spriteMaterial);
-            sprite.scale.set(1, 0.5, 1); // Tùy chỉnh tỷ lệ
+            
+            // 2. RENDER ORDER CAO NHẤT ĐỂ ĐÈ LÊN MỌI THỨ
+            sprite.renderOrder = 9999; 
+            
+            // 3. CHỈNH TÂM XUỐNG DƯỚI (0.5, 0) ĐỂ CHỮ NGỒI TRÊN ĐIỂM
+            sprite.center.set(0.5, 0); 
+            
             return sprite;
         }
 
@@ -341,11 +334,13 @@
             solutionDiv.innerHTML = "";
 
             if (currentModel) { scene.remove(currentModel); currentModel = null; }
-            // Xóa sprite cũ khỏi mảng (nếu cần tracking, hiện tại clear scene là đủ)
+            
+            // Xóa sạch danh sách label cũ
+            textLabels = [];
+
             if (mixer) { mixer.stopAllAction(); mixer = null; }
             animationActions = []; currentStepIndex = -1; controlsPanel.classList.remove('visible');
 
-            // Fix URL encode
             const timestamp = new Date().getTime();
             const encodedPath = encodeURI(filePath); 
             const textPathRaw = filePath.replace('.glb', '.txt').replace('.gltf', '.txt');
@@ -368,7 +363,6 @@
                     } else { problemDiv.innerHTML = "<i>(Không tìm thấy dữ liệu đề bài)</i>"; }
                 });
 
-            // Tải 3D
             loader.load(encodedPath + '?t=' + timestamp, (gltf) => {
                 const root = gltf.scene;
                 let maxGeoSize = 0;
@@ -385,11 +379,16 @@
                         const match = child.name.match(/\((.*?)\)/); 
                         let displayText = match ? match[1] : child.name.replace("Label_", "").split(".")[0]; 
                         
-                        // SỬ DỤNG SPRITE THAY VÌ HTML
                         const sprite = createTextSprite(displayText);
-                        sprite.position.set(0, 0, 0); 
+                        
+                        // OFFSET: Nâng cao một chút so với điểm gốc
+                        sprite.position.set(0, 0.15, 0); 
+                        
                         child.add(sprite); 
                         
+                        // THÊM VÀO LIST QUẢN LÝ SCALE
+                        textLabels.push(sprite);
+
                         if(child.material) child.material.visible = false; 
                     }
                     else if (child.name.includes("Symbol")) { 
@@ -415,7 +414,6 @@
 
                 currentModel = root; updateStepVisibility(-1);
                 
-                // AUTO FIT
                 const box = new THREE.Box3().setFromObject(root); const center = box.getCenter(new THREE.Vector3()); root.position.sub(center); 
                 if (maxGeoSize > 0) {
                     const padding = 1.5; const newFrustumSize = maxGeoSize * padding;
@@ -434,6 +432,31 @@
         function render(timestamp, frame) {
             const delta = clock.getDelta();
             if (mixer) mixer.update(delta);
+
+            // LOGIC SCALE CHỮ ĐỘNG (FIX LỖI TO/NHỎ)
+            // Tự động điều chỉnh scale của Sprite dựa trên khoảng cách camera hoặc zoom
+            if (textLabels.length > 0) {
+                // Hệ số này bạn có thể chỉnh để chữ to hơn hay nhỏ hơn (0.04 là vừa đẹp)
+                const baseScale = 0.04; 
+                
+                if (activeCamera.isPerspectiveCamera) {
+                    // Với phối cảnh: Scale tỉ lệ thuận với khoảng cách đến camera
+                    // Để chữ xa trông vẫn to bằng chữ gần (trên màn hình)
+                    const tempVec = new THREE.Vector3();
+                    textLabels.forEach(sprite => {
+                        sprite.getWorldPosition(tempVec);
+                        const distance = tempVec.distanceTo(activeCamera.position);
+                        const s = distance * baseScale;
+                        sprite.scale.set(s * 2, s, 1); // Tỷ lệ rộng/cao của canvas là 2:1
+                    });
+                } else if (activeCamera.isOrthographicCamera) {
+                    // Với trục đo: Scale tỉ lệ nghịch với Zoom
+                    const s = (baseScale * 30) / activeCamera.zoom; 
+                    textLabels.forEach(sprite => {
+                        sprite.scale.set(s * 2, s, 1);
+                    });
+                }
+            }
             
             if (frame) {
                 const referenceSpace = renderer.xr.getReferenceSpace();
@@ -463,7 +486,6 @@
 
             controls.update();
             renderer.render(scene, activeCamera);
-            // Không còn labelRenderer.render
         }
 
         renderer.setAnimationLoop(render);
