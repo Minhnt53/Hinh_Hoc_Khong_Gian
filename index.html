@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Học Hình Học 3D (AR UX Final)</title>
+    <title>Học Hình Học 3D (V39 - UI Fix)</title>
     
     <link rel="icon" href="data:,">
 
@@ -39,26 +39,33 @@
         body.in-ar #main-content { background: transparent !important; }
         body.in-ar #viewer-container { background: transparent !important; border: none !important; }
 
-        /* --- AR UI OVERLAY (CHỈ HIỆN TRONG AR) --- */
+        /* --- AR UI OVERLAY (HIỆN TRONG AR NHỜ DOM-OVERLAY) --- */
         #ar-ui-overlay {
             display: none; /* Mặc định ẩn */
             position: absolute;
-            bottom: 20px;
+            bottom: 30px;
             left: 0;
             width: 100%;
             pointer-events: none; /* Để touch xuyên qua vùng trống */
-            z-index: 9999;
+            z-index: 10000; /* Z-index cao nhất */
             flex-direction: column;
             align-items: center;
-            gap: 15px;
+            justify-content: flex-end;
+            padding-bottom: 20px;
         }
         
-        body.in-ar #ar-ui-overlay { display: flex; } /* Hiện khi vào AR */
+        /* Khi vào AR class này được thêm vào body, kích hoạt hiển thị */
+        body.in-ar #ar-ui-overlay { display: flex; } 
 
         .ar-btn-group {
             display: flex;
+            align-items: center;
             gap: 20px;
-            pointer-events: auto;
+            pointer-events: auto; /* Cho phép bấm nút */
+            background: rgba(0,0,0,0.3); /* Nền mờ nhẹ để nút nổi bật hơn */
+            padding: 10px 20px;
+            border-radius: 40px;
+            backdrop-filter: blur(5px);
         }
 
         #btn-place-ar {
@@ -71,39 +78,38 @@
             font-weight: bold;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             cursor: pointer;
-            pointer-events: auto;
-            transition: transform 0.1s;
+            text-transform: uppercase;
         }
         #btn-place-ar:active { transform: scale(0.95); background: #219150; }
 
         .ar-scale-btn {
-            width: 50px; height: 50px;
+            width: 45px; height: 45px;
             border-radius: 50%;
             border: 2px solid white;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(44, 62, 80, 0.8);
             color: white;
             font-size: 24px;
+            font-weight: bold;
             cursor: pointer;
             display: flex; justify-content: center; align-items: center;
-            pointer-events: auto;
+            user-select: none;
         }
-        .ar-scale-btn:active { background: rgba(0, 0, 0, 0.8); }
+        .ar-scale-btn:active { background: #3498db; transform: scale(0.9); }
 
-        /* --- TÙY CHỈNH VỊ TRÍ NÚT START AR CỦA THREE.JS --- */
-        /* Class này do THREE.ARButton tự sinh ra, ta ghi đè đê chỉnh vị trí */
+        /* --- TÙY CHỈNH VỊ TRÍ NÚT START AR (GÓC TRÊN TRÁI) --- */
         #ar-button {
             position: absolute !important;
             bottom: auto !important;
-            top: 20px !important;     /* Đưa lên trên để ko che bài giải */
-            right: 20px !important;   /* Góc phải */
-            left: auto !important;
+            top: 20px !important;     
+            left: 20px !important;    /* Đổi sang trái */
+            right: auto !important;
             width: auto !important;
             padding: 10px 20px !important;
             opacity: 0.9 !important;
             border-radius: 20px !important;
-            z-index: 999 !important;
+            z-index: 99999 !important; /* Đảm bảo nổi lên trên cùng */
         }
-        /* Ẩn nút AR trên màn hình lớn (PC) giả định > 1024px */
+        /* Ẩn nút AR trên màn hình lớn */
         @media (min-width: 1024px) { #ar-button { display: none !important; } }
 
 
@@ -158,7 +164,7 @@
     <div id="sidebar">
         <div class="brand">📐 MENU BÀI TẬP</div>
         <div id="menu-content"></div>
-        <div class="sidebar-footer">V38 - AR UX FINAL</div>
+        <div class="sidebar-footer">V39 - UI FIX</div>
     </div>
 
     <div id="main-content">
@@ -175,7 +181,7 @@
             <div id="ar-ui-overlay">
                 <div class="ar-btn-group">
                     <div class="ar-scale-btn" id="btn-scale-down" title="Thu nhỏ">−</div>
-                    <button id="btn-place-ar">👇 ĐẶT MÔ HÌNH</button>
+                    <div id="btn-place-ar">👇 ĐẶT MÔ HÌNH</div>
                     <div class="ar-scale-btn" id="btn-scale-up" title="Phóng to">+</div>
                 </div>
             </div>
@@ -220,7 +226,7 @@
         const perspCamera = new THREE.PerspectiveCamera(45, aspect, 0.1, 10000);
         let activeCamera = orthoCamera; 
 
-        // RENDERER: Quan trọng alpha: true để AR xuyên thấu
+        // RENDERER: alpha true để nền trong suốt
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(viewer.clientWidth, viewer.clientHeight);
         renderer.setPixelRatio(window.devicePixelRatio); 
@@ -235,10 +241,10 @@
 
         // --- AR VARS ---
         let textLabels = []; 
-        let currentShadow = null; // Biến giữ bóng
-        let arScale = 0.15; // Tỉ lệ mặc định (nhỏ nhất)
-        const minScale = 0.15;
-        const maxScale = 1.5; // Gấp 10 lần
+        let currentShadow = null;
+        let arScale = 0.15; 
+        const minScale = 0.05; // Cho phép nhỏ hơn nữa
+        const maxScale = 2.0; 
 
         // --- SHADER MATERIALS ---
         function getColorFromName(name) {
@@ -274,10 +280,14 @@
             geometry.setAttribute('lineDistance', new THREE.BufferAttribute(lineDistances, 1));
         }
 
-        // --- AR BUTTON SETUP ---
-        // Sửa id của nút AR để CSS có thể can thiệp
-        const arBtnDOM = ARButton.createButton(renderer, { requiredFeatures: ['hit-test'] });
-        arBtnDOM.id = "ar-button"; // Gán ID để CSS override vị trí
+        // --- AR BUTTON SETUP (FIX QUAN TRỌNG: DOM OVERLAY) ---
+        // Thêm optionalFeatures: ['dom-overlay'] để hiển thị UI HTML lên trên AR
+        const arBtnDOM = ARButton.createButton(renderer, { 
+            requiredFeatures: ['hit-test'],
+            optionalFeatures: ['dom-overlay'], 
+            domOverlay: { root: document.body } // Quy định body là vùng chứa UI
+        });
+        arBtnDOM.id = "ar-button"; 
         document.body.appendChild(arBtnDOM);
 
         // KHI VÀO AR
@@ -285,12 +295,9 @@
             document.body.classList.add('in-ar');
             scene.background = null; 
             if(currentModel) {
-                currentModel.visible = false; // Ẩn model cho đến khi đặt
-                // Reset scale về mặc định AR khi bắt đầu
+                currentModel.visible = false; 
                 arScale = 0.15;
                 currentModel.scale.set(arScale, arScale, arScale);
-                
-                // Hiện bóng nếu có
                 if(currentShadow) currentShadow.visible = true;
             }
         });
@@ -301,11 +308,9 @@
             scene.background = new THREE.Color(0xe0e0e0);
             if(currentModel) {
                 currentModel.visible = true; 
-                currentModel.scale.set(1,1,1); // Về scale chuẩn 3D View
-                // Ẩn bóng
+                currentModel.scale.set(1,1,1);
                 if(currentShadow) currentShadow.visible = false;
                 
-                // Reset vị trí về giữa
                 const box = new THREE.Box3().setFromObject(currentModel);
                 const center = box.getCenter(new THREE.Vector3());
                 currentModel.position.sub(center);
@@ -321,32 +326,32 @@
         let hitTestSource = null;
         let hitTestSourceRequested = false;
 
-        // --- LOGIC ĐẶT MODEL MỚI (BẰNG NÚT BẤM, KHÔNG PHẢI TAP) ---
-        // Xóa logic onSelect cũ đi, thay bằng event click của nút HTML
-        document.getElementById('btn-place-ar').addEventListener('click', () => {
+        // --- SỰ KIỆN NÚT BẤM AR UI ---
+        // Do dùng dom-overlay, các nút HTML này sẽ nhận sự kiện touch bình thường
+        document.getElementById('btn-place-ar').addEventListener('click', (e) => {
+            e.stopPropagation(); // Ngăn sự kiện xuyên qua
             if (reticle.visible && currentModel) {
                 currentModel.position.setFromMatrixPosition(reticle.matrix);
                 currentModel.visible = true; 
-                // Scale đã được set theo biến arScale
             }
         });
 
-        // --- LOGIC SCALE AR ---
         function updateARScale() {
             if(currentModel && document.body.classList.contains('in-ar')) {
                 currentModel.scale.set(arScale, arScale, arScale);
             }
         }
-        document.getElementById('btn-scale-up').addEventListener('click', () => {
-            if (arScale < maxScale) { arScale += 0.15; updateARScale(); }
+        document.getElementById('btn-scale-up').addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (arScale < maxScale) { arScale += 0.1; updateARScale(); }
         });
-        document.getElementById('btn-scale-down').addEventListener('click', () => {
+        document.getElementById('btn-scale-down').addEventListener('click', (e) => {
+            e.stopPropagation();
             if (arScale > minScale) { arScale -= 0.05; updateARScale(); }
         });
 
 
         // --- HELPER FUNCTIONS ---
-        
         function createTextSprite(message) {
             const ctx = document.createElement('canvas').getContext('2d');
             const size = 64; 
@@ -379,19 +384,17 @@
             return sprite;
         }
 
-        // HÀM TẠO BÓNG GIẢ
         function createShadowPlane(size) {
-            // Tạo hình tròn đen mờ
             const geometry = new THREE.CircleGeometry(size * 0.6, 32);
             const material = new THREE.MeshBasicMaterial({ 
                 color: 0x000000, 
                 transparent: true, 
-                opacity: 0.3, // Mờ mờ
+                opacity: 0.3, 
                 side: THREE.DoubleSide 
             });
             const shadow = new THREE.Mesh(geometry, material);
-            shadow.rotation.x = -Math.PI / 2; // Nằm ngang
-            shadow.position.y = 0.01; // Nhấc lên tí xíu để ko bị trùng mặt sàn
+            shadow.rotation.x = -Math.PI / 2; 
+            shadow.position.y = 0.01; 
             return shadow;
         }
 
@@ -490,7 +493,7 @@
 
                 // TẠO BÓNG GIẢ
                 currentShadow = createShadowPlane(maxGeoSize);
-                currentShadow.visible = false; // Mặc định ẩn (chỉ hiện khi vào AR)
+                currentShadow.visible = false; 
                 root.add(currentShadow);
 
                 if (gltf.animations && gltf.animations.length > 0) { mixer = new THREE.AnimationMixer(root); const clips = gltf.animations.sort((a, b) => a.name.localeCompare(b.name)); clips.forEach(clip => { const action = mixer.clipAction(clip); animationActions.push(action); }); updateUI(); }
