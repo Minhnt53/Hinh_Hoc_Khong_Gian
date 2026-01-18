@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Học Hình Học 3D (Final Perfect)</title>
+    <title>Học Hình Học 3D (AR UX Final)</title>
     
     <link rel="icon" href="data:,">
 
@@ -25,10 +25,10 @@
     </script>
 
     <style>
-        /* --- CSS GIAO DIỆN --- */
+        /* --- CSS GIAO DIỆN CHUNG --- */
         body { margin: 0; font-family: 'Segoe UI', sans-serif; overflow: hidden; display: flex; height: 100vh; background-color: #f5f6fa; }
         
-        /* CLASS ẨN GIAO DIỆN KHI VÀO AR */
+        /* ẨN GIAO DIỆN TRUYỀN THỐNG KHI VÀO AR */
         body.in-ar #sidebar, 
         body.in-ar #text-panel, 
         body.in-ar #cam-toggle, 
@@ -36,10 +36,78 @@
         body.in-ar #animation-controls,
         body.in-ar #loading { display: none !important; }
         
-        /* Làm trong suốt khi AR */
         body.in-ar #main-content { background: transparent !important; }
         body.in-ar #viewer-container { background: transparent !important; border: none !important; }
 
+        /* --- AR UI OVERLAY (CHỈ HIỆN TRONG AR) --- */
+        #ar-ui-overlay {
+            display: none; /* Mặc định ẩn */
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            pointer-events: none; /* Để touch xuyên qua vùng trống */
+            z-index: 9999;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        body.in-ar #ar-ui-overlay { display: flex; } /* Hiện khi vào AR */
+
+        .ar-btn-group {
+            display: flex;
+            gap: 20px;
+            pointer-events: auto;
+        }
+
+        #btn-place-ar {
+            background: #27ae60;
+            color: white;
+            border: 2px solid white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            cursor: pointer;
+            pointer-events: auto;
+            transition: transform 0.1s;
+        }
+        #btn-place-ar:active { transform: scale(0.95); background: #219150; }
+
+        .ar-scale-btn {
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            border: 2px solid white;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+            pointer-events: auto;
+        }
+        .ar-scale-btn:active { background: rgba(0, 0, 0, 0.8); }
+
+        /* --- TÙY CHỈNH VỊ TRÍ NÚT START AR CỦA THREE.JS --- */
+        /* Class này do THREE.ARButton tự sinh ra, ta ghi đè đê chỉnh vị trí */
+        #ar-button {
+            position: absolute !important;
+            bottom: auto !important;
+            top: 20px !important;     /* Đưa lên trên để ko che bài giải */
+            right: 20px !important;   /* Góc phải */
+            left: auto !important;
+            width: auto !important;
+            padding: 10px 20px !important;
+            opacity: 0.9 !important;
+            border-radius: 20px !important;
+            z-index: 999 !important;
+        }
+        /* Ẩn nút AR trên màn hình lớn (PC) giả định > 1024px */
+        @media (min-width: 1024px) { #ar-button { display: none !important; } }
+
+
+        /* --- CÁC CLASS CŨ --- */
         #sidebar { width: 280px; background-color: #2c3e50; color: white; display: flex; flex-direction: column; border-right: 1px solid #ddd; flex-shrink: 0; z-index: 200; overflow-y: auto; }
         .brand { padding: 20px; font-size: 18px; font-weight: bold; background: #1a252f; text-align: center; border-bottom: 1px solid #34495e; }
         ul { list-style: none; padding-left: 0; margin: 0; }
@@ -90,7 +158,7 @@
     <div id="sidebar">
         <div class="brand">📐 MENU BÀI TẬP</div>
         <div id="menu-content"></div>
-        <div class="sidebar-footer">V37 - FINAL STABLE</div>
+        <div class="sidebar-footer">V38 - AR UX FINAL</div>
     </div>
 
     <div id="main-content">
@@ -103,6 +171,15 @@
                 <div id="step-indicator">Bắt đầu</div>
                 <button class="control-btn" id="btn-next" title="Tiếp">❯</button>
             </div>
+            
+            <div id="ar-ui-overlay">
+                <div class="ar-btn-group">
+                    <div class="ar-scale-btn" id="btn-scale-down" title="Thu nhỏ">−</div>
+                    <button id="btn-place-ar">👇 ĐẶT MÔ HÌNH</button>
+                    <div class="ar-scale-btn" id="btn-scale-up" title="Phóng to">+</div>
+                </div>
+            </div>
+
         </div>
 
         <div id="text-panel">
@@ -149,17 +226,21 @@
         renderer.setPixelRatio(window.devicePixelRatio); 
         renderer.sortObjects = true;
         renderer.xr.enabled = true; 
-        renderer.setClearColor(0x000000, 0); // Đảm bảo trong suốt
+        renderer.setClearColor(0x000000, 0); 
         viewer.appendChild(renderer.domElement);
 
         const controls = new OrbitControls(activeCamera, renderer.domElement);
         controls.enableDamping = true; controls.enableRotate = true;
         const clock = new THREE.Clock();
 
-        // --- GLOBAL VARIABLES FOR LABELS ---
-        let textLabels = []; // Danh sách các nhãn để xử lý scale
+        // --- AR VARS ---
+        let textLabels = []; 
+        let currentShadow = null; // Biến giữ bóng
+        let arScale = 0.15; // Tỉ lệ mặc định (nhỏ nhất)
+        const minScale = 0.15;
+        const maxScale = 1.5; // Gấp 10 lần
 
-        // --- CÁC HÀM SHADER GIẢ LẬP ---
+        // --- SHADER MATERIALS ---
         function getColorFromName(name) {
             const n = name.toLowerCase();
             if (n.includes('red')) return 0xff4444; if (n.includes('green')) return 0x22aa22;
@@ -193,23 +274,38 @@
             geometry.setAttribute('lineDistance', new THREE.BufferAttribute(lineDistances, 1));
         }
 
-        // --- AR SETUP ---
-        const arButton = ARButton.createButton(renderer, { requiredFeatures: ['hit-test'] });
-        document.body.appendChild(arButton);
+        // --- AR BUTTON SETUP ---
+        // Sửa id của nút AR để CSS có thể can thiệp
+        const arBtnDOM = ARButton.createButton(renderer, { requiredFeatures: ['hit-test'] });
+        arBtnDOM.id = "ar-button"; // Gán ID để CSS override vị trí
+        document.body.appendChild(arBtnDOM);
 
+        // KHI VÀO AR
         renderer.xr.addEventListener('sessionstart', () => {
             document.body.classList.add('in-ar');
-            scene.background = null; // Nền trong suốt
-            if(currentModel) currentModel.visible = false;
+            scene.background = null; 
+            if(currentModel) {
+                currentModel.visible = false; // Ẩn model cho đến khi đặt
+                // Reset scale về mặc định AR khi bắt đầu
+                arScale = 0.15;
+                currentModel.scale.set(arScale, arScale, arScale);
+                
+                // Hiện bóng nếu có
+                if(currentShadow) currentShadow.visible = true;
+            }
         });
 
+        // KHI THOÁT AR
         renderer.xr.addEventListener('sessionend', () => {
             document.body.classList.remove('in-ar');
-            scene.background = new THREE.Color(0xe0e0e0); // Trả lại nền xám
+            scene.background = new THREE.Color(0xe0e0e0);
             if(currentModel) {
                 currentModel.visible = true; 
-                currentModel.scale.set(1,1,1);
-                // Reset view
+                currentModel.scale.set(1,1,1); // Về scale chuẩn 3D View
+                // Ẩn bóng
+                if(currentShadow) currentShadow.visible = false;
+                
+                // Reset vị trí về giữa
                 const box = new THREE.Box3().setFromObject(currentModel);
                 const center = box.getCenter(new THREE.Vector3());
                 currentModel.position.sub(center);
@@ -225,35 +321,43 @@
         let hitTestSource = null;
         let hitTestSourceRequested = false;
 
-        function onSelect() {
+        // --- LOGIC ĐẶT MODEL MỚI (BẰNG NÚT BẤM, KHÔNG PHẢI TAP) ---
+        // Xóa logic onSelect cũ đi, thay bằng event click của nút HTML
+        document.getElementById('btn-place-ar').addEventListener('click', () => {
             if (reticle.visible && currentModel) {
                 currentModel.position.setFromMatrixPosition(reticle.matrix);
                 currentModel.visible = true; 
-                currentModel.scale.set(0.15, 0.15, 0.15); 
+                // Scale đã được set theo biến arScale
+            }
+        });
+
+        // --- LOGIC SCALE AR ---
+        function updateARScale() {
+            if(currentModel && document.body.classList.contains('in-ar')) {
+                currentModel.scale.set(arScale, arScale, arScale);
             }
         }
-        const controller = renderer.xr.getController(0);
-        controller.addEventListener('select', onSelect);
-        scene.add(controller);
+        document.getElementById('btn-scale-up').addEventListener('click', () => {
+            if (arScale < maxScale) { arScale += 0.15; updateARScale(); }
+        });
+        document.getElementById('btn-scale-down').addEventListener('click', () => {
+            if (arScale > minScale) { arScale -= 0.05; updateARScale(); }
+        });
+
 
         // --- HELPER FUNCTIONS ---
         
-        // HÀM TẠO SPRITE (CÔNG NGHỆ MỚI)
         function createTextSprite(message) {
             const ctx = document.createElement('canvas').getContext('2d');
-            
-            // Tăng độ phân giải canvas để chữ nét hơn
             const size = 64; 
             ctx.canvas.width = size * 4; 
             ctx.canvas.height = size * 2;
             
-            // Vẽ chữ (Font đậm, Serif kiểu Toán học)
             ctx.font = `Bold ${size}px "Times New Roman", serif`;
             ctx.fillStyle = "rgba(0, 0, 0, 1.0)";
             ctx.textAlign = "center";
-            ctx.textBaseline = "bottom"; // Căn lề dưới
+            ctx.textBaseline = "bottom"; 
             
-            // Viền trắng dày hơn chút để nổi bật trên nền tối AR
             ctx.strokeStyle = 'white';
             ctx.lineWidth = 6;
             ctx.strokeText(message, ctx.canvas.width / 2, ctx.canvas.height - 10);
@@ -265,19 +369,30 @@
             const spriteMaterial = new THREE.SpriteMaterial({ 
                 map: texture, 
                 transparent: true,
-                depthTest: false,   // QUAN TRỌNG 1: Luôn vẽ đè lên vật thể
+                depthTest: false,   
                 depthWrite: false
             });
 
             const sprite = new THREE.Sprite(spriteMaterial);
-            
-            // QUAN TRỌNG 2: Render order cao nhất để không bị khuất
             sprite.renderOrder = 9999; 
-            
-            // QUAN TRỌNG 3: Chỉnh tâm xuống dưới để chữ nằm "trên" điểm
             sprite.center.set(0.5, 0); 
-            
             return sprite;
+        }
+
+        // HÀM TẠO BÓNG GIẢ
+        function createShadowPlane(size) {
+            // Tạo hình tròn đen mờ
+            const geometry = new THREE.CircleGeometry(size * 0.6, 32);
+            const material = new THREE.MeshBasicMaterial({ 
+                color: 0x000000, 
+                transparent: true, 
+                opacity: 0.3, // Mờ mờ
+                side: THREE.DoubleSide 
+            });
+            const shadow = new THREE.Mesh(geometry, material);
+            shadow.rotation.x = -Math.PI / 2; // Nằm ngang
+            shadow.position.y = 0.01; // Nhấc lên tí xíu để ko bị trùng mặt sàn
+            return shadow;
         }
 
         window.toggleCamera = function() {
@@ -338,15 +453,12 @@
             problemDiv.innerHTML = "<i>⏳ Đang tải đề bài...</i>"; 
             solutionDiv.innerHTML = "";
 
-            if (currentModel) { scene.remove(currentModel); currentModel = null; }
-            
-            // Reset danh sách nhãn
+            if (currentModel) { scene.remove(currentModel); currentModel = null; currentShadow = null; }
             textLabels = [];
 
             if (mixer) { mixer.stopAllAction(); mixer = null; }
             animationActions = []; currentStepIndex = -1; controlsPanel.classList.remove('visible');
 
-            // Fix URL encode
             const timestamp = new Date().getTime();
             const encodedPath = encodeURI(filePath); 
             const textPathRaw = filePath.replace('.glb', '.txt').replace('.gltf', '.txt');
@@ -376,30 +488,27 @@
                 root.traverse((child) => { if (child.isMesh || child.isLine || child.isLineSegments) { if (!child.geometry.boundingBox) child.geometry.computeBoundingBox(); const box = child.geometry.boundingBox; const size = new THREE.Vector3(); box.getSize(size); maxGeoSize = Math.max(maxGeoSize, size.x, size.y, size.z); } });
                 if (maxGeoSize === 0) maxGeoSize = 5;
 
+                // TẠO BÓNG GIẢ
+                currentShadow = createShadowPlane(maxGeoSize);
+                currentShadow.visible = false; // Mặc định ẩn (chỉ hiện khi vào AR)
+                root.add(currentShadow);
+
                 if (gltf.animations && gltf.animations.length > 0) { mixer = new THREE.AnimationMixer(root); const clips = gltf.animations.sort((a, b) => a.name.localeCompare(b.name)); clips.forEach(clip => { const action = mixer.clipAction(clip); animationActions.push(action); }); updateUI(); }
 
                 root.traverse((child) => {
                     if (child.userData.isGenerated) return;
                     
                     if (child.name.includes("Label_")) { 
-                        // === FIX LỖI SCALE TÙM LUM ===
-                        // Ép đối tượng cha (Empty Object) về tỷ lệ chuẩn 1:1:1
-                        // Bất chấp trong 3D gốc bạn scale nó to nhỏ cỡ nào
                         child.scale.set(1, 1, 1);
                         child.updateMatrixWorld(); 
-                        // ==============================
 
                         const match = child.name.match(/\((.*?)\)/); 
                         let displayText = match ? match[1] : child.name.replace("Label_", "").split(".")[0]; 
                         
                         const sprite = createTextSprite(displayText);
-                        
-                        // OFFSET: Nâng vị trí chữ lên 0.05 đơn vị để không che mất điểm
                         sprite.position.set(0, 0.05, 0); 
                         
                         child.add(sprite); 
-                        
-                        // Thêm vào danh sách để hàm render tự điều chỉnh độ to nhỏ
                         textLabels.push(sprite);
 
                         if(child.material) child.material.visible = false; 
@@ -427,7 +536,6 @@
 
                 currentModel = root; updateStepVisibility(-1);
                 
-                // Auto Fit logic
                 const box = new THREE.Box3().setFromObject(root); const center = box.getCenter(new THREE.Vector3()); root.position.sub(center); 
                 if (maxGeoSize > 0) {
                     const padding = 1.5; const newFrustumSize = maxGeoSize * padding;
@@ -447,15 +555,9 @@
             const delta = clock.getDelta();
             if (mixer) mixer.update(delta);
 
-            // LOGIC SCALE CHỮ ĐỘNG (ĐÃ GIẢM SIZE CÒN 25%)
             if (textLabels.length > 0) {
-                // --- SỬA Ở ĐÂY ---
-                // Cũ là 0.04. Giảm xuống 0.01 (25%) để chữ nhỏ nhắn vừa mắt hơn
                 const baseScale = 0.01; 
-                // ----------------
-                
                 if (activeCamera.isPerspectiveCamera) {
-                    // Với phối cảnh: Scale tỉ lệ thuận với khoảng cách đến camera
                     const tempVec = new THREE.Vector3();
                     textLabels.forEach(sprite => {
                         sprite.getWorldPosition(tempVec);
@@ -464,8 +566,6 @@
                         sprite.scale.set(s * 2, s, 1); 
                     });
                 } else if (activeCamera.isOrthographicCamera) {
-                    // Với trục đo: Scale tỉ lệ nghịch với Zoom
-                    // Đã điều chỉnh công thức một chút để khớp với size mới
                     const s = (baseScale * 30) / activeCamera.zoom; 
                     textLabels.forEach(sprite => {
                         sprite.scale.set(s * 2, s, 1);
