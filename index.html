@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Học Hình Học 3D (V39 - UI Fix)</title>
+    <title>Học Hình Học 3D (V40 - Final Perfect)</title>
     
     <link rel="icon" href="data:,">
 
@@ -39,81 +39,85 @@
         body.in-ar #main-content { background: transparent !important; }
         body.in-ar #viewer-container { background: transparent !important; border: none !important; }
 
-        /* --- AR UI OVERLAY (HIỆN TRONG AR NHỜ DOM-OVERLAY) --- */
+        /* --- AR UI OVERLAY (HIỆN TRONG AR) --- */
         #ar-ui-overlay {
-            display: none; /* Mặc định ẩn */
+            display: none;
             position: absolute;
-            bottom: 30px;
+            bottom: 40px;
             left: 0;
             width: 100%;
-            pointer-events: none; /* Để touch xuyên qua vùng trống */
-            z-index: 10000; /* Z-index cao nhất */
+            pointer-events: none; 
+            z-index: 10000; 
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
             padding-bottom: 20px;
         }
         
-        /* Khi vào AR class này được thêm vào body, kích hoạt hiển thị */
+        /* Hiện khi vào AR */
         body.in-ar #ar-ui-overlay { display: flex; } 
 
         .ar-btn-group {
             display: flex;
             align-items: center;
             gap: 20px;
-            pointer-events: auto; /* Cho phép bấm nút */
-            background: rgba(0,0,0,0.3); /* Nền mờ nhẹ để nút nổi bật hơn */
-            padding: 10px 20px;
-            border-radius: 40px;
-            backdrop-filter: blur(5px);
+            pointer-events: auto;
+            background: rgba(255, 255, 255, 0.15); /* Nền kính mờ sang trọng */
+            padding: 10px 25px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
 
         #btn-place-ar {
-            background: #27ae60;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
             color: white;
-            border: 2px solid white;
-            padding: 12px 30px;
+            border: none;
+            padding: 12px 25px;
             border-radius: 30px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
             cursor: pointer;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: transform 0.1s, box-shadow 0.1s;
         }
-        #btn-place-ar:active { transform: scale(0.95); background: #219150; }
+        #btn-place-ar:active { transform: scale(0.95); box-shadow: 0 2px 5px rgba(39, 174, 96, 0.4); }
 
         .ar-scale-btn {
-            width: 45px; height: 45px;
+            width: 40px; height: 40px;
             border-radius: 50%;
-            border: 2px solid white;
-            background: rgba(44, 62, 80, 0.8);
+            background: rgba(255, 255, 255, 0.2);
             color: white;
             font-size: 24px;
             font-weight: bold;
             cursor: pointer;
             display: flex; justify-content: center; align-items: center;
             user-select: none;
+            transition: background 0.2s;
         }
-        .ar-scale-btn:active { background: #3498db; transform: scale(0.9); }
+        .ar-scale-btn:active { background: rgba(255, 255, 255, 0.4); transform: scale(0.9); }
 
-        /* --- TÙY CHỈNH VỊ TRÍ NÚT START AR (GÓC TRÊN TRÁI) --- */
+        /* --- FIX NÚT START AR (GÓC TRÊN TRÁI) --- */
         #ar-button {
             position: absolute !important;
             bottom: auto !important;
             top: 20px !important;     
-            left: 20px !important;    /* Đổi sang trái */
+            left: 20px !important;    
             right: auto !important;
             width: auto !important;
-            padding: 10px 20px !important;
+            padding: 8px 16px !important;
             opacity: 0.9 !important;
             border-radius: 20px !important;
-            z-index: 99999 !important; /* Đảm bảo nổi lên trên cùng */
+            z-index: 99999 !important;
+            font-size: 13px !important;
+            font-weight: bold !important;
         }
-        /* Ẩn nút AR trên màn hình lớn */
         @media (min-width: 1024px) { #ar-button { display: none !important; } }
 
-
-        /* --- CÁC CLASS CŨ --- */
+        /* --- CSS CŨ --- */
         #sidebar { width: 280px; background-color: #2c3e50; color: white; display: flex; flex-direction: column; border-right: 1px solid #ddd; flex-shrink: 0; z-index: 200; overflow-y: auto; }
         .brand { padding: 20px; font-size: 18px; font-weight: bold; background: #1a252f; text-align: center; border-bottom: 1px solid #34495e; }
         ul { list-style: none; padding-left: 0; margin: 0; }
@@ -164,7 +168,7 @@
     <div id="sidebar">
         <div class="brand">📐 MENU BÀI TẬP</div>
         <div id="menu-content"></div>
-        <div class="sidebar-footer">V39 - UI FIX</div>
+        <div class="sidebar-footer">V40 - FINAL PERFECT</div>
     </div>
 
     <div id="main-content">
@@ -226,7 +230,7 @@
         const perspCamera = new THREE.PerspectiveCamera(45, aspect, 0.1, 10000);
         let activeCamera = orthoCamera; 
 
-        // RENDERER: alpha true để nền trong suốt
+        // RENDERER: Quan trọng alpha: true
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(viewer.clientWidth, viewer.clientHeight);
         renderer.setPixelRatio(window.devicePixelRatio); 
@@ -242,8 +246,8 @@
         // --- AR VARS ---
         let textLabels = []; 
         let currentShadow = null;
-        let arScale = 0.15; 
-        const minScale = 0.05; // Cho phép nhỏ hơn nữa
+        let arScale = 0.15; // 15cm mặc định
+        const minScale = 0.05; 
         const maxScale = 2.0; 
 
         // --- SHADER MATERIALS ---
@@ -280,12 +284,11 @@
             geometry.setAttribute('lineDistance', new THREE.BufferAttribute(lineDistances, 1));
         }
 
-        // --- AR BUTTON SETUP (FIX QUAN TRỌNG: DOM OVERLAY) ---
-        // Thêm optionalFeatures: ['dom-overlay'] để hiển thị UI HTML lên trên AR
+        // --- AR BUTTON SETUP ---
         const arBtnDOM = ARButton.createButton(renderer, { 
             requiredFeatures: ['hit-test'],
             optionalFeatures: ['dom-overlay'], 
-            domOverlay: { root: document.body } // Quy định body là vùng chứa UI
+            domOverlay: { root: document.body } 
         });
         arBtnDOM.id = "ar-button"; 
         document.body.appendChild(arBtnDOM);
@@ -309,11 +312,8 @@
             if(currentModel) {
                 currentModel.visible = true; 
                 currentModel.scale.set(1,1,1);
+                currentModel.position.set(0,0,0); // Reset về 0
                 if(currentShadow) currentShadow.visible = false;
-                
-                const box = new THREE.Box3().setFromObject(currentModel);
-                const center = box.getCenter(new THREE.Vector3());
-                currentModel.position.sub(center);
             }
             activeCamera.position.set(0, 2, 10);
             activeCamera.lookAt(0,0,0);
@@ -326,11 +326,11 @@
         let hitTestSource = null;
         let hitTestSourceRequested = false;
 
-        // --- SỰ KIỆN NÚT BẤM AR UI ---
-        // Do dùng dom-overlay, các nút HTML này sẽ nhận sự kiện touch bình thường
+        // --- UI EVENTS ---
         document.getElementById('btn-place-ar').addEventListener('click', (e) => {
-            e.stopPropagation(); // Ngăn sự kiện xuyên qua
+            e.stopPropagation(); 
             if (reticle.visible && currentModel) {
+                // Đặt Container vào vị trí Reticle
                 currentModel.position.setFromMatrixPosition(reticle.matrix);
                 currentModel.visible = true; 
             }
@@ -371,13 +371,7 @@
             const texture = new THREE.CanvasTexture(ctx.canvas);
             texture.minFilter = THREE.LinearFilter;
 
-            const spriteMaterial = new THREE.SpriteMaterial({ 
-                map: texture, 
-                transparent: true,
-                depthTest: false,   
-                depthWrite: false
-            });
-
+            const spriteMaterial = new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false, depthWrite: false });
             const sprite = new THREE.Sprite(spriteMaterial);
             sprite.renderOrder = 9999; 
             sprite.center.set(0.5, 0); 
@@ -386,15 +380,10 @@
 
         function createShadowPlane(size) {
             const geometry = new THREE.CircleGeometry(size * 0.6, 32);
-            const material = new THREE.MeshBasicMaterial({ 
-                color: 0x000000, 
-                transparent: true, 
-                opacity: 0.3, 
-                side: THREE.DoubleSide 
-            });
+            const material = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.3, side: THREE.DoubleSide });
             const shadow = new THREE.Mesh(geometry, material);
             shadow.rotation.x = -Math.PI / 2; 
-            shadow.position.y = 0.01; 
+            shadow.position.y = 0.005; // Cao hơn sàn tí xíu
             return shadow;
         }
 
@@ -426,7 +415,8 @@
 
         function updateStepVisibility(currentStep) {
             if (!currentModel) return;
-            currentModel.traverse((child) => {
+            // Traverse vào rawScene (con của container)
+            currentModel.children[0].traverse((child) => {
                 const match = child.name.match(/step_(\d+)/i);
                 if (match) { child.visible = (parseInt(match[1]) <= currentStep + 1); }
             });
@@ -441,7 +431,7 @@
         btnNext.addEventListener('click', () => { if (currentStepIndex < animationActions.length - 1) { currentStepIndex++; const action = animationActions[currentStepIndex]; action.reset(); action.setLoop(THREE.LoopOnce); action.clampWhenFinished = true; action.play(); updateStepVisibility(currentStepIndex); updateUI(); } });
         btnPrev.addEventListener('click', () => { if (currentStepIndex >= 0) { const action = animationActions[currentStepIndex]; action.stop(); currentStepIndex--; updateStepVisibility(currentStepIndex); updateUI(); } });
 
-        // --- LOAD MODEL ---
+        // --- LOAD MODEL (QUAN TRỌNG: CONTAINER WRAPPER) ---
         const loader = new GLTFLoader();
 
         window.loadModel3D = function(filePath, title, fullTextFromMenu) {
@@ -485,20 +475,43 @@
                 });
 
             loader.load(encodedPath + '?t=' + timestamp, (gltf) => {
-                const root = gltf.scene;
+                const rawScene = gltf.scene; // Đây là scene gốc từ file
+
+                // 1. TÍNH TOÁN KÍCH THƯỚC GỐC
                 let maxGeoSize = 0;
-                
-                root.traverse((child) => { if (child.isMesh || child.isLine || child.isLineSegments) { if (!child.geometry.boundingBox) child.geometry.computeBoundingBox(); const box = child.geometry.boundingBox; const size = new THREE.Vector3(); box.getSize(size); maxGeoSize = Math.max(maxGeoSize, size.x, size.y, size.z); } });
+                rawScene.traverse((child) => { if (child.isMesh || child.isLine || child.isLineSegments) { if (!child.geometry.boundingBox) child.geometry.computeBoundingBox(); const box = child.geometry.boundingBox; const size = new THREE.Vector3(); box.getSize(size); maxGeoSize = Math.max(maxGeoSize, size.x, size.y, size.z); } });
                 if (maxGeoSize === 0) maxGeoSize = 5;
 
-                // TẠO BÓNG GIẢ
-                currentShadow = createShadowPlane(maxGeoSize);
+                // 2. TẠO CONTAINER & CHUẨN HÓA VỊ TRÍ
+                const container = new THREE.Group();
+                const box = new THREE.Box3().setFromObject(rawScene);
+                const center = box.getCenter(new THREE.Vector3());
+                const size = new THREE.Vector3(); box.getSize(size);
+
+                // Dịch chuyển rawScene sao cho đáy nằm ở Y=0 và tâm X,Z ở 0
+                rawScene.position.x = -center.x;
+                rawScene.position.y = -box.min.y;
+                rawScene.position.z = -center.z;
+                
+                // 3. CHUẨN HÓA SCALE (VỀ 1 ĐƠN VỊ ~ 1 MÉT)
+                // Điều này cực quan trọng cho AR để arScale 0.15 luôn là 15cm
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const normScale = 1.0 / maxDim; 
+                rawScene.scale.setScalar(normScale); 
+
+                container.add(rawScene);
+
+                // 4. TẠO BÓNG (Gắn vào container)
+                // Bóng to hơn mô hình 1 chút (1.5 lần)
+                currentShadow = createShadowPlane(1.5);
                 currentShadow.visible = false; 
-                root.add(currentShadow);
+                container.add(currentShadow);
 
-                if (gltf.animations && gltf.animations.length > 0) { mixer = new THREE.AnimationMixer(root); const clips = gltf.animations.sort((a, b) => a.name.localeCompare(b.name)); clips.forEach(clip => { const action = mixer.clipAction(clip); animationActions.push(action); }); updateUI(); }
+                // Animation setup
+                if (gltf.animations && gltf.animations.length > 0) { mixer = new THREE.AnimationMixer(rawScene); const clips = gltf.animations.sort((a, b) => a.name.localeCompare(b.name)); clips.forEach(clip => { const action = mixer.clipAction(clip); animationActions.push(action); }); updateUI(); }
 
-                root.traverse((child) => {
+                // Shader & Label Logic (Áp dụng cho rawScene)
+                rawScene.traverse((child) => {
                     if (child.userData.isGenerated) return;
                     
                     if (child.name.includes("Label_")) { 
@@ -509,7 +522,7 @@
                         let displayText = match ? match[1] : child.name.replace("Label_", "").split(".")[0]; 
                         
                         const sprite = createTextSprite(displayText);
-                        sprite.position.set(0, 0.05, 0); 
+                        sprite.position.set(0, 0.05 / normScale, 0); // Bù lại scale
                         
                         child.add(sprite); 
                         textLabels.push(sprite);
@@ -537,19 +550,21 @@
                     }
                 });
 
-                currentModel = root; updateStepVisibility(-1);
+                currentModel = container;
+                updateStepVisibility(-1);
                 
-                const box = new THREE.Box3().setFromObject(root); const center = box.getCenter(new THREE.Vector3()); root.position.sub(center); 
-                if (maxGeoSize > 0) {
-                    const padding = 1.5; const newFrustumSize = maxGeoSize * padding;
-                    orthoCamera.left = -newFrustumSize * aspect / 2; orthoCamera.right = newFrustumSize * aspect / 2;
-                    orthoCamera.top = newFrustumSize / 2; orthoCamera.bottom = -newFrustumSize / 2;
-                    orthoCamera.updateProjectionMatrix();
-                    orthoCamera.position.set(maxGeoSize * 0.0, maxGeoSize * 0.8, maxGeoSize * 4.0); orthoCamera.lookAt(0,0,0);
-                    const fov = perspCamera.fov * (Math.PI / 180); let cameraZ = Math.abs(maxGeoSize / 2 / Math.tan(fov / 2)) * 1.5;
-                    perspCamera.position.set(cameraZ * 0.5, cameraZ * 0.3, cameraZ); perspCamera.lookAt(0,0,0);
-                }
-                scene.add(root); controls.object = activeCamera; controls.target.set(0,0,0); controls.update(); loading.style.display = 'none';
+                // Camera Fit (Dùng số cứng vì đã chuẩn hóa scale về 1)
+                orthoCamera.left = -2 * aspect; orthoCamera.right = 2 * aspect;
+                orthoCamera.top = 2; orthoCamera.bottom = -2;
+                orthoCamera.updateProjectionMatrix();
+                orthoCamera.position.set(0, 1, 4); orthoCamera.lookAt(0,0,0);
+                
+                perspCamera.position.set(1.5, 1.5, 3); perspCamera.lookAt(0,0,0);
+                
+                scene.add(currentModel); 
+                controls.object = activeCamera; controls.target.set(0,0,0); controls.update(); 
+                loading.style.display = 'none';
+
             }, undefined, (err) => { console.error(err); loading.style.display = 'none'; alert("Lỗi tải file 3D"); });
         }
 
@@ -560,17 +575,31 @@
 
             if (textLabels.length > 0) {
                 const baseScale = 0.01; 
+                // Fix: Chia cho scale của parent để chữ không bị teo nhỏ khi scale model
+                // Tuy nhiên do parent (rawScene) có scale cố định (normScale), ta có thể lấy trực tiếp
+                // Hoặc lấy WorldScale của parent để chính xác nhất
+                
                 if (activeCamera.isPerspectiveCamera) {
                     const tempVec = new THREE.Vector3();
                     textLabels.forEach(sprite => {
+                        // Lấy scale của parent (Empty Object chứa Label)
+                        // Empty Object đã bị reset scale 1,1,1.
+                        // Nhưng cha của nó (rawScene) bị scale normScale.
+                        // Cha của rawScene (container) bị scale arScale.
+                        // World Scale = 1 * normScale * arScale.
+                        const parentWorldScale = sprite.parent.getWorldScale(new THREE.Vector3()).x;
+                        
                         sprite.getWorldPosition(tempVec);
                         const distance = tempVec.distanceTo(activeCamera.position);
-                        const s = distance * baseScale;
+                        
+                        // ScaleSprite = (Distance * Base) / ParentWorldScale
+                        const s = (distance * baseScale) / parentWorldScale;
                         sprite.scale.set(s * 2, s, 1); 
                     });
                 } else if (activeCamera.isOrthographicCamera) {
-                    const s = (baseScale * 30) / activeCamera.zoom; 
-                    textLabels.forEach(sprite => {
+                     textLabels.forEach(sprite => {
+                        const parentWorldScale = sprite.parent.getWorldScale(new THREE.Vector3()).x;
+                        const s = ((baseScale * 30) / activeCamera.zoom) / parentWorldScale; 
                         sprite.scale.set(s * 2, s, 1);
                     });
                 }
