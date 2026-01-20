@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Học Hình Học 3D (AR Hand Tracking)</title>
+    <title>Học Hình Học 3D (Final Fixed V51)</title>
     
     <link rel="icon" href="data:,">
 
@@ -28,6 +28,7 @@
         /* --- CSS GIAO DIỆN --- */
         body { margin: 0; font-family: 'Segoe UI', sans-serif; overflow: hidden; display: flex; height: 100vh; background-color: #f5f6fa; }
         
+        /* Ẩn UI khi vào AR */
         body.in-ar #sidebar, 
         body.in-ar #text-panel, 
         body.in-ar #cam-toggle, 
@@ -38,75 +39,49 @@
         body.in-ar #main-content { background: transparent !important; }
         body.in-ar #viewer-container { background: transparent !important; border: none !important; }
 
+        /* Overlay AR */
         #ar-ui-overlay {
-            display: none;
-            position: absolute;
-            bottom: 40px;
-            left: 0;
-            width: 100%;
-            pointer-events: none; 
-            z-index: 10000; 
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-end;
-            padding-bottom: 20px;
+            display: none; position: absolute; bottom: 40px; left: 0; width: 100%;
+            pointer-events: none; z-index: 10000; flex-direction: column;
+            align-items: center; justify-content: flex-end; padding-bottom: 20px;
         }
-        
         body.in-ar #ar-ui-overlay { display: flex; } 
 
         .ar-btn-group {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            pointer-events: auto;
-            background: rgba(255, 255, 255, 0.15); 
-            padding: 10px 25px;
-            border-radius: 50px;
-            backdrop-filter: blur(10px);
+            display: flex; align-items: center; gap: 20px; pointer-events: auto;
+            background: rgba(255, 255, 255, 0.15); padding: 10px 25px;
+            border-radius: 50px; backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.2);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
 
         #btn-place-ar {
             background: linear-gradient(135deg, #2ecc71, #27ae60);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-size: 15px;
-            font-weight: bold;
+            color: white; border: none; padding: 12px 25px; border-radius: 30px;
+            font-size: 15px; font-weight: bold; cursor: pointer;
             box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            text-transform: uppercase; letter-spacing: 0.5px;
         }
         #btn-place-ar:active { transform: scale(0.95); }
 
         .ar-scale-btn {
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
+            width: 40px; height: 40px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2); color: white;
+            font-size: 24px; font-weight: bold; cursor: pointer;
             display: flex; justify-content: center; align-items: center;
             user-select: none;
         }
         .ar-scale-btn:active { background: rgba(255, 255, 255, 0.4); transform: scale(0.9); }
 
         #ar-button {
-            position: absolute !important;
-            top: 20px !important;     
-            left: 20px !important;    
-            bottom: auto !important; right: auto !important;
-            width: auto !important; padding: 8px 16px !important;
-            opacity: 0.9 !important; border-radius: 20px !important;
+            position: absolute !important; top: 20px !important; left: 20px !important;
+            bottom: auto !important; right: auto !important; width: auto !important;
+            padding: 8px 16px !important; opacity: 0.9 !important; border-radius: 20px !important;
             z-index: 99999 !important; font-size: 13px !important; font-weight: bold !important;
         }
         @media (min-width: 1024px) { #ar-button { display: none !important; } }
 
-        /* --- CSS CŨ --- */
+        /* Sidebar */
         #sidebar { width: 280px; background-color: #2c3e50; color: white; display: flex; flex-direction: column; border-right: 1px solid #ddd; flex-shrink: 0; z-index: 200; overflow-y: auto; }
         .brand { padding: 20px; font-size: 18px; font-weight: bold; background: #1a252f; text-align: center; border-bottom: 1px solid #34495e; }
         ul { list-style: none; padding-left: 0; margin: 0; }
@@ -123,13 +98,15 @@
         
         #main-content { flex: 1; display: flex; position: relative; overflow: hidden; }
         #viewer-container { flex: 7; position: relative; background: #e0e0e0; overflow: hidden; border-right: 2px solid #ccc; transition: background 0.3s; }
-        #text-panel { flex: 3; display: flex; flex-direction: column; min-width: 300px; background: white; border-left: 1px solid #ccc; }
-        #problem-section { flex: 1; display: flex; flex-direction: column; border-bottom: 4px double #ddd; background-color: #fffdf5; }
-        .section-header { padding: 8px 15px; font-weight: bold; font-size: 14px; color: white; display: flex; justify-content: space-between; align-items: center; }
+        
+        /* Text Panel */
+        #text-panel { flex: 3; display: flex; flex-direction: column; min-width: 300px; background: white; border-left: 1px solid #ccc; height: 100vh; overflow: hidden; }
+        #problem-section { flex: 0 0 35%; display: flex; flex-direction: column; border-bottom: 4px double #ddd; background-color: #fffdf5; min-height: 0; }
+        .section-header { padding: 8px 15px; font-weight: bold; font-size: 14px; color: white; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
         .header-problem { background: #f39c12; }
         .header-solution { background: #3498db; }
         .section-content { padding: 15px; overflow-y: auto; font-size: 14px; line-height: 1.6; color: #333; white-space: pre-wrap; flex: 1; }
-        #solution-section { flex: 3; display: flex; flex-direction: column; position: relative; background: white; }
+        #solution-section { flex: 1; display: flex; flex-direction: column; position: relative; background: white; min-height: 0; }
         #solution-content-wrapper { flex: 1; overflow-y: auto; position: relative; padding: 15px; }
         #solution-text { font-size: 14px; line-height: 1.6; transition: filter 0.3s; white-space: pre-wrap; }
         .blur-solution { filter: blur(10px); user-select: none; pointer-events: none; opacity: 0.5; }
@@ -147,7 +124,14 @@
         .control-btn:disabled { background: #ccc; cursor: not-allowed; }
         #step-indicator { font-weight: bold; color: #2c3e50; font-size: 14px; min-width: 70px; text-align: center; }
         
-        @media (max-width: 768px) { #sidebar { position: absolute; height: 100%; transform: translateX(-100%); } #sidebar.mobile-open { transform: translateX(0); } #main-content { flex-direction: column; } #viewer-container { flex: 1; height: 50%; } #text-panel { flex: 1; height: 50%; } #cam-toggle { top: 60px; } }
+        @media (max-width: 768px) { 
+            #sidebar { position: absolute; height: 100%; transform: translateX(-100%); } 
+            #sidebar.mobile-open { transform: translateX(0); } 
+            #main-content { flex-direction: column; } 
+            #viewer-container { flex: 1; height: 50%; } 
+            #text-panel { flex: 1; height: 50%; min-width: 100%; } 
+            #cam-toggle { top: 60px; } 
+        }
         #mobile-toggle { display: none; position: absolute; top: 10px; right: 10px; z-index: 100; background: #2c3e50; color: white; border: none; padding: 8px 12px; border-radius: 5px; }
         @media (max-width: 768px) { #mobile-toggle { display: block; } }
     </style>
@@ -157,7 +141,7 @@
     <div id="sidebar">
         <div class="brand">📐 MENU BÀI TẬP</div>
         <div id="menu-content"></div>
-        <div class="sidebar-footer">V46 - FINAL VIEW & SCALE</div>
+        <div class="sidebar-footer">V51 - FINAL FIXED</div>
     </div>
 
     <div id="main-content">
@@ -209,6 +193,10 @@
 
         // --- CẤU HÌNH ---
         const SHOW_SHADOW = true; 
+        
+        // VỊ TRÍ CAMERA CỐ ĐỊNH (0, 1, 2)
+        const DEFAULT_CAM_POS = new THREE.Vector3(0, 1, 2); 
+        const DEFAULT_TARGET = new THREE.Vector3(0, 0, 0);
 
         // --- SETUP ---
         const viewer = document.getElementById('viewer-container');
@@ -217,7 +205,17 @@
 
         const aspect = viewer.clientWidth / viewer.clientHeight;
         
-        const orthoCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10000);
+        // Ortho Scale
+        const orthoFrustum = 3; 
+        
+        // --- SỬA LỖI MẤT GÓC (NEAR = -100) ---
+        const orthoCamera = new THREE.OrthographicCamera(
+            -orthoFrustum * aspect, orthoFrustum * aspect, 
+            orthoFrustum, -orthoFrustum, 
+            -100, // <--- Đã sửa: Near âm để không bị cắt hình
+            10000
+        );
+        
         const perspCamera = new THREE.PerspectiveCamera(45, aspect, 0.1, 10000);
         let activeCamera = orthoCamera; 
 
@@ -233,18 +231,12 @@
         controls.enableDamping = true; controls.enableRotate = true;
         const clock = new THREE.Clock();
 
-        // --- AR & HAND TRACKING VARS ---
+        // --- AR VARS ---
         let textLabels = []; 
         let currentShadow = null;
-        let arScale = 0.08; // Mặc định nhỏ hơn để vừa tay (khoảng 8cm)
-        const minScale = 0.02; 
-        const maxScale = 2.0; 
-
-        // Hand Controllers
-        const hand0 = renderer.xr.getHand(0);
-        const hand1 = renderer.xr.getHand(1);
-        scene.add(hand0);
-        scene.add(hand1);
+        let arScale = 0.5; // Scale mặc định cho AR
+        const minScale = 0.05; 
+        const maxScale = 5.0; 
 
         // --- SHADER MATERIALS ---
         function getColorFromName(name) {
@@ -258,7 +250,7 @@
             let faceC = 0xcccccc; let lineC = 0x000000; let hiddenC = 0x888888;
             if (colorHex !== null) { faceC = colorHex; lineC = colorHex; hiddenC = colorHex; }
             
-            const myDash = sizeFactor / 30; 
+            const myDash = 0.05; // Dash cố định, không phụ thuộc size
             const myGap = myDash / 2;
 
             return {
@@ -280,11 +272,10 @@
             geometry.setAttribute('lineDistance', new THREE.BufferAttribute(lineDistances, 1));
         }
 
-        // --- AR BUTTON (CẬP NHẬT: Thêm hand-tracking) ---
+        // --- AR BUTTON ---
         const arBtnDOM = ARButton.createButton(renderer, { 
             requiredFeatures: ['hit-test'],
-            // Yêu cầu thêm 'hand-tracking'
-            optionalFeatures: ['dom-overlay', 'hand-tracking'], 
+            optionalFeatures: ['dom-overlay'], 
             domOverlay: { root: document.body } 
         });
         arBtnDOM.id = "ar-button"; 
@@ -296,7 +287,7 @@
             scene.background = null; 
             if(currentModel) {
                 currentModel.visible = false; 
-                arScale = 0.08; // Set scale nhỏ hơn khi vào AR để vừa tay
+                arScale = 0.5;
                 currentModel.scale.set(arScale, arScale, arScale);
                 if(currentShadow) currentShadow.visible = SHOW_SHADOW;
             }
@@ -312,8 +303,9 @@
                 currentModel.position.set(0,0,0);
                 if(currentShadow) currentShadow.visible = false;
             }
-            activeCamera.position.set(0, 2, 10);
-            activeCamera.lookAt(0,0,0);
+            // Reset Camera về vị trí cố định
+            activeCamera.position.copy(DEFAULT_CAM_POS);
+            activeCamera.lookAt(DEFAULT_TARGET);
         });
 
         const reticle = new THREE.Mesh(new THREE.RingGeometry(0.15, 0.2, 32).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial());
@@ -326,27 +318,24 @@
         // --- UI EVENTS ---
         document.getElementById('btn-place-ar').addEventListener('click', (e) => {
             e.stopPropagation(); 
-            // Nếu không dùng tay thì mới dùng reticle
             if (reticle.visible && currentModel) {
                 currentModel.position.setFromMatrixPosition(reticle.matrix);
-                currentModel.visible = true;
-                // Khi đặt bằng tay chạm, set scale về full arScale
-                currentModel.scale.set(arScale, arScale, arScale);
+                currentModel.visible = true; 
             }
         });
 
         function updateARScale() {
             if(currentModel && document.body.classList.contains('in-ar')) {
-                // Chỉ cập nhật biến, việc scale model sẽ do logic Hand Tracking xử lý
+                currentModel.scale.set(arScale, arScale, arScale);
             }
         }
         document.getElementById('btn-scale-up').addEventListener('click', (e) => {
             e.stopPropagation();
-            if (arScale < maxScale) { arScale += 0.05; }
+            if (arScale < maxScale) { arScale += 0.1; updateARScale(); }
         });
         document.getElementById('btn-scale-down').addEventListener('click', (e) => {
             e.stopPropagation();
-            if (arScale > minScale) { arScale -= 0.01; }
+            if (arScale > minScale) { arScale -= 0.05; updateARScale(); }
         });
 
 
@@ -386,14 +375,14 @@
         }
 
         function createShadowPlane(size) {
-            const geometry = new THREE.PlaneGeometry(size * 1.5, size * 1.5);
+            const geometry = new THREE.PlaneGeometry(size * 4, size * 4); // Shadow to
             const texture = createSoftShadowTexture();
             const material = new THREE.MeshBasicMaterial({ 
                 map: texture, transparent: true, opacity: 1, side: THREE.DoubleSide, depthWrite: false
             });
             const shadow = new THREE.Mesh(geometry, material);
             shadow.rotation.x = -Math.PI / 2; 
-            shadow.position.y = 0.005; 
+            shadow.position.y = 0.005; // Luôn nằm sát mặt đất (y=0)
             shadow.renderOrder = 0;
             return shadow;
         }
@@ -441,71 +430,7 @@
         btnNext.addEventListener('click', () => { if (currentStepIndex < animationActions.length - 1) { currentStepIndex++; const action = animationActions[currentStepIndex]; action.reset(); action.setLoop(THREE.LoopOnce); action.clampWhenFinished = true; action.play(); updateStepVisibility(currentStepIndex); updateUI(); } });
         btnPrev.addEventListener('click', () => { if (currentStepIndex >= 0) { const action = animationActions[currentStepIndex]; action.stop(); currentStepIndex--; updateStepVisibility(currentStepIndex); updateUI(); } });
 
-        // --- HAND TRACKING LOGIC ---
-        function updateHandTrackingLogic() {
-            if (!renderer.xr.isPresenting || !currentModel) return;
-
-            const hands = [hand0, hand1];
-            let foundOpenHand = false;
-            let handDetected = false;
-
-            for (const hand of hands) {
-                // Kiểm tra xem tay có khớp không
-                if (hand.joints && hand.joints['wrist'] && hand.joints['middle-finger-tip']) {
-                    handDetected = true;
-                    const wrist = hand.joints['wrist'];
-                    const middleTip = hand.joints['middle-finger-tip'];
-                    const indexTip = hand.joints['index-finger-tip'];
-
-                    // Tính khoảng cách cổ tay - đầu ngón giữa
-                    const distance = wrist.position.distanceTo(middleTip.position);
-                    
-                    // Ngưỡng phát hiện mở tay (0.12 mét = 12cm)
-                    if (distance > 0.12) {
-                        foundOpenHand = true;
-                        
-                        // DI CHUYỂN MODEL THEO TAY (Giữa lòng bàn tay)
-                        const palmPos = new THREE.Vector3().copy(wrist.position).lerp(middleTip.position, 0.4);
-                        currentModel.position.lerp(palmPos, 0.2); // Di chuyển mượt
-                        currentModel.quaternion.slerp(wrist.quaternion, 0.1); // Xoay theo tay
-
-                        // Ẩn Reticle (vòng tròn dò sàn) khi dùng tay
-                        reticle.visible = false;
-                        break; 
-                    }
-                }
-            }
-
-            // XỬ LÝ SCALE (HIỆU ỨNG PHÓNG TO/THU NHỎ)
-            // Nếu có tay detect:
-            // - Mở tay: Scale = arScale
-            // - Nắm tay: Scale = 0
-            // Nếu KHÔNG có tay detect (dùng điện thoại thường): Giữ nguyên scale hiện tại để dùng Touch
-            
-            if (handDetected) {
-                const targetScale = foundOpenHand ? arScale : 0;
-                const smoothing = 0.15;
-                const currentS = currentModel.scale.x;
-                
-                if (Math.abs(currentS - targetScale) > 0.001) {
-                    const newS = THREE.MathUtils.lerp(currentS, targetScale, smoothing);
-                    currentModel.scale.set(newS, newS, newS);
-                    currentModel.visible = true;
-                } else if (targetScale === 0) {
-                    currentModel.visible = false;
-                }
-            } else {
-                // Fallback: Nếu không thấy tay, đảm bảo model vẫn scale đúng theo arScale (cho chế độ chạm màn hình)
-                if (currentModel.visible) {
-                   const currentS = currentModel.scale.x;
-                   if (Math.abs(currentS - arScale) > 0.001) {
-                       currentModel.scale.set(arScale, arScale, arScale);
-                   }
-                }
-            }
-        }
-
-        // --- LOAD MODEL ---
+        // --- LOAD MODEL (SIMPLE - NO AUTO CENTER) ---
         const loader = new GLTFLoader();
 
         window.loadModel3D = function(filePath, title, fullTextFromMenu) {
@@ -531,6 +456,7 @@
             const textPathRaw = filePath.replace('.glb', '.txt').replace('.gltf', '.txt');
             const encodedTextPath = encodeURI(textPathRaw);
 
+            // Tải nội dung text
             fetch(encodedTextPath + '?t=' + timestamp)
                 .then(response => { if (!response.ok) throw new Error("File text không tồn tại"); return response.text(); })
                 .then(text => {
@@ -548,44 +474,20 @@
                     } else { problemDiv.innerHTML = "<i>(Không tìm thấy dữ liệu đề bài)</i>"; }
                 });
 
+            // Tải Model 3D
             loader.load(encodedPath + '?t=' + timestamp, (gltf) => {
                 const rawScene = gltf.scene; 
-
-                // --- SMART BOX CALCULATION ---
-                let smartBox = new THREE.Box3();
-                let hasMesh = false;
-                rawScene.traverse((child) => {
-                    if (child.isMesh) {
-                        if (!child.geometry.boundingBox) child.geometry.computeBoundingBox();
-                        const childBox = child.geometry.boundingBox.clone();
-                        childBox.applyMatrix4(child.matrixWorld);
-                        smartBox.union(childBox);
-                        hasMesh = true;
-                    }
-                });
-                if (!hasMesh) smartBox.setFromObject(rawScene);
-
-                const center = smartBox.getCenter(new THREE.Vector3());
-                const size = smartBox.getSize(new THREE.Vector3());
-
-                // --- CONTAINER SETUP ---
+                
+                // --- CONTAINER SETUP (Đơn giản, không di chuyển/scale) ---
                 const container = new THREE.Group();
-                rawScene.position.x = -center.x;
-                rawScene.position.y = -smartBox.min.y; 
-                rawScene.position.z = -center.z;
+                // rawScene.position.set(0,0,0); // Giữ nguyên vị trí gốc của GLB
+                // rawScene.scale.set(1,1,1);    // Giữ nguyên kích thước gốc
                 
-                const maxDim = Math.max(size.x, size.y, size.z) || 1;
-                const normScale = 1.0 / maxDim; 
-                
-                // Lưu lại scale để dùng cho label
-                container.userData.normScale = normScale;
-                
-                rawScene.scale.setScalar(normScale); 
-
                 container.add(rawScene);
 
                 if (SHOW_SHADOW) {
-                    currentShadow = createShadowPlane(1.0); 
+                    currentShadow = createShadowPlane(2.0); // Shadow size cố định
+                    currentShadow.position.set(0, 0.005, 0); 
                     currentShadow.visible = false; 
                     container.add(currentShadow);
                 }
@@ -601,7 +503,7 @@
                         const match = child.name.match(/\((.*?)\)/); 
                         let displayText = match ? match[1] : child.name.replace("Label_", "").split(".")[0]; 
                         const sprite = createTextSprite(displayText);
-                        sprite.position.set(0, 0.02 / normScale, 0); 
+                        sprite.position.set(0, 0.05, 0); // Vị trí text tương đối
                         child.add(sprite); 
                         textLabels.push(sprite);
                         if(child.material) child.material.visible = false; 
@@ -612,7 +514,7 @@
                     else if (child.name.includes("DASH")) {
                         if(child.isLine || child.isLineSegments) {
                             const color = getColorFromName(child.name);
-                            const myMats = createMaterials(color, maxDim); 
+                            const myMats = createMaterials(color, 1.0); 
                             manualComputeLineDistances(child.geometry);
                             child.material = myMats.fixedDashed; 
                             child.renderOrder = 1;
@@ -620,35 +522,29 @@
                         }
                     }
                     else if (child.isMesh) { 
-                        const color = getColorFromName(child.name); const myMats = createMaterials(color, maxDim); child.material = myMats.face; child.renderOrder = 0; const edgesGeom = new THREE.EdgesGeometry(child.geometry, 15); const lHidden = new THREE.LineSegments(edgesGeom, myMats.hidden); lHidden.computeLineDistances(); lHidden.renderOrder = 1; lHidden.userData.isGenerated = true; const lVisible = new THREE.LineSegments(edgesGeom, myMats.visible); lVisible.renderOrder = 1; lVisible.userData.isGenerated = true; child.add(lHidden); child.add(lVisible); 
+                        const color = getColorFromName(child.name); const myMats = createMaterials(color, 1.0); child.material = myMats.face; child.renderOrder = 0; const edgesGeom = new THREE.EdgesGeometry(child.geometry, 15); const lHidden = new THREE.LineSegments(edgesGeom, myMats.hidden); lHidden.computeLineDistances(); lHidden.renderOrder = 1; lHidden.userData.isGenerated = true; const lVisible = new THREE.LineSegments(edgesGeom, myMats.visible); lVisible.renderOrder = 1; lVisible.userData.isGenerated = true; child.add(lHidden); child.add(lVisible); 
                     } 
                     else if (child.isLine || child.isLineSegments) { 
-                        const color = getColorFromName(child.name); const myMats = createMaterials(color, maxDim); manualComputeLineDistances(child.geometry); child.material = myMats.visible; child.renderOrder = 1; const hiddenClone = child.clone(); hiddenClone.position.set(0,0,0); hiddenClone.rotation.set(0,0,0); hiddenClone.scale.set(1,1,1); hiddenClone.quaternion.set(0,0,0,1); hiddenClone.material = myMats.hidden; hiddenClone.renderOrder = 1; hiddenClone.userData.isGenerated = true; child.add(hiddenClone); 
+                        const color = getColorFromName(child.name); const myMats = createMaterials(color, 1.0); manualComputeLineDistances(child.geometry); child.material = myMats.visible; child.renderOrder = 1; const hiddenClone = child.clone(); hiddenClone.position.set(0,0,0); hiddenClone.rotation.set(0,0,0); hiddenClone.scale.set(1,1,1); hiddenClone.quaternion.set(0,0,0,1); hiddenClone.material = myMats.hidden; hiddenClone.renderOrder = 1; hiddenClone.userData.isGenerated = true; child.add(hiddenClone); 
                     }
                 });
 
                 currentModel = container;
                 updateStepVisibility(-1);
                 
-                // --- FIX CAMERA POSITIONS ---
-                const targetCenter = new THREE.Vector3(0, 0.5, 0); 
-                
-                const orthoPadding = 1.0; 
-                orthoCamera.left = -orthoPadding * aspect;
-                orthoCamera.right = orthoPadding * aspect;
-                orthoCamera.top = orthoPadding; 
-                orthoCamera.bottom = -orthoPadding;
+                // --- RESET CAMERA VỀ CỐ ĐỊNH ---
+                orthoCamera.position.copy(DEFAULT_CAM_POS);
+                orthoCamera.lookAt(DEFAULT_TARGET);
+                orthoCamera.zoom = 1;
                 orthoCamera.updateProjectionMatrix();
-                orthoCamera.position.set(2, 2, 2); 
-                orthoCamera.lookAt(targetCenter);
-                
-                perspCamera.position.set(1.8, 1.5, 2.5); 
-                perspCamera.lookAt(targetCenter);
-                
+
+                perspCamera.position.copy(DEFAULT_CAM_POS.clone().multiplyScalar(2.5)); // Perspective thì xa hơn chút
+                perspCamera.lookAt(DEFAULT_TARGET);
+
                 scene.add(currentModel); 
                 
                 controls.object = activeCamera; 
-                controls.target.copy(targetCenter); 
+                controls.target.copy(DEFAULT_TARGET); // Luôn xoay quanh (0,0,0)
                 controls.update(); 
                 
                 loading.style.display = 'none';
@@ -661,50 +557,27 @@
             const delta = clock.getDelta();
             if (mixer) mixer.update(delta);
 
-            // Cập nhật Logic Hand Tracking
-            updateHandTrackingLogic();
-
             if (textLabels.length > 0) {
-                const normScale = currentModel ? (currentModel.userData.normScale || 1.0) : 1.0;
-
+                // Logic scale text đơn giản hóa vì không còn normScale
                 if (renderer.xr.isPresenting) {
-                    // *** FIX AR SCALE LABEL ***
-                    const arBase = 0.08; 
-                    const tempVec = new THREE.Vector3();
-                    const xrCamera = renderer.xr.getCamera(activeCamera);
-
-                    textLabels.forEach(sprite => {
-                        sprite.getWorldPosition(tempVec);
-                        const distance = tempVec.distanceTo(xrCamera.position); 
-                        const s = (distance * arBase) / normScale; 
-                        sprite.scale.set(s * 2, s, 1);
-                    });
+                    const arBase = 0.08; const tempVec = new THREE.Vector3(); const xrCamera = renderer.xr.getCamera(activeCamera);
+                    textLabels.forEach(sprite => { sprite.getWorldPosition(tempVec); const distance = tempVec.distanceTo(xrCamera.position); const s = distance * arBase; sprite.scale.set(s * 2, s, 1); });
                 } 
                 else {
-                    // *** PC / MOBILE VIEW ***
                     if (activeCamera.isPerspectiveCamera) {
-                        const pcBase = 0.035; 
+                        // FIX: Tăng base từ 0.05 lên 0.15 (to gấp 3 lần)
+                        const pcBase = 0.15; 
                         const tempVec = new THREE.Vector3();
-                        textLabels.forEach(sprite => {
-                            const parentWorldScale = sprite.parent.getWorldScale(new THREE.Vector3()).x; 
-                            sprite.getWorldPosition(tempVec);
-                            const distance = tempVec.distanceTo(activeCamera.position);
-                            const s = (distance * pcBase) / parentWorldScale;
-                            sprite.scale.set(s * 2, s, 1); 
-                        });
+                        textLabels.forEach(sprite => { sprite.getWorldPosition(tempVec); const distance = tempVec.distanceTo(activeCamera.position); const s = distance * pcBase; sprite.scale.set(s * 2, s, 1); });
                     } else if (activeCamera.isOrthographicCamera) {
-                        const orthoBase = 0.08; 
-                        textLabels.forEach(sprite => {
-                            const parentWorldScale = sprite.parent.getWorldScale(new THREE.Vector3()).x;
-                            const s = (orthoBase / activeCamera.zoom) / parentWorldScale; 
-                            sprite.scale.set(s * 2, s, 1);
-                        });
+                        // FIX: Tăng base từ 0.1 lên 0.4 (to gấp 4 lần)
+                        const orthoBase = 0.4; 
+                        textLabels.forEach(sprite => { const s = orthoBase / activeCamera.zoom; sprite.scale.set(s * 2, s, 1); });
                     }
                 }
             }
             
             if (frame) {
-                // Logic Hit Test (Giữ lại để dò sàn nếu không dùng tay)
                 const referenceSpace = renderer.xr.getReferenceSpace();
                 const session = renderer.xr.getSession();
 
@@ -719,8 +592,7 @@
                     });
                     hitTestSourceRequested = true;
                 }
-
-                if (hitTestSource && reticle.visible !== false) { // Chỉ dò sàn nếu Reticle chưa bị tắt bởi Hand Tracking
+                if (hitTestSource) {
                     const hitTestResults = frame.getHitTestResults(hitTestSource);
                     if (hitTestResults.length > 0) {
                         const hit = hitTestResults[0];
@@ -729,7 +601,6 @@
                     } else { reticle.visible = false; }
                 }
             }
-
             controls.update();
             renderer.render(scene, activeCamera);
         }
@@ -739,17 +610,52 @@
         window.addEventListener('resize', () => {
             const w = viewer.clientWidth; const h = viewer.clientHeight; const newAspect = w / h;
             perspCamera.aspect = newAspect; perspCamera.updateProjectionMatrix();
-            const currentFrustumHeight = (orthoCamera.top - orthoCamera.bottom);
-            orthoCamera.left = -currentFrustumHeight * newAspect / 2; orthoCamera.right = currentFrustumHeight * newAspect / 2; orthoCamera.top = currentFrustumHeight / 2; orthoCamera.bottom = -currentFrustumHeight / 2; orthoCamera.updateProjectionMatrix();
+            const currentFrustum = orthoFrustum; // Sử dụng giá trị cố định
+            orthoCamera.left = -currentFrustum * newAspect; orthoCamera.right = currentFrustum * newAspect; orthoCamera.top = currentFrustum; orthoCamera.bottom = -currentFrustum; orthoCamera.updateProjectionMatrix();
             renderer.setSize(w, h); 
         });
 
+        // --- XỬ LÝ MENU ---
         const menuContainer = document.getElementById('menu-content');
-        function createMenuHTML(data, parentElement) {
-            const ul = document.createElement('ul'); if (parentElement !== menuContainer) ul.classList.add('submenu');
-            data.forEach(item => { const li = document.createElement('li'); if (item.type === 'folder') { const titleDiv = document.createElement('div'); titleDiv.className = 'menu-folder-title'; titleDiv.innerHTML = `<span>${item.title}</span> <span>▶</span>`; titleDiv.onclick = () => { const sub = li.querySelector('.submenu'); if (sub) sub.classList.toggle('show'); }; li.appendChild(titleDiv); if (item.children) createMenuHTML(item.children, li); } else { const itemDiv = document.createElement('div'); itemDiv.className = 'menu-item'; itemDiv.innerText = item.title; itemDiv.onclick = () => { document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active')); itemDiv.classList.add('active'); loadModel3D(item.file, item.title, item.desc); if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('mobile-open'); }; li.appendChild(itemDiv); } ul.appendChild(li); }); parentElement.appendChild(ul);
+        
+        function findItemByFile(data, filename) {
+            for (const item of data) {
+                if (item.type === 'file' && item.file === filename) return item;
+                if (item.children) { const found = findItemByFile(item.children, filename); if (found) return found; }
+            }
+            return null;
         }
-        if (typeof curriculumData !== 'undefined') { createMenuHTML(curriculumData, menuContainer); const firstSub = menuContainer.querySelector('.submenu'); if (firstSub) firstSub.classList.add('show'); } else { menuContainer.innerHTML = '<div style="padding:20px; color:red">⚠️ Chưa có dữ liệu menu_data.js!<br>Hãy chạy file Python scan_menu.py</div>'; }
+
+        function createMenuHTML(data, parentElement) {
+            const ul = document.createElement('ul'); 
+            if (parentElement !== menuContainer) ul.classList.add('submenu');
+            
+            data.forEach(item => { 
+                const li = document.createElement('li'); 
+                if (item.type === 'folder') { 
+                    const titleDiv = document.createElement('div'); titleDiv.className = 'menu-folder-title'; titleDiv.innerHTML = `<span>${item.title}</span> <span>▶</span>`; titleDiv.onclick = () => { const sub = li.querySelector('.submenu'); if (sub) sub.classList.toggle('show'); }; li.appendChild(titleDiv); if (item.children) createMenuHTML(item.children, li); 
+                } else { 
+                    const itemDiv = document.createElement('div'); itemDiv.className = 'menu-item'; itemDiv.innerText = item.title; 
+                    itemDiv.onclick = () => { 
+                        document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active')); itemDiv.classList.add('active'); 
+                        loadModel3D(item.file, item.title, item.desc); 
+                        const newUrl = new URL(window.location); newUrl.searchParams.set('bai', item.file); window.history.pushState({}, '', newUrl);
+                        if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('mobile-open'); 
+                    }; 
+                    li.appendChild(itemDiv); 
+                } 
+                ul.appendChild(li); 
+            }); 
+            parentElement.appendChild(ul);
+        }
+
+        if (typeof curriculumData !== 'undefined') { 
+            createMenuHTML(curriculumData, menuContainer); 
+            const firstSub = menuContainer.querySelector('.submenu'); if (firstSub) firstSub.classList.add('show'); 
+            const urlParams = new URLSearchParams(window.location.search); const fileToLoad = urlParams.get('bai');
+            if(fileToLoad) { const item = findItemByFile(curriculumData, fileToLoad); if(item) { document.querySelectorAll('.menu-item').forEach(div => { if(div.innerText === item.title) div.classList.add('active'); }); loadModel3D(item.file, item.title, item.desc); } }
+        } else { menuContainer.innerHTML = '<div style="padding:20px; color:red">⚠️ Chưa có dữ liệu menu_data.js!</div>'; }
+
         window.toggleMenu = function () { document.getElementById('sidebar').classList.toggle('mobile-open'); }
         document.getElementById('mobile-toggle').addEventListener('click', toggleMenu);
     </script>
