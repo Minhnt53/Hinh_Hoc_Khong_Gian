@@ -2,8 +2,8 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Học Hình Học 3D (V39 - UI Fix)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Học Hình Học 3D (AR Hand Tracking)</title>
     
     <link rel="icon" href="data:,">
 
@@ -25,10 +25,9 @@
     </script>
 
     <style>
-        /* --- CSS GIAO DIỆN CHUNG --- */
+        /* --- CSS GIAO DIỆN --- */
         body { margin: 0; font-family: 'Segoe UI', sans-serif; overflow: hidden; display: flex; height: 100vh; background-color: #f5f6fa; }
         
-        /* ẨN GIAO DIỆN TRUYỀN THỐNG KHI VÀO AR */
         body.in-ar #sidebar, 
         body.in-ar #text-panel, 
         body.in-ar #cam-toggle, 
@@ -39,54 +38,54 @@
         body.in-ar #main-content { background: transparent !important; }
         body.in-ar #viewer-container { background: transparent !important; border: none !important; }
 
-        /* --- AR UI OVERLAY (HIỆN TRONG AR NHỜ DOM-OVERLAY) --- */
         #ar-ui-overlay {
-            display: none; /* Mặc định ẩn */
+            display: none;
             position: absolute;
-            bottom: 30px;
+            bottom: 40px;
             left: 0;
             width: 100%;
-            pointer-events: none; /* Để touch xuyên qua vùng trống */
-            z-index: 10000; /* Z-index cao nhất */
+            pointer-events: none; 
+            z-index: 10000; 
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
             padding-bottom: 20px;
         }
         
-        /* Khi vào AR class này được thêm vào body, kích hoạt hiển thị */
         body.in-ar #ar-ui-overlay { display: flex; } 
 
         .ar-btn-group {
             display: flex;
             align-items: center;
             gap: 20px;
-            pointer-events: auto; /* Cho phép bấm nút */
-            background: rgba(0,0,0,0.3); /* Nền mờ nhẹ để nút nổi bật hơn */
-            padding: 10px 20px;
-            border-radius: 40px;
-            backdrop-filter: blur(5px);
+            pointer-events: auto;
+            background: rgba(255, 255, 255, 0.15); 
+            padding: 10px 25px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
 
         #btn-place-ar {
-            background: #27ae60;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
             color: white;
-            border: 2px solid white;
-            padding: 12px 30px;
+            border: none;
+            padding: 12px 25px;
             border-radius: 30px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
             cursor: pointer;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        #btn-place-ar:active { transform: scale(0.95); background: #219150; }
+        #btn-place-ar:active { transform: scale(0.95); }
 
         .ar-scale-btn {
-            width: 45px; height: 45px;
+            width: 40px; height: 40px;
             border-radius: 50%;
-            border: 2px solid white;
-            background: rgba(44, 62, 80, 0.8);
+            background: rgba(255, 255, 255, 0.2);
             color: white;
             font-size: 24px;
             font-weight: bold;
@@ -94,26 +93,20 @@
             display: flex; justify-content: center; align-items: center;
             user-select: none;
         }
-        .ar-scale-btn:active { background: #3498db; transform: scale(0.9); }
+        .ar-scale-btn:active { background: rgba(255, 255, 255, 0.4); transform: scale(0.9); }
 
-        /* --- TÙY CHỈNH VỊ TRÍ NÚT START AR (GÓC TRÊN TRÁI) --- */
         #ar-button {
             position: absolute !important;
-            bottom: auto !important;
             top: 20px !important;     
-            left: 20px !important;    /* Đổi sang trái */
-            right: auto !important;
-            width: auto !important;
-            padding: 10px 20px !important;
-            opacity: 0.9 !important;
-            border-radius: 20px !important;
-            z-index: 99999 !important; /* Đảm bảo nổi lên trên cùng */
+            left: 20px !important;    
+            bottom: auto !important; right: auto !important;
+            width: auto !important; padding: 8px 16px !important;
+            opacity: 0.9 !important; border-radius: 20px !important;
+            z-index: 99999 !important; font-size: 13px !important; font-weight: bold !important;
         }
-        /* Ẩn nút AR trên màn hình lớn */
         @media (min-width: 1024px) { #ar-button { display: none !important; } }
 
-
-        /* --- CÁC CLASS CŨ --- */
+        /* --- CSS CŨ --- */
         #sidebar { width: 280px; background-color: #2c3e50; color: white; display: flex; flex-direction: column; border-right: 1px solid #ddd; flex-shrink: 0; z-index: 200; overflow-y: auto; }
         .brand { padding: 20px; font-size: 18px; font-weight: bold; background: #1a252f; text-align: center; border-bottom: 1px solid #34495e; }
         ul { list-style: none; padding-left: 0; margin: 0; }
@@ -164,7 +157,7 @@
     <div id="sidebar">
         <div class="brand">📐 MENU BÀI TẬP</div>
         <div id="menu-content"></div>
-        <div class="sidebar-footer">V39 - UI FIX</div>
+        <div class="sidebar-footer">V46 - FINAL VIEW & SCALE</div>
     </div>
 
     <div id="main-content">
@@ -214,19 +207,20 @@
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         import { ARButton } from 'three/addons/webxr/ARButton.js';
 
+        // --- CẤU HÌNH ---
+        const SHOW_SHADOW = true; 
+
         // --- SETUP ---
         const viewer = document.getElementById('viewer-container');
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0xe0e0e0);
 
         const aspect = viewer.clientWidth / viewer.clientHeight;
-        const frustumSize = 10; 
         
-        const orthoCamera = new THREE.OrthographicCamera(frustumSize * aspect / -2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / -2, 0.1, 10000);
+        const orthoCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10000);
         const perspCamera = new THREE.PerspectiveCamera(45, aspect, 0.1, 10000);
         let activeCamera = orthoCamera; 
 
-        // RENDERER: alpha true để nền trong suốt
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(viewer.clientWidth, viewer.clientHeight);
         renderer.setPixelRatio(window.devicePixelRatio); 
@@ -239,12 +233,18 @@
         controls.enableDamping = true; controls.enableRotate = true;
         const clock = new THREE.Clock();
 
-        // --- AR VARS ---
+        // --- AR & HAND TRACKING VARS ---
         let textLabels = []; 
         let currentShadow = null;
-        let arScale = 0.15; 
-        const minScale = 0.05; // Cho phép nhỏ hơn nữa
+        let arScale = 0.08; // Mặc định nhỏ hơn để vừa tay (khoảng 8cm)
+        const minScale = 0.02; 
         const maxScale = 2.0; 
+
+        // Hand Controllers
+        const hand0 = renderer.xr.getHand(0);
+        const hand1 = renderer.xr.getHand(1);
+        scene.add(hand0);
+        scene.add(hand1);
 
         // --- SHADER MATERIALS ---
         function getColorFromName(name) {
@@ -280,12 +280,12 @@
             geometry.setAttribute('lineDistance', new THREE.BufferAttribute(lineDistances, 1));
         }
 
-        // --- AR BUTTON SETUP (FIX QUAN TRỌNG: DOM OVERLAY) ---
-        // Thêm optionalFeatures: ['dom-overlay'] để hiển thị UI HTML lên trên AR
+        // --- AR BUTTON (CẬP NHẬT: Thêm hand-tracking) ---
         const arBtnDOM = ARButton.createButton(renderer, { 
             requiredFeatures: ['hit-test'],
-            optionalFeatures: ['dom-overlay'], 
-            domOverlay: { root: document.body } // Quy định body là vùng chứa UI
+            // Yêu cầu thêm 'hand-tracking'
+            optionalFeatures: ['dom-overlay', 'hand-tracking'], 
+            domOverlay: { root: document.body } 
         });
         arBtnDOM.id = "ar-button"; 
         document.body.appendChild(arBtnDOM);
@@ -296,9 +296,9 @@
             scene.background = null; 
             if(currentModel) {
                 currentModel.visible = false; 
-                arScale = 0.15;
+                arScale = 0.08; // Set scale nhỏ hơn khi vào AR để vừa tay
                 currentModel.scale.set(arScale, arScale, arScale);
-                if(currentShadow) currentShadow.visible = true;
+                if(currentShadow) currentShadow.visible = SHOW_SHADOW;
             }
         });
 
@@ -309,11 +309,8 @@
             if(currentModel) {
                 currentModel.visible = true; 
                 currentModel.scale.set(1,1,1);
+                currentModel.position.set(0,0,0);
                 if(currentShadow) currentShadow.visible = false;
-                
-                const box = new THREE.Box3().setFromObject(currentModel);
-                const center = box.getCenter(new THREE.Vector3());
-                currentModel.position.sub(center);
             }
             activeCamera.position.set(0, 2, 10);
             activeCamera.lookAt(0,0,0);
@@ -326,28 +323,30 @@
         let hitTestSource = null;
         let hitTestSourceRequested = false;
 
-        // --- SỰ KIỆN NÚT BẤM AR UI ---
-        // Do dùng dom-overlay, các nút HTML này sẽ nhận sự kiện touch bình thường
+        // --- UI EVENTS ---
         document.getElementById('btn-place-ar').addEventListener('click', (e) => {
-            e.stopPropagation(); // Ngăn sự kiện xuyên qua
+            e.stopPropagation(); 
+            // Nếu không dùng tay thì mới dùng reticle
             if (reticle.visible && currentModel) {
                 currentModel.position.setFromMatrixPosition(reticle.matrix);
-                currentModel.visible = true; 
+                currentModel.visible = true;
+                // Khi đặt bằng tay chạm, set scale về full arScale
+                currentModel.scale.set(arScale, arScale, arScale);
             }
         });
 
         function updateARScale() {
             if(currentModel && document.body.classList.contains('in-ar')) {
-                currentModel.scale.set(arScale, arScale, arScale);
+                // Chỉ cập nhật biến, việc scale model sẽ do logic Hand Tracking xử lý
             }
         }
         document.getElementById('btn-scale-up').addEventListener('click', (e) => {
             e.stopPropagation();
-            if (arScale < maxScale) { arScale += 0.1; updateARScale(); }
+            if (arScale < maxScale) { arScale += 0.05; }
         });
         document.getElementById('btn-scale-down').addEventListener('click', (e) => {
             e.stopPropagation();
-            if (arScale > minScale) { arScale -= 0.05; updateARScale(); }
+            if (arScale > minScale) { arScale -= 0.01; }
         });
 
 
@@ -357,44 +356,45 @@
             const size = 64; 
             ctx.canvas.width = size * 4; 
             ctx.canvas.height = size * 2;
-            
             ctx.font = `Bold ${size}px "Times New Roman", serif`;
             ctx.fillStyle = "rgba(0, 0, 0, 1.0)";
             ctx.textAlign = "center";
             ctx.textBaseline = "bottom"; 
-            
             ctx.strokeStyle = 'white';
             ctx.lineWidth = 6;
             ctx.strokeText(message, ctx.canvas.width / 2, ctx.canvas.height - 10);
             ctx.fillText(message, ctx.canvas.width / 2, ctx.canvas.height - 10);
-
             const texture = new THREE.CanvasTexture(ctx.canvas);
             texture.minFilter = THREE.LinearFilter;
-
-            const spriteMaterial = new THREE.SpriteMaterial({ 
-                map: texture, 
-                transparent: true,
-                depthTest: false,   
-                depthWrite: false
-            });
-
+            const spriteMaterial = new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false, depthWrite: false });
             const sprite = new THREE.Sprite(spriteMaterial);
             sprite.renderOrder = 9999; 
             sprite.center.set(0.5, 0); 
             return sprite;
         }
 
+        function createSoftShadowTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 128; canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            const gradient = ctx.createRadialGradient(64, 64, 10, 64, 64, 60);
+            gradient.addColorStop(0, 'rgba(0, 0, 0, 0.6)');
+            gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 128, 128);
+            return new THREE.CanvasTexture(canvas);
+        }
+
         function createShadowPlane(size) {
-            const geometry = new THREE.CircleGeometry(size * 0.6, 32);
+            const geometry = new THREE.PlaneGeometry(size * 1.5, size * 1.5);
+            const texture = createSoftShadowTexture();
             const material = new THREE.MeshBasicMaterial({ 
-                color: 0x000000, 
-                transparent: true, 
-                opacity: 0.3, 
-                side: THREE.DoubleSide 
+                map: texture, transparent: true, opacity: 1, side: THREE.DoubleSide, depthWrite: false
             });
             const shadow = new THREE.Mesh(geometry, material);
             shadow.rotation.x = -Math.PI / 2; 
-            shadow.position.y = 0.01; 
+            shadow.position.y = 0.005; 
+            shadow.renderOrder = 0;
             return shadow;
         }
 
@@ -426,7 +426,7 @@
 
         function updateStepVisibility(currentStep) {
             if (!currentModel) return;
-            currentModel.traverse((child) => {
+            currentModel.children[0].traverse((child) => {
                 const match = child.name.match(/step_(\d+)/i);
                 if (match) { child.visible = (parseInt(match[1]) <= currentStep + 1); }
             });
@@ -440,6 +440,70 @@
         }
         btnNext.addEventListener('click', () => { if (currentStepIndex < animationActions.length - 1) { currentStepIndex++; const action = animationActions[currentStepIndex]; action.reset(); action.setLoop(THREE.LoopOnce); action.clampWhenFinished = true; action.play(); updateStepVisibility(currentStepIndex); updateUI(); } });
         btnPrev.addEventListener('click', () => { if (currentStepIndex >= 0) { const action = animationActions[currentStepIndex]; action.stop(); currentStepIndex--; updateStepVisibility(currentStepIndex); updateUI(); } });
+
+        // --- HAND TRACKING LOGIC ---
+        function updateHandTrackingLogic() {
+            if (!renderer.xr.isPresenting || !currentModel) return;
+
+            const hands = [hand0, hand1];
+            let foundOpenHand = false;
+            let handDetected = false;
+
+            for (const hand of hands) {
+                // Kiểm tra xem tay có khớp không
+                if (hand.joints && hand.joints['wrist'] && hand.joints['middle-finger-tip']) {
+                    handDetected = true;
+                    const wrist = hand.joints['wrist'];
+                    const middleTip = hand.joints['middle-finger-tip'];
+                    const indexTip = hand.joints['index-finger-tip'];
+
+                    // Tính khoảng cách cổ tay - đầu ngón giữa
+                    const distance = wrist.position.distanceTo(middleTip.position);
+                    
+                    // Ngưỡng phát hiện mở tay (0.12 mét = 12cm)
+                    if (distance > 0.12) {
+                        foundOpenHand = true;
+                        
+                        // DI CHUYỂN MODEL THEO TAY (Giữa lòng bàn tay)
+                        const palmPos = new THREE.Vector3().copy(wrist.position).lerp(middleTip.position, 0.4);
+                        currentModel.position.lerp(palmPos, 0.2); // Di chuyển mượt
+                        currentModel.quaternion.slerp(wrist.quaternion, 0.1); // Xoay theo tay
+
+                        // Ẩn Reticle (vòng tròn dò sàn) khi dùng tay
+                        reticle.visible = false;
+                        break; 
+                    }
+                }
+            }
+
+            // XỬ LÝ SCALE (HIỆU ỨNG PHÓNG TO/THU NHỎ)
+            // Nếu có tay detect:
+            // - Mở tay: Scale = arScale
+            // - Nắm tay: Scale = 0
+            // Nếu KHÔNG có tay detect (dùng điện thoại thường): Giữ nguyên scale hiện tại để dùng Touch
+            
+            if (handDetected) {
+                const targetScale = foundOpenHand ? arScale : 0;
+                const smoothing = 0.15;
+                const currentS = currentModel.scale.x;
+                
+                if (Math.abs(currentS - targetScale) > 0.001) {
+                    const newS = THREE.MathUtils.lerp(currentS, targetScale, smoothing);
+                    currentModel.scale.set(newS, newS, newS);
+                    currentModel.visible = true;
+                } else if (targetScale === 0) {
+                    currentModel.visible = false;
+                }
+            } else {
+                // Fallback: Nếu không thấy tay, đảm bảo model vẫn scale đúng theo arScale (cho chế độ chạm màn hình)
+                if (currentModel.visible) {
+                   const currentS = currentModel.scale.x;
+                   if (Math.abs(currentS - arScale) > 0.001) {
+                       currentModel.scale.set(arScale, arScale, arScale);
+                   }
+                }
+            }
+        }
 
         // --- LOAD MODEL ---
         const loader = new GLTFLoader();
@@ -485,35 +549,61 @@
                 });
 
             loader.load(encodedPath + '?t=' + timestamp, (gltf) => {
-                const root = gltf.scene;
-                let maxGeoSize = 0;
+                const rawScene = gltf.scene; 
+
+                // --- SMART BOX CALCULATION ---
+                let smartBox = new THREE.Box3();
+                let hasMesh = false;
+                rawScene.traverse((child) => {
+                    if (child.isMesh) {
+                        if (!child.geometry.boundingBox) child.geometry.computeBoundingBox();
+                        const childBox = child.geometry.boundingBox.clone();
+                        childBox.applyMatrix4(child.matrixWorld);
+                        smartBox.union(childBox);
+                        hasMesh = true;
+                    }
+                });
+                if (!hasMesh) smartBox.setFromObject(rawScene);
+
+                const center = smartBox.getCenter(new THREE.Vector3());
+                const size = smartBox.getSize(new THREE.Vector3());
+
+                // --- CONTAINER SETUP ---
+                const container = new THREE.Group();
+                rawScene.position.x = -center.x;
+                rawScene.position.y = -smartBox.min.y; 
+                rawScene.position.z = -center.z;
                 
-                root.traverse((child) => { if (child.isMesh || child.isLine || child.isLineSegments) { if (!child.geometry.boundingBox) child.geometry.computeBoundingBox(); const box = child.geometry.boundingBox; const size = new THREE.Vector3(); box.getSize(size); maxGeoSize = Math.max(maxGeoSize, size.x, size.y, size.z); } });
-                if (maxGeoSize === 0) maxGeoSize = 5;
+                const maxDim = Math.max(size.x, size.y, size.z) || 1;
+                const normScale = 1.0 / maxDim; 
+                
+                // Lưu lại scale để dùng cho label
+                container.userData.normScale = normScale;
+                
+                rawScene.scale.setScalar(normScale); 
 
-                // TẠO BÓNG GIẢ
-                currentShadow = createShadowPlane(maxGeoSize);
-                currentShadow.visible = false; 
-                root.add(currentShadow);
+                container.add(rawScene);
 
-                if (gltf.animations && gltf.animations.length > 0) { mixer = new THREE.AnimationMixer(root); const clips = gltf.animations.sort((a, b) => a.name.localeCompare(b.name)); clips.forEach(clip => { const action = mixer.clipAction(clip); animationActions.push(action); }); updateUI(); }
+                if (SHOW_SHADOW) {
+                    currentShadow = createShadowPlane(1.0); 
+                    currentShadow.visible = false; 
+                    container.add(currentShadow);
+                }
 
-                root.traverse((child) => {
+                if (gltf.animations && gltf.animations.length > 0) { mixer = new THREE.AnimationMixer(rawScene); const clips = gltf.animations.sort((a, b) => a.name.localeCompare(b.name)); clips.forEach(clip => { const action = mixer.clipAction(clip); animationActions.push(action); }); updateUI(); }
+
+                rawScene.traverse((child) => {
                     if (child.userData.isGenerated) return;
                     
                     if (child.name.includes("Label_")) { 
                         child.scale.set(1, 1, 1);
                         child.updateMatrixWorld(); 
-
                         const match = child.name.match(/\((.*?)\)/); 
                         let displayText = match ? match[1] : child.name.replace("Label_", "").split(".")[0]; 
-                        
                         const sprite = createTextSprite(displayText);
-                        sprite.position.set(0, 0.05, 0); 
-                        
+                        sprite.position.set(0, 0.02 / normScale, 0); 
                         child.add(sprite); 
                         textLabels.push(sprite);
-
                         if(child.material) child.material.visible = false; 
                     }
                     else if (child.name.includes("Symbol")) { 
@@ -522,7 +612,7 @@
                     else if (child.name.includes("DASH")) {
                         if(child.isLine || child.isLineSegments) {
                             const color = getColorFromName(child.name);
-                            const myMats = createMaterials(color, maxGeoSize);
+                            const myMats = createMaterials(color, maxDim); 
                             manualComputeLineDistances(child.geometry);
                             child.material = myMats.fixedDashed; 
                             child.renderOrder = 1;
@@ -530,26 +620,39 @@
                         }
                     }
                     else if (child.isMesh) { 
-                        const color = getColorFromName(child.name); const myMats = createMaterials(color, maxGeoSize); child.material = myMats.face; child.renderOrder = 0; const edgesGeom = new THREE.EdgesGeometry(child.geometry, 15); const lHidden = new THREE.LineSegments(edgesGeom, myMats.hidden); lHidden.computeLineDistances(); lHidden.renderOrder = 1; lHidden.userData.isGenerated = true; const lVisible = new THREE.LineSegments(edgesGeom, myMats.visible); lVisible.renderOrder = 1; lVisible.userData.isGenerated = true; child.add(lHidden); child.add(lVisible); 
+                        const color = getColorFromName(child.name); const myMats = createMaterials(color, maxDim); child.material = myMats.face; child.renderOrder = 0; const edgesGeom = new THREE.EdgesGeometry(child.geometry, 15); const lHidden = new THREE.LineSegments(edgesGeom, myMats.hidden); lHidden.computeLineDistances(); lHidden.renderOrder = 1; lHidden.userData.isGenerated = true; const lVisible = new THREE.LineSegments(edgesGeom, myMats.visible); lVisible.renderOrder = 1; lVisible.userData.isGenerated = true; child.add(lHidden); child.add(lVisible); 
                     } 
                     else if (child.isLine || child.isLineSegments) { 
-                        const color = getColorFromName(child.name); const myMats = createMaterials(color, maxGeoSize); manualComputeLineDistances(child.geometry); child.material = myMats.visible; child.renderOrder = 1; const hiddenClone = child.clone(); hiddenClone.position.set(0,0,0); hiddenClone.rotation.set(0,0,0); hiddenClone.scale.set(1,1,1); hiddenClone.quaternion.set(0,0,0,1); hiddenClone.material = myMats.hidden; hiddenClone.renderOrder = 1; hiddenClone.userData.isGenerated = true; child.add(hiddenClone); 
+                        const color = getColorFromName(child.name); const myMats = createMaterials(color, maxDim); manualComputeLineDistances(child.geometry); child.material = myMats.visible; child.renderOrder = 1; const hiddenClone = child.clone(); hiddenClone.position.set(0,0,0); hiddenClone.rotation.set(0,0,0); hiddenClone.scale.set(1,1,1); hiddenClone.quaternion.set(0,0,0,1); hiddenClone.material = myMats.hidden; hiddenClone.renderOrder = 1; hiddenClone.userData.isGenerated = true; child.add(hiddenClone); 
                     }
                 });
 
-                currentModel = root; updateStepVisibility(-1);
+                currentModel = container;
+                updateStepVisibility(-1);
                 
-                const box = new THREE.Box3().setFromObject(root); const center = box.getCenter(new THREE.Vector3()); root.position.sub(center); 
-                if (maxGeoSize > 0) {
-                    const padding = 1.5; const newFrustumSize = maxGeoSize * padding;
-                    orthoCamera.left = -newFrustumSize * aspect / 2; orthoCamera.right = newFrustumSize * aspect / 2;
-                    orthoCamera.top = newFrustumSize / 2; orthoCamera.bottom = -newFrustumSize / 2;
-                    orthoCamera.updateProjectionMatrix();
-                    orthoCamera.position.set(maxGeoSize * 0.0, maxGeoSize * 0.8, maxGeoSize * 4.0); orthoCamera.lookAt(0,0,0);
-                    const fov = perspCamera.fov * (Math.PI / 180); let cameraZ = Math.abs(maxGeoSize / 2 / Math.tan(fov / 2)) * 1.5;
-                    perspCamera.position.set(cameraZ * 0.5, cameraZ * 0.3, cameraZ); perspCamera.lookAt(0,0,0);
-                }
-                scene.add(root); controls.object = activeCamera; controls.target.set(0,0,0); controls.update(); loading.style.display = 'none';
+                // --- FIX CAMERA POSITIONS ---
+                const targetCenter = new THREE.Vector3(0, 0.5, 0); 
+                
+                const orthoPadding = 1.0; 
+                orthoCamera.left = -orthoPadding * aspect;
+                orthoCamera.right = orthoPadding * aspect;
+                orthoCamera.top = orthoPadding; 
+                orthoCamera.bottom = -orthoPadding;
+                orthoCamera.updateProjectionMatrix();
+                orthoCamera.position.set(2, 2, 2); 
+                orthoCamera.lookAt(targetCenter);
+                
+                perspCamera.position.set(1.8, 1.5, 2.5); 
+                perspCamera.lookAt(targetCenter);
+                
+                scene.add(currentModel); 
+                
+                controls.object = activeCamera; 
+                controls.target.copy(targetCenter); 
+                controls.update(); 
+                
+                loading.style.display = 'none';
+
             }, undefined, (err) => { console.error(err); loading.style.display = 'none'; alert("Lỗi tải file 3D"); });
         }
 
@@ -558,25 +661,50 @@
             const delta = clock.getDelta();
             if (mixer) mixer.update(delta);
 
+            // Cập nhật Logic Hand Tracking
+            updateHandTrackingLogic();
+
             if (textLabels.length > 0) {
-                const baseScale = 0.01; 
-                if (activeCamera.isPerspectiveCamera) {
+                const normScale = currentModel ? (currentModel.userData.normScale || 1.0) : 1.0;
+
+                if (renderer.xr.isPresenting) {
+                    // *** FIX AR SCALE LABEL ***
+                    const arBase = 0.08; 
                     const tempVec = new THREE.Vector3();
+                    const xrCamera = renderer.xr.getCamera(activeCamera);
+
                     textLabels.forEach(sprite => {
                         sprite.getWorldPosition(tempVec);
-                        const distance = tempVec.distanceTo(activeCamera.position);
-                        const s = distance * baseScale;
-                        sprite.scale.set(s * 2, s, 1); 
-                    });
-                } else if (activeCamera.isOrthographicCamera) {
-                    const s = (baseScale * 30) / activeCamera.zoom; 
-                    textLabels.forEach(sprite => {
+                        const distance = tempVec.distanceTo(xrCamera.position); 
+                        const s = (distance * arBase) / normScale; 
                         sprite.scale.set(s * 2, s, 1);
                     });
+                } 
+                else {
+                    // *** PC / MOBILE VIEW ***
+                    if (activeCamera.isPerspectiveCamera) {
+                        const pcBase = 0.035; 
+                        const tempVec = new THREE.Vector3();
+                        textLabels.forEach(sprite => {
+                            const parentWorldScale = sprite.parent.getWorldScale(new THREE.Vector3()).x; 
+                            sprite.getWorldPosition(tempVec);
+                            const distance = tempVec.distanceTo(activeCamera.position);
+                            const s = (distance * pcBase) / parentWorldScale;
+                            sprite.scale.set(s * 2, s, 1); 
+                        });
+                    } else if (activeCamera.isOrthographicCamera) {
+                        const orthoBase = 0.08; 
+                        textLabels.forEach(sprite => {
+                            const parentWorldScale = sprite.parent.getWorldScale(new THREE.Vector3()).x;
+                            const s = (orthoBase / activeCamera.zoom) / parentWorldScale; 
+                            sprite.scale.set(s * 2, s, 1);
+                        });
+                    }
                 }
             }
             
             if (frame) {
+                // Logic Hit Test (Giữ lại để dò sàn nếu không dùng tay)
                 const referenceSpace = renderer.xr.getReferenceSpace();
                 const session = renderer.xr.getSession();
 
@@ -592,7 +720,7 @@
                     hitTestSourceRequested = true;
                 }
 
-                if (hitTestSource) {
+                if (hitTestSource && reticle.visible !== false) { // Chỉ dò sàn nếu Reticle chưa bị tắt bởi Hand Tracking
                     const hitTestResults = frame.getHitTestResults(hitTestSource);
                     if (hitTestResults.length > 0) {
                         const hit = hitTestResults[0];
