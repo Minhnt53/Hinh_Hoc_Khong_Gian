@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Học Hình Học 3D (Final Fixed V51)</title>
+    <title>Học Hình Học 3D (V48 - Standard)</title>
     
     <link rel="icon" href="data:,">
 
@@ -28,6 +28,25 @@
         /* --- CSS GIAO DIỆN --- */
         body { margin: 0; font-family: 'Segoe UI', sans-serif; overflow: hidden; display: flex; height: 100vh; background-color: #f5f6fa; }
         
+        /* Nút chuyển chế độ AI */
+        .btn-switch-mode {
+            display: block;
+            margin: 15px;
+            padding: 12px;
+            background: linear-gradient(135deg, #ff9966, #ff5e62);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 4px 10px rgba(255, 94, 98, 0.4);
+            transition: transform 0.2s;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn-switch-mode:hover { transform: scale(1.02); filter: brightness(1.1); }
+        .btn-switch-mode:active { transform: scale(0.98); }
+
         /* Ẩn UI khi vào AR */
         body.in-ar #sidebar, 
         body.in-ar #text-panel, 
@@ -140,8 +159,11 @@
 
     <div id="sidebar">
         <div class="brand">📐 MENU BÀI TẬP</div>
+        
+        <a href="ai_solver.html" class="btn-switch-mode">🤖 CHUYỂN SANG GIẢI AI</a>
+
         <div id="menu-content"></div>
-        <div class="sidebar-footer">V51 - FINAL FIXED</div>
+        <div class="sidebar-footer">V48 - SMART CAMERA & DEEP LINK</div>
     </div>
 
     <div id="main-content">
@@ -193,10 +215,6 @@
 
         // --- CẤU HÌNH ---
         const SHOW_SHADOW = true; 
-        
-        // VỊ TRÍ CAMERA CỐ ĐỊNH (0, 1, 2)
-        const DEFAULT_CAM_POS = new THREE.Vector3(0, 1, 2); 
-        const DEFAULT_TARGET = new THREE.Vector3(0, 0, 0);
 
         // --- SETUP ---
         const viewer = document.getElementById('viewer-container');
@@ -205,17 +223,7 @@
 
         const aspect = viewer.clientWidth / viewer.clientHeight;
         
-        // Ortho Scale
-        const orthoFrustum = 3; 
-        
-        // --- SỬA LỖI MẤT GÓC (NEAR = -100) ---
-        const orthoCamera = new THREE.OrthographicCamera(
-            -orthoFrustum * aspect, orthoFrustum * aspect, 
-            orthoFrustum, -orthoFrustum, 
-            -100, // <--- Đã sửa: Near âm để không bị cắt hình
-            10000
-        );
-        
+        const orthoCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10000);
         const perspCamera = new THREE.PerspectiveCamera(45, aspect, 0.1, 10000);
         let activeCamera = orthoCamera; 
 
@@ -234,9 +242,9 @@
         // --- AR VARS ---
         let textLabels = []; 
         let currentShadow = null;
-        let arScale = 0.5; // Scale mặc định cho AR
+        let arScale = 0.15; 
         const minScale = 0.05; 
-        const maxScale = 5.0; 
+        const maxScale = 2.0; 
 
         // --- SHADER MATERIALS ---
         function getColorFromName(name) {
@@ -250,7 +258,7 @@
             let faceC = 0xcccccc; let lineC = 0x000000; let hiddenC = 0x888888;
             if (colorHex !== null) { faceC = colorHex; lineC = colorHex; hiddenC = colorHex; }
             
-            const myDash = 0.05; // Dash cố định, không phụ thuộc size
+            const myDash = sizeFactor / 30; 
             const myGap = myDash / 2;
 
             return {
@@ -287,7 +295,7 @@
             scene.background = null; 
             if(currentModel) {
                 currentModel.visible = false; 
-                arScale = 0.5;
+                arScale = 0.15;
                 currentModel.scale.set(arScale, arScale, arScale);
                 if(currentShadow) currentShadow.visible = SHOW_SHADOW;
             }
@@ -303,9 +311,8 @@
                 currentModel.position.set(0,0,0);
                 if(currentShadow) currentShadow.visible = false;
             }
-            // Reset Camera về vị trí cố định
-            activeCamera.position.copy(DEFAULT_CAM_POS);
-            activeCamera.lookAt(DEFAULT_TARGET);
+            activeCamera.position.set(0, 2, 10);
+            activeCamera.lookAt(0,0,0);
         });
 
         const reticle = new THREE.Mesh(new THREE.RingGeometry(0.15, 0.2, 32).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial());
@@ -375,14 +382,14 @@
         }
 
         function createShadowPlane(size) {
-            const geometry = new THREE.PlaneGeometry(size * 4, size * 4); // Shadow to
+            const geometry = new THREE.PlaneGeometry(size * 1.5, size * 1.5);
             const texture = createSoftShadowTexture();
             const material = new THREE.MeshBasicMaterial({ 
                 map: texture, transparent: true, opacity: 1, side: THREE.DoubleSide, depthWrite: false
             });
             const shadow = new THREE.Mesh(geometry, material);
             shadow.rotation.x = -Math.PI / 2; 
-            shadow.position.y = 0.005; // Luôn nằm sát mặt đất (y=0)
+            shadow.position.y = 0.005; 
             shadow.renderOrder = 0;
             return shadow;
         }
@@ -430,7 +437,7 @@
         btnNext.addEventListener('click', () => { if (currentStepIndex < animationActions.length - 1) { currentStepIndex++; const action = animationActions[currentStepIndex]; action.reset(); action.setLoop(THREE.LoopOnce); action.clampWhenFinished = true; action.play(); updateStepVisibility(currentStepIndex); updateUI(); } });
         btnPrev.addEventListener('click', () => { if (currentStepIndex >= 0) { const action = animationActions[currentStepIndex]; action.stop(); currentStepIndex--; updateStepVisibility(currentStepIndex); updateUI(); } });
 
-        // --- LOAD MODEL (SIMPLE - NO AUTO CENTER) ---
+        // --- LOAD MODEL (SMART CENTER + SHADOW + CAMERA FIX) ---
         const loader = new GLTFLoader();
 
         window.loadModel3D = function(filePath, title, fullTextFromMenu) {
@@ -478,15 +485,42 @@
             loader.load(encodedPath + '?t=' + timestamp, (gltf) => {
                 const rawScene = gltf.scene; 
                 
-                // --- CONTAINER SETUP (Đơn giản, không di chuyển/scale) ---
-                const container = new THREE.Group();
-                // rawScene.position.set(0,0,0); // Giữ nguyên vị trí gốc của GLB
-                // rawScene.scale.set(1,1,1);    // Giữ nguyên kích thước gốc
+                // --- SMART BOX (CHỈ TÍNH TOÁN DỰA TRÊN MESH) ---
+                let smartBox = new THREE.Box3();
+                let hasMesh = false;
                 
+                rawScene.updateMatrixWorld(true);
+                rawScene.traverse((child) => {
+                    if (child.isMesh && !child.name.includes("Shadow")) {
+                        if (!child.geometry.boundingBox) child.geometry.computeBoundingBox();
+                        const childBox = child.geometry.boundingBox.clone();
+                        childBox.applyMatrix4(child.matrixWorld);
+                        smartBox.union(childBox);
+                        hasMesh = true;
+                    }
+                });
+                if (!hasMesh) smartBox.setFromObject(rawScene);
+
+                const center = smartBox.getCenter(new THREE.Vector3());
+                const size = smartBox.getSize(new THREE.Vector3());
+                const minY = smartBox.min.y;
+
+                // --- CONTAINER SETUP (CĂN GIỮA ĐỂ SỬA LỖI LỆCH BÓNG) ---
+                const container = new THREE.Group();
+                rawScene.position.x = -center.x;
+                rawScene.position.y = -minY; 
+                rawScene.position.z = -center.z;
+                
+                const maxDim = Math.max(size.x, size.y, size.z) || 1;
+                const normScale = 1.0 / maxDim; 
+                
+                container.userData.normScale = normScale;
+                rawScene.scale.setScalar(normScale); 
+
                 container.add(rawScene);
 
                 if (SHOW_SHADOW) {
-                    currentShadow = createShadowPlane(2.0); // Shadow size cố định
+                    currentShadow = createShadowPlane(1.0); 
                     currentShadow.position.set(0, 0.005, 0); 
                     currentShadow.visible = false; 
                     container.add(currentShadow);
@@ -503,7 +537,7 @@
                         const match = child.name.match(/\((.*?)\)/); 
                         let displayText = match ? match[1] : child.name.replace("Label_", "").split(".")[0]; 
                         const sprite = createTextSprite(displayText);
-                        sprite.position.set(0, 0.05, 0); // Vị trí text tương đối
+                        sprite.position.set(0, 0.02 / normScale, 0); 
                         child.add(sprite); 
                         textLabels.push(sprite);
                         if(child.material) child.material.visible = false; 
@@ -514,7 +548,7 @@
                     else if (child.name.includes("DASH")) {
                         if(child.isLine || child.isLineSegments) {
                             const color = getColorFromName(child.name);
-                            const myMats = createMaterials(color, 1.0); 
+                            const myMats = createMaterials(color, maxDim); 
                             manualComputeLineDistances(child.geometry);
                             child.material = myMats.fixedDashed; 
                             child.renderOrder = 1;
@@ -522,29 +556,45 @@
                         }
                     }
                     else if (child.isMesh) { 
-                        const color = getColorFromName(child.name); const myMats = createMaterials(color, 1.0); child.material = myMats.face; child.renderOrder = 0; const edgesGeom = new THREE.EdgesGeometry(child.geometry, 15); const lHidden = new THREE.LineSegments(edgesGeom, myMats.hidden); lHidden.computeLineDistances(); lHidden.renderOrder = 1; lHidden.userData.isGenerated = true; const lVisible = new THREE.LineSegments(edgesGeom, myMats.visible); lVisible.renderOrder = 1; lVisible.userData.isGenerated = true; child.add(lHidden); child.add(lVisible); 
+                        const color = getColorFromName(child.name); const myMats = createMaterials(color, maxDim); child.material = myMats.face; child.renderOrder = 0; const edgesGeom = new THREE.EdgesGeometry(child.geometry, 15); const lHidden = new THREE.LineSegments(edgesGeom, myMats.hidden); lHidden.computeLineDistances(); lHidden.renderOrder = 1; lHidden.userData.isGenerated = true; const lVisible = new THREE.LineSegments(edgesGeom, myMats.visible); lVisible.renderOrder = 1; lVisible.userData.isGenerated = true; child.add(lHidden); child.add(lVisible); 
                     } 
                     else if (child.isLine || child.isLineSegments) { 
-                        const color = getColorFromName(child.name); const myMats = createMaterials(color, 1.0); manualComputeLineDistances(child.geometry); child.material = myMats.visible; child.renderOrder = 1; const hiddenClone = child.clone(); hiddenClone.position.set(0,0,0); hiddenClone.rotation.set(0,0,0); hiddenClone.scale.set(1,1,1); hiddenClone.quaternion.set(0,0,0,1); hiddenClone.material = myMats.hidden; hiddenClone.renderOrder = 1; hiddenClone.userData.isGenerated = true; child.add(hiddenClone); 
+                        const color = getColorFromName(child.name); const myMats = createMaterials(color, maxDim); manualComputeLineDistances(child.geometry); child.material = myMats.visible; child.renderOrder = 1; const hiddenClone = child.clone(); hiddenClone.position.set(0,0,0); hiddenClone.rotation.set(0,0,0); hiddenClone.scale.set(1,1,1); hiddenClone.quaternion.set(0,0,0,1); hiddenClone.material = myMats.hidden; hiddenClone.renderOrder = 1; hiddenClone.userData.isGenerated = true; child.add(hiddenClone); 
                     }
                 });
 
                 currentModel = container;
                 updateStepVisibility(-1);
                 
-                // --- RESET CAMERA VỀ CỐ ĐỊNH ---
-                orthoCamera.position.copy(DEFAULT_CAM_POS);
-                orthoCamera.lookAt(DEFAULT_TARGET);
-                orthoCamera.zoom = 1;
+                // --- FIX CAMERA POSITIONS (AUTO-CENTERING THÔNG MINH) ---
+                const scaledHeight = size.y * normScale;
+                const centerHeight = scaledHeight / 2;
+                const targetCenter = new THREE.Vector3(0, centerHeight, 0); 
+                
+                const orthoPadding = 1.0; 
+                orthoCamera.left = -orthoPadding * aspect;
+                orthoCamera.right = orthoPadding * aspect;
+                orthoCamera.top = orthoPadding; 
+                orthoCamera.bottom = -orthoPadding;
                 orthoCamera.updateProjectionMatrix();
 
-                perspCamera.position.copy(DEFAULT_CAM_POS.clone().multiplyScalar(2.5)); // Perspective thì xa hơn chút
-                perspCamera.lookAt(DEFAULT_TARGET);
+                orthoCamera.position.set(0, 1, 2); // Góc nhìn đẹp (0, 1, 2)
+                orthoCamera.lookAt(targetCenter);
+                orthoCamera.zoom = 1; 
+                orthoCamera.updateProjectionMatrix();
+                
+                // 2. Perspective Camera (Auto Zoom)
+                const fov = perspCamera.fov * (Math.PI / 180);
+                let cameraZ = Math.abs((scaledHeight / 2) / Math.tan(fov / 2));
+                cameraZ *= 2.5; // Hệ số lùi xa
 
+                perspCamera.position.set(0, centerHeight + 0.5, cameraZ); 
+                perspCamera.lookAt(targetCenter);
+                
                 scene.add(currentModel); 
                 
                 controls.object = activeCamera; 
-                controls.target.copy(DEFAULT_TARGET); // Luôn xoay quanh (0,0,0)
+                controls.target.copy(targetCenter); 
                 controls.update(); 
                 
                 loading.style.display = 'none';
@@ -558,21 +608,33 @@
             if (mixer) mixer.update(delta);
 
             if (textLabels.length > 0) {
-                // Logic scale text đơn giản hóa vì không còn normScale
+                const normScale = currentModel ? (currentModel.userData.normScale || 1.0) : 1.0;
+
                 if (renderer.xr.isPresenting) {
-                    const arBase = 0.08; const tempVec = new THREE.Vector3(); const xrCamera = renderer.xr.getCamera(activeCamera);
-                    textLabels.forEach(sprite => { sprite.getWorldPosition(tempVec); const distance = tempVec.distanceTo(xrCamera.position); const s = distance * arBase; sprite.scale.set(s * 2, s, 1); });
+                    const arBase = 0.08; 
+                    const tempVec = new THREE.Vector3();
+                    const xrCamera = renderer.xr.getCamera(activeCamera);
+                    textLabels.forEach(sprite => {
+                        sprite.getWorldPosition(tempVec);
+                        const distance = tempVec.distanceTo(xrCamera.position); 
+                        const s = (distance * arBase) / normScale; 
+                        sprite.scale.set(s * 2, s, 1);
+                    });
                 } 
                 else {
                     if (activeCamera.isPerspectiveCamera) {
-                        // FIX: Tăng base từ 0.05 lên 0.15 (to gấp 3 lần)
-                        const pcBase = 0.15; 
-                        const tempVec = new THREE.Vector3();
-                        textLabels.forEach(sprite => { sprite.getWorldPosition(tempVec); const distance = tempVec.distanceTo(activeCamera.position); const s = distance * pcBase; sprite.scale.set(s * 2, s, 1); });
+                        const pcBase = 0.035; const tempVec = new THREE.Vector3();
+                        textLabels.forEach(sprite => {
+                            const parentWorldScale = sprite.parent.getWorldScale(new THREE.Vector3()).x; 
+                            sprite.getWorldPosition(tempVec); const distance = tempVec.distanceTo(activeCamera.position);
+                            const s = (distance * pcBase) / parentWorldScale; sprite.scale.set(s * 2, s, 1); 
+                        });
                     } else if (activeCamera.isOrthographicCamera) {
-                        // FIX: Tăng base từ 0.1 lên 0.4 (to gấp 4 lần)
-                        const orthoBase = 0.4; 
-                        textLabels.forEach(sprite => { const s = orthoBase / activeCamera.zoom; sprite.scale.set(s * 2, s, 1); });
+                        const orthoBase = 0.08; 
+                        textLabels.forEach(sprite => {
+                            const parentWorldScale = sprite.parent.getWorldScale(new THREE.Vector3()).x;
+                            const s = (orthoBase / activeCamera.zoom) / parentWorldScale; sprite.scale.set(s * 2, s, 1);
+                        });
                     }
                 }
             }
@@ -610,18 +672,21 @@
         window.addEventListener('resize', () => {
             const w = viewer.clientWidth; const h = viewer.clientHeight; const newAspect = w / h;
             perspCamera.aspect = newAspect; perspCamera.updateProjectionMatrix();
-            const currentFrustum = orthoFrustum; // Sử dụng giá trị cố định
-            orthoCamera.left = -currentFrustum * newAspect; orthoCamera.right = currentFrustum * newAspect; orthoCamera.top = currentFrustum; orthoCamera.bottom = -currentFrustum; orthoCamera.updateProjectionMatrix();
+            const currentFrustumHeight = (orthoCamera.top - orthoCamera.bottom);
+            orthoCamera.left = -currentFrustumHeight * newAspect / 2; orthoCamera.right = currentFrustumHeight * newAspect / 2; orthoCamera.top = currentFrustumHeight / 2; orthoCamera.bottom = -currentFrustumHeight / 2; orthoCamera.updateProjectionMatrix();
             renderer.setSize(w, h); 
         });
 
-        // --- XỬ LÝ MENU ---
+        // --- XỬ LÝ MENU VÀ LINK URL ---
         const menuContainer = document.getElementById('menu-content');
         
         function findItemByFile(data, filename) {
             for (const item of data) {
                 if (item.type === 'file' && item.file === filename) return item;
-                if (item.children) { const found = findItemByFile(item.children, filename); if (found) return found; }
+                if (item.children) {
+                    const found = findItemByFile(item.children, filename);
+                    if (found) return found;
+                }
             }
             return null;
         }
@@ -633,13 +698,32 @@
             data.forEach(item => { 
                 const li = document.createElement('li'); 
                 if (item.type === 'folder') { 
-                    const titleDiv = document.createElement('div'); titleDiv.className = 'menu-folder-title'; titleDiv.innerHTML = `<span>${item.title}</span> <span>▶</span>`; titleDiv.onclick = () => { const sub = li.querySelector('.submenu'); if (sub) sub.classList.toggle('show'); }; li.appendChild(titleDiv); if (item.children) createMenuHTML(item.children, li); 
+                    const titleDiv = document.createElement('div'); 
+                    titleDiv.className = 'menu-folder-title'; 
+                    titleDiv.innerHTML = `<span>${item.title}</span> <span>▶</span>`; 
+                    titleDiv.onclick = () => { 
+                        const sub = li.querySelector('.submenu'); 
+                        if (sub) sub.classList.toggle('show'); 
+                    }; 
+                    li.appendChild(titleDiv); 
+                    if (item.children) createMenuHTML(item.children, li); 
                 } else { 
-                    const itemDiv = document.createElement('div'); itemDiv.className = 'menu-item'; itemDiv.innerText = item.title; 
+                    const itemDiv = document.createElement('div'); 
+                    itemDiv.className = 'menu-item'; 
+                    itemDiv.innerText = item.title; 
+                    
+                    // SỰ KIỆN CLICK: Tải bài và đổi URL
                     itemDiv.onclick = () => { 
-                        document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active')); itemDiv.classList.add('active'); 
+                        document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active')); 
+                        itemDiv.classList.add('active'); 
+                        
                         loadModel3D(item.file, item.title, item.desc); 
-                        const newUrl = new URL(window.location); newUrl.searchParams.set('bai', item.file); window.history.pushState({}, '', newUrl);
+                        
+                        // Cập nhật link trình duyệt
+                        const newUrl = new URL(window.location);
+                        newUrl.searchParams.set('bai', item.file); 
+                        window.history.pushState({}, '', newUrl);
+
                         if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('mobile-open'); 
                     }; 
                     li.appendChild(itemDiv); 
@@ -649,12 +733,29 @@
             parentElement.appendChild(ul);
         }
 
+        // --- KHỞI TẠO ---
         if (typeof curriculumData !== 'undefined') { 
             createMenuHTML(curriculumData, menuContainer); 
-            const firstSub = menuContainer.querySelector('.submenu'); if (firstSub) firstSub.classList.add('show'); 
-            const urlParams = new URLSearchParams(window.location.search); const fileToLoad = urlParams.get('bai');
-            if(fileToLoad) { const item = findItemByFile(curriculumData, fileToLoad); if(item) { document.querySelectorAll('.menu-item').forEach(div => { if(div.innerText === item.title) div.classList.add('active'); }); loadModel3D(item.file, item.title, item.desc); } }
-        } else { menuContainer.innerHTML = '<div style="padding:20px; color:red">⚠️ Chưa có dữ liệu menu_data.js!</div>'; }
+            const firstSub = menuContainer.querySelector('.submenu'); 
+            if (firstSub) firstSub.classList.add('show'); 
+
+            // Tự động mở bài nếu có link
+            const urlParams = new URLSearchParams(window.location.search);
+            const fileToLoad = urlParams.get('bai');
+            if(fileToLoad) {
+                const item = findItemByFile(curriculumData, fileToLoad);
+                if(item) {
+                    const menuItems = document.querySelectorAll('.menu-item');
+                    menuItems.forEach(div => {
+                        if(div.innerText === item.title) div.classList.add('active');
+                    });
+                    loadModel3D(item.file, item.title, item.desc);
+                }
+            }
+
+        } else { 
+            menuContainer.innerHTML = '<div style="padding:20px; color:red">⚠️ Chưa có dữ liệu menu_data.js!<br>Hãy chạy file Python scan_menu.py</div>'; 
+        }
 
         window.toggleMenu = function () { document.getElementById('sidebar').classList.toggle('mobile-open'); }
         document.getElementById('mobile-toggle').addEventListener('click', toggleMenu);
