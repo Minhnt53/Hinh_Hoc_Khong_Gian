@@ -1,1 +1,430 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>GeoSolver 3D - V12.0 (Legacy AI)</title>
+    <link rel="icon" href="data:,">
 
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+                "@google/generative-ai": "https://esm.run/@google/generative-ai"
+            }
+        }
+    </script>
+
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; overflow: hidden; display: flex; height: 100vh; background-color: #121212; color: #e0e0e0; }
+        
+        /* UI Logic */
+        body.in-ar #sidebar, body.in-ar #text-panel, body.in-ar #cam-toggle, body.in-ar #mobile-toggle, body.in-ar #animation-controls, body.in-ar #loading { display: none !important; }
+        body.in-ar #main-content { background: transparent !important; }
+        body.in-ar #viewer-container { background: transparent !important; border: none !important; }
+        #ar-ui-overlay { display: none; position: absolute; bottom: 40px; left: 0; width: 100%; pointer-events: none; z-index: 10000; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 20px; }
+        body.in-ar #ar-ui-overlay { display: flex; } 
+        .ar-btn-group { display: flex; align-items: center; gap: 20px; pointer-events: auto; background: rgba(50, 50, 50, 0.8); padding: 10px 25px; border-radius: 50px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
+        #btn-place-ar { background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; border: none; padding: 12px 25px; border-radius: 30px; font-weight: bold; cursor: pointer; }
+        .ar-scale-btn { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.2); color: white; font-size: 24px; font-weight: bold; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+        #ar-button { position: absolute !important; top: 20px !important; left: 20px !important; padding: 8px 16px !important; opacity: 0.9 !important; border-radius: 20px !important; z-index: 99999 !important; font-size: 13px !important; font-weight: bold !important; }
+        @media (min-width: 1024px) { #ar-button { display: none !important; } }
+
+        /* Sidebar */
+        #sidebar { width: 320px; background-color: #1e1e1e; display: flex; flex-direction: column; border-right: 1px solid #333; z-index: 200; overflow-y: auto; }
+        .brand { padding: 20px; font-size: 18px; font-weight: bold; background: #252526; text-align: center; border-bottom: 1px solid #333; color: #4facfe; }
+        
+        /* AI Section */
+        #ai-section { padding: 15px; background: #2d2d2d; border-bottom: 1px solid #333; }
+        .ai-title { color: #f39c12; margin: 0 0 10px 0; font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+        
+        #inp-gemini-image { width: 100%; margin-bottom: 10px; color: #ccc; font-size: 12px; }
+        
+        #btn-solve-ai { margin-top: 5px; width: 100%; padding: 12px; background: linear-gradient(135deg, #007acc, #005a9e); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        #btn-solve-ai:hover { filter: brightness(1.1); }
+        #btn-solve-ai:disabled { background: #555; cursor: not-allowed; }
+        #ai-status { color: #aaa; font-size: 12px; margin-top: 8px; text-align: center; font-style: italic; white-space: pre-wrap; }
+
+        /* Menu */
+        ul { list-style: none; padding: 0; margin: 0; }
+        .menu-folder-title { padding: 12px 15px; cursor: pointer; background: #252526; border-bottom: 1px solid #333; display: flex; justify-content: space-between; font-weight: 600; font-size: 14px; }
+        .submenu { display: none; background: #151515; }
+        .submenu.show { display: block; }
+        .menu-item { padding: 10px 15px 10px 30px; cursor: pointer; color: #bbb; font-size: 14px; border-left: 3px solid transparent; }
+        .menu-item:hover { background: rgba(255,255,255,0.05); color: white; }
+        .menu-item.active { border-left: 3px solid #4facfe; background: rgba(79, 172, 254, 0.1); color: white; }
+        .sidebar-footer { padding: 15px; text-align: center; color: #555; font-size: 11px; margin-top: auto; }
+
+        /* Viewer */
+        #main-content { flex: 1; display: flex; position: relative; overflow: hidden; }
+        #viewer-container { flex: 7; position: relative; background: #e0e0e0; overflow: hidden; border-right: 1px solid #333; }
+        #text-panel { flex: 3; display: flex; flex-direction: column; min-width: 300px; background: #1e1e1e; height: 100vh; }
+        #problem-section { flex: 0 0 35%; display: flex; flex-direction: column; border-bottom: 4px double #333; background: #252526; }
+        .section-header { padding: 8px 15px; font-weight: bold; font-size: 13px; display: flex; justify-content: space-between; align-items: center; color: #fff; }
+        .header-problem { background: #d35400; }
+        .header-solution { background: #2980b9; }
+        .section-content { padding: 15px; overflow-y: auto; font-size: 14px; line-height: 1.6; color: #eee; flex: 1; white-space: pre-wrap; }
+        #solution-section { flex: 1; display: flex; flex-direction: column; position: relative; background: #1e1e1e; min-height: 0; }
+        #solution-content-wrapper { flex: 1; overflow-y: auto; position: relative; padding: 15px; }
+        #solution-text { font-size: 14px; line-height: 1.6; color: #ddd; white-space: pre-wrap; }
+        .blur-solution { filter: blur(8px); pointer-events: none; opacity: 0.4; }
+        #reveal-btn { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); padding: 10px 20px; background: #27ae60; color: white; border: none; border-radius: 20px; font-weight: bold; cursor: pointer; z-index: 10; display: none; }
+        
+        #cam-toggle { position: absolute; top: 20px; right: 20px; z-index: 100; background: #fff; color: #333; border: 1px solid #999; width: 40px; height: 40px; border-radius: 8px; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        #mobile-toggle { display: none; position: absolute; top: 10px; right: 10px; z-index: 100; background: #333; color: white; border: none; padding: 8px; border-radius: 4px; }
+        @media (max-width: 768px) { #sidebar { position: absolute; height: 100%; transform: translateX(-100%); } #sidebar.mobile-open { transform: translateX(0); } #main-content { flex-direction: column; } #viewer-container { flex: 1; height: 50%; } #text-panel { flex: 1; height: 50%; } #mobile-toggle { display: block; } }
+    </style>
+</head>
+<body>
+
+    <div id="sidebar">
+        <a href="index.html" style="text-decoration: none;">
+            <button style="width: 100%; padding: 15px; background: #e74c3c; color: white; border: none; font-weight: bold; cursor: pointer; font-size: 14px; margin-bottom: 0;">⬅ QUAY LẠI MENU CHÍNH</button>
+        </a>
+        <div class="brand">📐 MENU BÀI TẬP</div>
+        <div id="ai-section">
+            <h4 class="ai-title">⚡ GEMINI 1.5 FLASH (AUTO-FIT)</h4>
+            <input type="file" id="inp-gemini-image" accept="image/*">
+            <button onclick="processGeometryImage()" id="btn-solve-ai">🚀 GIẢI & VẼ 3D</button>
+            <div id="ai-status"></div>
+        </div>
+        <div id="menu-content"></div>
+        <div class="sidebar-footer">V12.0 - BEAUTIFUL LABELS</div>
+    </div>
+
+    <div id="main-content">
+        <div id="viewer-container">
+            <button id="mobile-toggle">☰</button>
+            <button id="cam-toggle" onclick="toggleCamera()" title="Đổi Camera">🧊</button>
+            <div id="ar-ui-overlay">
+                <div class="ar-btn-group">
+                    <div class="ar-scale-btn" id="btn-scale-down">−</div><div id="btn-place-ar">👇 ĐẶT MÔ HÌNH</div><div class="ar-scale-btn" id="btn-scale-up">+</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="text-panel">
+            <div id="problem-section">
+                <div class="section-header header-problem">📄 Đề Bài</div>
+                <div class="section-content" id="problem-text"><i>Chọn ảnh từ nút bên trái...</i></div>
+            </div>
+            <div id="solution-section">
+                <div class="section-header header-solution">
+                    <span>💡 Lời Giải</span>
+                    <button onclick="toggleSolution()" style="background:none; border:1px solid #aaa; color:#eee; border-radius:4px; font-size:10px; padding:2px 5px; cursor:pointer;">Ẩn/Hiện</button>
+                </div>
+                <div id="solution-content-wrapper">
+                    <button id="reveal-btn" onclick="toggleSolution()">👁️ Xem Lời Giải</button>
+                    <div id="solution-text" class="blur-solution"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="menu_data.js"></script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { ConvexGeometry } from 'three/addons/geometries/ConvexGeometry.js'; 
+        import { ARButton } from 'three/addons/webxr/ARButton.js';
+        import { GoogleGenerativeAI } from "@google/generative-ai";
+
+        // ============================================
+        // 🔑 API KEY
+        // ============================================
+        const API_KEY = "AIzaSyCdh2h__kCvA2U6-gwFY9gJ5X0iSHM5yn0"; 
+        
+        // ĐÃ GIỮ NGUYÊN GEMINI 3 THEO YÊU CẦU
+        const MODEL_NAME = "gemini-3-flash-preview"; 
+        const genAI = new GoogleGenerativeAI(API_KEY);
+
+        // --- CORE SETUP ---
+        const viewer = document.getElementById('viewer-container');
+        const scene = new THREE.Scene(); scene.background = new THREE.Color(0xe0e0e0); // Nền sáng dễ nhìn
+        
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); scene.add(ambientLight);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.6); dirLight.position.set(5, 10, 7); scene.add(dirLight);
+
+        const aspect = viewer.clientWidth / viewer.clientHeight;
+        const orthoCamera = new THREE.OrthographicCamera(-3*aspect, 3*aspect, 3, -3, -100, 10000);
+        const perspCamera = new THREE.PerspectiveCamera(45, aspect, 0.1, 10000);
+        let activeCamera = perspCamera; 
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, logarithmicDepthBuffer: true });
+        renderer.setSize(viewer.clientWidth, viewer.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.xr.enabled = true;
+        viewer.appendChild(renderer.domElement);
+
+        const controls = new OrbitControls(activeCamera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+
+        let currentModel = null;
+        let textLabels = [];
+        let arScale = 0.5;
+
+        // --- AR ---
+        document.body.appendChild(ARButton.createButton(renderer, { requiredFeatures: ['hit-test'], optionalFeatures: ['dom-overlay'], domOverlay: { root: document.body } }));
+        const reticle = new THREE.Mesh(new THREE.RingGeometry(0.15, 0.2, 32).rotateX(-Math.PI/2), new THREE.MeshBasicMaterial());
+        reticle.matrixAutoUpdate = false; reticle.visible = false; scene.add(reticle);
+        let hitTestSource = null, hitTestSourceRequested = false;
+        renderer.xr.addEventListener('sessionstart', () => { document.body.classList.add('in-ar'); scene.background = null; if(currentModel) { currentModel.visible=false; currentModel.scale.setScalar(arScale); } });
+        renderer.xr.addEventListener('sessionend', () => { document.body.classList.remove('in-ar'); scene.background = new THREE.Color(0xf0f2f5); if(currentModel) { currentModel.visible=true; currentModel.scale.set(1,1,1); currentModel.position.set(0,0,0); } activeCamera.position.set(0,2,5); activeCamera.lookAt(0,0,0); });
+
+        // --- 🟢 HELPER: FORMAT LABEL (FIX A_PRIME) ---
+        function formatLabelText(rawText) {
+            if (!rawText) return "";
+            // Thay _prime thành dấu '
+            let nice = rawText.replace(/_prime/gi, "'").replace(/_p/gi, "'");
+            // Thay _1, _2 thành số nhỏ
+            nice = nice.replace(/_(\d+)/g, (match, p1) => {
+                const subs = { '0':'₀','1':'₁','2':'₂','3':'₃','4':'₄','5':'₅','6':'₆','7':'₇','8':'₈','9':'₉' };
+                return subs[p1] || p1;
+            });
+            // Bỏ các ký tự thừa
+            return nice.replace(/[^a-zA-Z0-9'₁₂₃₄₅₆₇₈₉]/g, "");
+        }
+
+        // --- 🟢 HELPER: TEXT SPRITE ĐẸP (TIMES NEW ROMAN) ---
+        window.createTextSprite = function(text) {
+            const prettyText = formatLabelText(text);
+            const ctx = document.createElement('canvas').getContext('2d');
+            const size = 128; 
+            
+            // Tính toán kích thước
+            ctx.font = "Bold 100px 'Times New Roman'"; // Font toán học
+            const w = ctx.measureText(prettyText).width + 20;
+            ctx.canvas.width = w; 
+            ctx.canvas.height = size;
+            
+            // Vẽ
+            ctx.font = "Bold 100px 'Times New Roman'"; 
+            ctx.fillStyle = "black"; 
+            ctx.textAlign = "center"; 
+            ctx.textBaseline = "middle"; 
+            
+            // Viền trắng
+            ctx.lineWidth = 10; 
+            ctx.strokeStyle = "rgba(255,255,255,0.9)"; 
+            ctx.strokeText(prettyText, w/2, size/2);
+            
+            // Chữ đen
+            ctx.fillText(prettyText, w/2, size/2);
+            
+            const tex = new THREE.CanvasTexture(ctx.canvas); 
+            tex.minFilter = THREE.LinearFilter;
+            const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, depthTest: false }));
+            
+            // Scale sprite theo tỷ lệ chữ
+            const ratio = w / size;
+            sprite.scale.set(0.3 * ratio, 0.3, 1); 
+            sprite.renderOrder = 999;
+            return sprite;
+        }
+
+        function extractAndParseJSON(text) {
+            try {
+                const match = text.match(/\{[\s\S]*\}/);
+                if (match) return JSON.parse(match[0]);
+                throw new Error("Không tìm thấy JSON");
+            } catch (e) {
+                const cleaned = text.replace(/```json/g, '').replace(/```/g, '').trim();
+                try { return JSON.parse(cleaned); } catch(err) { return null; }
+            }
+        }
+
+        window.processGeometryImage = async function() {
+            const fileInput = document.getElementById('inp-gemini-image');
+            const statusDiv = document.getElementById('ai-status');
+            const btn = document.getElementById('btn-solve-ai');
+            
+            if(!fileInput.files[0]) return alert("Chưa chọn ảnh!");
+            if(API_KEY.includes("PASTE_KEY")) return alert("Chưa nhập API Key!");
+
+            btn.disabled = true; btn.innerText = "⏳ Đang xử lý...";
+            statusDiv.innerText = "Gemini đang đọc đề...";
+            document.getElementById('problem-text').innerHTML = "<i>🤖 Đang phân tích...</i>";
+            document.getElementById('solution-text').innerHTML = "";
+            document.getElementById('solution-text').classList.remove('blur-solution');
+            document.getElementById('reveal-btn').style.display = 'none';
+            
+            if(currentModel) { scene.remove(currentModel); currentModel = null; textLabels = []; }
+
+            try {
+                const imageBase64 = await new Promise(r => { const rd = new FileReader(); rd.onload=()=>r(rd.result.split(',')[1]); rd.readAsDataURL(fileInput.files[0]); });
+                const model = genAI.getGenerativeModel({ model: MODEL_NAME, generationConfig: { responseMimeType: "application/json" } });
+
+                const prompt = `
+                Giải bài toán hình học (Tiếng Việt) và trích xuất tọa độ 3D.
+                OUTPUT JSON:
+                {
+                    "problem_summary": "Đề bài...",
+                    "solution_full": "Lời giải...",
+                    "geometry": {
+                        "points": [ {"id":"A", "x":0, "y":0, "z":0}, ... ],
+                        "lines": [ {"from":"A", "to":"B"}, ... ]
+                    }
+                }
+                `;
+
+                const result = await model.generateContent([prompt, { inlineData: { data: imageBase64, mimeType: fileInput.files[0].type } }]);
+                const rawText = result.response.text();
+                const data = extractAndParseJSON(rawText);
+
+                if (!data) throw new Error("AI trả về dữ liệu lỗi.");
+
+                document.getElementById('problem-text').innerHTML = data.problem_summary || "Không đọc được đề.";
+                document.getElementById('solution-text').innerHTML = data.solution_full || rawText;
+                if(window.MathJax) MathJax.typesetPromise();
+
+                if (data.geometry) {
+                    statusDiv.innerText = "Đang dựng hình...";
+                    drawScene(data.geometry);
+                    statusDiv.innerText = "✅ Hoàn tất!";
+                } else {
+                    statusDiv.innerText = "⚠️ Không vẽ được hình.";
+                }
+                btn.innerText = "✨ Giải bài khác";
+
+            } catch(e) {
+                console.error(e);
+                statusDiv.innerText = "❌ Lỗi: " + e.message;
+                alert("Lỗi AI: " + e.message);
+            } finally {
+                btn.disabled = false;
+            }
+        };
+
+        function drawScene(geoData) {
+            const group = new THREE.Group();
+            const pointsMap = {};
+            const verticesForHull = [];
+
+            // Points
+            geoData.points.forEach(p => {
+                const vec = new THREE.Vector3(p.x, p.y, p.z);
+                pointsMap[p.id] = vec;
+                verticesForHull.push(vec);
+
+                const geom = new THREE.SphereGeometry(0.08, 16, 16);
+                const mat = new THREE.MeshPhongMaterial({ color: 0x34495e }); 
+                const mesh = new THREE.Mesh(geom, mat);
+                mesh.position.copy(vec);
+                group.add(mesh);
+
+                const label = window.createTextSprite(p.id);
+                label.position.copy(vec).add(new THREE.Vector3(0.12, 0.12, 0));
+                group.add(label);
+                textLabels.push(label);
+            });
+
+            // Convex Hull (Vỏ tàng hình để che khuất)
+            if (verticesForHull.length >= 4) {
+                try {
+                    const hullGeom = new ConvexGeometry(verticesForHull);
+                    // colorWrite: false -> Không vẽ màu, chỉ ghi Depth để che nét sau
+                    const hullMat = new THREE.MeshBasicMaterial({ colorWrite: false, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
+                    const hullMesh = new THREE.Mesh(hullGeom, hullMat);
+                    group.add(hullMesh);
+                } catch (e) {}
+            }
+
+            // Lines
+            const lineMatVis = new THREE.LineBasicMaterial({ color: 0x000000, depthTest: true, depthFunc: THREE.LessEqualDepth });
+            const lineMatHid = new THREE.LineDashedMaterial({ color: 0x999999, dashSize: 0.1, gapSize: 0.05, depthTest: true, depthFunc: THREE.GreaterDepth, transparent: true, opacity: 0.5 });
+
+            geoData.lines.forEach(l => {
+                const start = pointsMap[l.from];
+                const end = pointsMap[l.to];
+                if(start && end) {
+                    const geo = new THREE.BufferGeometry().setFromPoints([start, end]);
+                    const lineVis = new THREE.Line(geo, lineMatVis);
+                    const lineHid = new THREE.Line(geo, lineMatHid);
+                    lineHid.computeLineDistances();
+                    group.add(lineVis);
+                    group.add(lineHid);
+                }
+            });
+
+            // 🟢 AUTO CAMERA FIT (Quan trọng)
+            const box = new THREE.Box3().setFromObject(group);
+            if(!box.isEmpty()) {
+                const center = box.getCenter(new THREE.Vector3());
+                const size = box.getSize(new THREE.Vector3());
+                const maxDim = Math.max(size.x, size.y, size.z) || 1;
+                
+                // Scale sao cho vừa khung
+                const scale = 4 / maxDim;
+                group.position.copy(center).multiplyScalar(-scale);
+                group.scale.setScalar(scale);
+                
+                // Đặt camera góc chéo đẹp (Isometric view)
+                controls.target.set(0,0,0);
+                activeCamera.position.set(4, 3, 5); // Góc 3/4 chuẩn
+                activeCamera.lookAt(0,0,0);
+                controls.update();
+            }
+            scene.add(group);
+            currentModel = group;
+        }
+
+        function render(t, frame) {
+            controls.update();
+            if(textLabels.length > 0) {
+                textLabels.forEach(s => { 
+                    const d = s.getWorldPosition(new THREE.Vector3()).distanceTo(activeCamera.position);
+                    s.scale.setScalar(d * 0.08); // Scale chữ theo khoảng cách
+                });
+            }
+            if(frame && !hitTestSourceRequested) {
+                const s = renderer.xr.getSession();
+                s.requestReferenceSpace('viewer').then(r => s.requestHitTestSource({space: r}).then(src => { hitTestSource = src; }));
+                s.addEventListener('end', () => { hitTestSourceRequested = false; hitTestSource = null; });
+                hitTestSourceRequested = true;
+            }
+            if(hitTestSource && frame) {
+                const res = frame.getHitTestResults(hitTestSource);
+                if(res.length) {
+                    const pose = res[0].getPose(renderer.xr.getReferenceSpace());
+                    reticle.visible = true; reticle.matrix.fromArray(pose.transform.matrix);
+                } else reticle.visible = false;
+            }
+            renderer.render(scene, activeCamera);
+        }
+        renderer.setAnimationLoop(render);
+        
+        window.addEventListener('resize', () => { 
+            const w=viewer.clientWidth, h=viewer.clientHeight; renderer.setSize(w,h);
+            const a=w/h; perspCamera.aspect=a; perspCamera.updateProjectionMatrix();
+            orthoCamera.left=-3*a; orthoCamera.right=3*a; orthoCamera.updateProjectionMatrix();
+        });
+        
+        document.getElementById('mobile-toggle').onclick = () => document.getElementById('sidebar').classList.toggle('mobile-open');
+        window.toggleCamera = () => {
+            const old = activeCamera;
+            activeCamera = (activeCamera === orthoCamera) ? perspCamera : orthoCamera;
+            activeCamera.position.copy(old.position); activeCamera.lookAt(controls.target);
+            document.getElementById('cam-toggle').innerText = (activeCamera === orthoCamera) ? "🧊" : "👁️";
+            controls.object = activeCamera;
+        };
+        window.toggleSolution = () => {
+            const s = document.getElementById('solution-text');
+            if(s.classList.contains('blur-solution')) { s.classList.remove('blur-solution'); document.getElementById('reveal-btn').style.display='none'; }
+            else { s.classList.add('blur-solution'); document.getElementById('reveal-btn').style.display='block'; }
+        };
+        
+        document.getElementById('btn-place-ar').onclick = (e) => { e.stopPropagation(); if(reticle.visible && currentModel) { currentModel.position.setFromMatrixPosition(reticle.matrix); currentModel.visible = true; } };
+        document.getElementById('btn-scale-up').onclick = (e) => { e.stopPropagation(); arScale += 0.1; if(currentModel) currentModel.scale.setScalar(arScale); };
+        document.getElementById('btn-scale-down').onclick = (e) => { e.stopPropagation(); if(arScale>0.05) { arScale-=0.05; if(currentModel) currentModel.scale.setScalar(arScale); } };
+
+    </script>
+</body>
+</html>
